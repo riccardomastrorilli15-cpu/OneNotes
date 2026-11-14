@@ -34,18 +34,23 @@ def results(root):
         cases = list(suite.iter("testcase"))
         skipped = suite.get("skipped", "0")
         skipped_cases = sum(case.find("skipped") is not None for case in cases)
+        child_tags = ",".join(sorted({child.tag for child in suite}))
         yield (
-            f"::notice title=Android test summary::{path}: tests={tests} failures={failures} "
-            f"errors={errors} skipped={skipped} skipped_cases={skipped_cases} cases={len(cases)}"
+            f"::notice title=Android test summary::{path}: root={suite.tag} children={child_tags} "
+            f"tests={tests} failures={failures} errors={errors} skipped={skipped} "
+            f"skipped_cases={skipped_cases} cases={len(cases)}"
         )
         for case in cases:
             for failure in list(case.findall("failure")) + list(case.findall("error")):
                 detail = f"{case.get('classname', '')}.{case.get('name', '')}\n{failure.get('message', '')}\n{failure.text or ''}"
                 yield from annotations(detail, "error", "Android test failure")
         # Some runners report an infrastructure failure outside a testcase.
-        for failure in list(suite.findall("failure")) + list(suite.findall("error")):
-            detail = f"{path}\n{failure.get('message', '')}\n{failure.text or ''}"
-            yield from annotations(detail, "error", "Android test infrastructure failure")
+        for parent in suite.iter():
+            if parent.tag not in ("testsuite", "testsuites"):
+                continue
+            for failure in list(parent.findall("failure")) + list(parent.findall("error")):
+                detail = f"{path}\n{failure.get('message', '')}\n{failure.text or ''}"
+                yield from annotations(detail, "error", "Android test infrastructure failure")
 
 
 def validation_errors(root, minimums=MIN_TESTS):
@@ -66,8 +71,10 @@ def validation_errors(root, minimums=MIN_TESTS):
                 continue
             cases = list(suite.iter("testcase"))
             skipped_cases = sum(case.find("skipped") is not None for case in cases)
-            if suite.tag != "testsuite" or any(count < 0 for count in (*counts.values(), skipped)):
-                yield f"{path}: invalid suite or negative count"
+            if suite.tag not in ("testsuite", "testsuites"):
+                yield f"{path}: unsupported report root {suite.tag!r}"
+            if any(count < 0 for count in (*counts.values(), skipped)):
+                yield f"{path}: negative count"
             if counts["tests"] < minimum:
                 yield f"{path}: expected at least {minimum} tests, found {counts['tests']}"
             if len(cases) != counts["tests"]:
@@ -77,6 +84,27 @@ def validation_errors(root, minimums=MIN_TESTS):
                 yield f"{path}: failures={counts['failures']} errors={counts['errors']} or failure elements present"
             if skipped or skipped_cases:
                 yield f"{path}: skipped={skipped}, skipped cases={skipped_cases}"
+            if suite.tag == "testsuite" and suite.find(".//testsuite") is not None:
+                yield f"{path}: nested testsuites are not supported"
+            if suite.tag == "testsuites":
+                children = suite.findall("testsuite")
+                if not children or sum(len(list(child.iter("testcase"))) for child in children) != len(cases):
+                    yield f"{path}: aggregate must contain test cases inside direct testsuite children"
+                for child in children:
+                    if child.find(".//testsuite") is not None:
+                        yield f"{path}: nested testsuites are not supported"
+                    for name in ("tests", "failures", "errors", "skipped"):
+                        if name not in child.attrib:
+                            continue
+                        try:
+                            value = int(child.attrib[name])
+                        except ValueError:
+                            yield f"{path}: invalid child testsuite {name} count"
+                            continue
+                        if value < 0 or (name != "tests" and value != 0):
+                            yield f"{path}: child testsuite {name}={value}"
+                        if name == "tests" and value != len(list(child.iter("testcase"))):
+                            yield f"{path}: child testsuite count does not match its test cases"
 
 
 def task_diagnostics(log_path):

@@ -98,6 +98,46 @@ class ReportingTest(unittest.TestCase):
                     path.write_text(xml)
                     self.assertTrue(list(tests.validation_errors(root, {"app": 2})))
 
+    def test_instrumented_validation_supports_aggregate_suites_without_double_counting(self):
+        valid = (
+            '<testsuites tests="2" failures="0" errors="0">'
+            '<testsuite name="A" tests="1" failures="0" errors="0" skipped="0"><testcase name="a"/></testsuite>'
+            '<testsuite name="B" tests="1" failures="0" errors="0" skipped="0"><testcase name="b"/></testsuite>'
+            '</testsuites>'
+        )
+        variants = {
+            "child skipped": valid.replace('skipped="0"', 'skipped="1"', 1),
+            "child failure": valid.replace('failures="0"', 'failures="1"', 2).replace('failures="1"', 'failures="0"', 1),
+            "child count mismatch": valid.replace('name="A" tests="1"', 'name="A" tests="2"'),
+            "invalid child count": valid.replace('name="A" tests="1"', 'name="A" tests="?"'),
+            "nested suite": valid.replace('<testcase name="a"/>', '<testsuite><testcase name="a"/></testsuite>'),
+            "case outside suite": valid.replace('<testcase name="a"/>', '').replace('</testsuites>', '<testcase name="a"/></testsuites>'),
+            "unsupported root": valid.replace('testsuites', 'other'),
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            path = write_instrumented_suite(root, "app", valid)
+            self.assertEqual([], list(tests.validation_errors(root, {"app": 2})))
+            for name, xml in variants.items():
+                with self.subTest(name=name):
+                    path.write_text(xml)
+                    self.assertTrue(list(tests.validation_errors(root, {"app": 2})))
+
+    def test_instrumented_validation_command_accepts_complete_reports(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            for module, count in tests.MIN_TESTS.items():
+                cases = ''.join(f'<testcase name="case-{i}"/>' for i in range(count))
+                suite = f'<testsuite tests="{count}" failures="0" errors="0">{cases}</testsuite>'
+                write_instrumented_suite(root, module, suite)
+            result = subprocess.run(
+                [sys.executable, str(ROOT / "scripts/ci_report_test_results.py"), directory],
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+
     def test_instrumented_validation_command_fails_when_reports_are_missing(self):
         with tempfile.TemporaryDirectory() as directory:
             result = subprocess.run(
