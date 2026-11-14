@@ -106,7 +106,7 @@
     <string name="privacy_text">Notes and sketches are stored in this app’s private database on your device. They are not end-to-end encrypted or protected by a note lock. Lume Notes has no account, advertising, analytics, or network permission. Exports are copies saved wherever you choose and are not encrypted by the app. Cloud backup is disabled by the app, but some devices may still allow direct device-to-device transfers. Uninstalling the app deletes its local notes; export important work first.</string>
     <string name="licenses">Open-source licenses</string>
     <string name="licenses_summary">OneUI Project, AndroidX, and other contributors</string>
-    <string name="licenses_intro">Lume Notes uses OneUI Project’s design and SESL libraries (MIT), AndroidX, Kotlin, Hilt, SQLite and other components (see their licenses). Free DejaVu fonts replace upstream font files; final package verification is required. Samsung and One UI are trademarks of their respective owner; this app is independent and unofficial.\n\n</string>
+    <string name="licenses_intro">Lume Notes uses OneUI Project design and SESL, AndroidX, Kotlin, Hilt, SQLite and other components. OneUI repositories declare MIT, but some SESL source files also reserve rights to Samsung; redistribution rights remain under review. Free DejaVu fonts replace upstream font files, and the final package requires further review. Samsung and One UI are trademarks of their respective owner; this app is independent and unofficial.\n\n</string>
     <string name="close">Close</string>
     <string name="template_meeting">Meeting</string>
     <string name="template_meeting_body">## Agenda\n- \n\n## Notes\n\n## Next steps\n- [ ] </string>

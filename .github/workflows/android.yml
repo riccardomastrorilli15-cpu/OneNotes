@@ -24,7 +24,7 @@ jobs:
       - uses: gradle/actions/setup-gradle@v5
       - name: Compile and unit tests
         id: compile
-        run: ./scripts/ci_gradle.sh --no-daemon :app:assembleDebug :app:assembleRelease testDebugUnitTest ktlintCheck
+        run: ./scripts/ci_gradle.sh --no-daemon :app:assembleDebug :app:assembleRelease :app:bundleRelease testDebugUnitTest ktlintCheck
       - name: Android lint
         run: ./scripts/ci_gradle.sh --no-daemon :app:lintDebug
       - name: Verify checked-in Room schemas
@@ -43,6 +43,7 @@ jobs:
           python3 -m unittest discover -s scripts/tests -v
           python3 scripts/audit_apk_fonts.py app/build/outputs/apk/debug/app-debug.apk
           python3 scripts/audit_apk_fonts.py app/build/outputs/apk/release/app-release-unsigned.apk
+          python3 scripts/audit_apk_fonts.py app/build/outputs/bundle/release/app-release.aab
       - uses: actions/upload-artifact@v6
         if: success()
         with:

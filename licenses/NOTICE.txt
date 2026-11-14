@@ -2,10 +2,13 @@ Lume Notes — notices for components identified in the source configuration
 
 Lume Notes source: MIT License, Copyright (c) 2026 Lume Notes contributors.
 
-OneUI Project design and SESL: MIT License, Copyright (c) 2022 Yanndroid &
-BlackMesa123. The fork contains AndroidX/Material-derived material that is also
-covered by Apache License 2.0; refer to upstream source notices and audit all
-packaged assets before distribution.
+OneUI Project's repositories declare the MIT License, Copyright (c) 2022
+Yanndroid & BlackMesa123. SESL also contains AndroidX/Material-derived files
+with Apache 2.0 headers, and upstream files state: "Original code by Samsung,
+all rights reserved to the original author." Rights to those Samsung portions
+have not been established. The repository's MIT notice does not establish the
+right to redistribute all third-party code or assets. Distribution is blocked
+pending provenance and legal review; see licenses/SESL-RIGHTS-REVIEW.md.
 
 AndroidX (including Room, SQLite driver, DataStore and Android test libraries),
 Kotlin, Kotlin coroutines, Dagger/Hilt, ZXing and LeakCanary: Apache License 2.0,
