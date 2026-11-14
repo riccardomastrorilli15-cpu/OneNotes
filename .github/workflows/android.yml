@@ -129,9 +129,9 @@ jobs:
           disable-spellchecker: true
           # Screenshot capture is opt-in and only for this disposable, synthetic-data emulator.
           script: ./scripts/ci_instrumented.sh -Pandroid.testInstrumentationRunnerArguments.captureScreenshots=1 :core-database:connectedDebugAndroidTest :feature-drawing:connectedDebugAndroidTest :app:connectedDebugAndroidTest
-      - name: Report instrumented test results
+      - name: Report and validate instrumented test results
         if: always()
-        run: python3 scripts/ci_report_test_results.py .
+        run: python3 scripts/ci_report_test_results.py . "$RUNNER_TEMP/lume-gradle-$GITHUB_JOB.log"
       - uses: actions/upload-artifact@v6
         if: always()
         with:

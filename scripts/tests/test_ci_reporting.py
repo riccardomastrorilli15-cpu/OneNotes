@@ -1,5 +1,6 @@
 import base64
 import importlib.util
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -22,6 +23,13 @@ tests = load("ci_report_test_results")
 crashes = load("ci_report_crashes")
 screenshots = load("ci_report_screenshot")
 lint = load("ci_report_lint")
+
+
+def write_instrumented_suite(root, module, xml):
+    path = root / module / "build/outputs/androidTest-results/connected/debug/TEST-device.xml"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(xml)
+    return path
 
 
 class ReportingTest(unittest.TestCase):
@@ -58,6 +66,62 @@ class ReportingTest(unittest.TestCase):
             self.assertIn("tests=1 failures=1 errors=0", result)
             self.assertIn("Ink.roundTrip", result)
             self.assertIn("trace details", result)
+
+    def test_instrumented_validation_requires_every_expected_suite(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            suite = '<testsuite tests="1" failures="0" errors="0"><testcase name="one"/></testsuite>'
+            write_instrumented_suite(root, "app", suite)
+            errors = list(tests.validation_errors(root, {"app": 1, "core-database": 1}))
+            self.assertEqual(["core-database: no instrumented test XML found"], errors)
+
+    def test_instrumented_validation_rejects_incomplete_failed_or_skipped_results(self):
+        valid = '<testsuite tests="2" failures="0" errors="0" skipped="0"><testcase name="a"/><testcase name="b"/></testsuite>'
+        variants = {
+            "too few tests": valid.replace('tests="2"', 'tests="1"').replace('<testcase name="b"/>', ''),
+            "missing testcase": valid.replace('<testcase name="b"/>', ''),
+            "skipped attribute": valid.replace('skipped="0"', 'skipped="1"'),
+            "skipped testcase": valid.replace('<testcase name="a"/>', '<testcase name="a"><skipped/></testcase>'),
+            "failure count": valid.replace('failures="0"', 'failures="1"'),
+            "failure element": valid.replace('<testcase name="a"/>', '<testcase name="a"><failure/></testcase>'),
+            "missing count": valid.replace('errors="0"', ''),
+            "invalid count": valid.replace('tests="2"', 'tests="?"'),
+            "negative count": valid.replace('errors="0"', 'errors="-1"'),
+            "invalid xml": '<testsuite>',
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            path = write_instrumented_suite(root, "app", valid)
+            self.assertEqual([], list(tests.validation_errors(root, {"app": 2})))
+            for name, xml in variants.items():
+                with self.subTest(name=name):
+                    path.write_text(xml)
+                    self.assertTrue(list(tests.validation_errors(root, {"app": 2})))
+
+    def test_instrumented_validation_command_fails_when_reports_are_missing(self):
+        with tempfile.TemporaryDirectory() as directory:
+            result = subprocess.run(
+                [sys.executable, str(ROOT / "scripts/ci_report_test_results.py"), directory],
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            self.assertEqual(1, result.returncode)
+            for module in tests.MIN_TESTS:
+                self.assertIn(f"{module}: no instrumented test XML found", result.stdout)
+
+    def test_instrumented_task_diagnostics_filters_gradle_output(self):
+        with tempfile.TemporaryDirectory() as directory:
+            log = Path(directory) / "gradle.log"
+            log.write_text(
+                "> Task :core-database:connectedDebugAndroidTest NO-SOURCE\n"
+                "unrelated build output\n"
+                "> Task :app:connectedDebugAndroidTest\n"
+            )
+            output = tests.task_diagnostics(log)
+            self.assertIn("core-database:connectedDebugAndroidTest NO-SOURCE", output)
+            self.assertIn("app:connectedDebugAndroidTest", output)
+            self.assertNotIn("unrelated build output", output)
 
     def test_crash_report_keeps_lume_stack_and_drops_other_processes(self):
         text = "E AndroidRuntime: FATAL EXCEPTION: main\nE AndroidRuntime: Process: dev.lumenotes.app, PID: 123\nE AndroidRuntime: java.lang.NoSuchMethodError: missing\nE AndroidRuntime: FATAL EXCEPTION: main\nE AndroidRuntime: Process: com.example.other, PID: 456\nE AndroidRuntime: unrelated secret\n"
