@@ -19,6 +19,8 @@ def load(name):
 failure = load("ci_report_failure")
 schemas = load("ci_report_schemas")
 tests = load("ci_report_test_results")
+crashes = load("ci_report_crashes")
+lint = load("ci_report_lint")
 
 
 class ReportingTest(unittest.TestCase):
@@ -55,6 +57,22 @@ class ReportingTest(unittest.TestCase):
             self.assertIn("tests=1 failures=1 errors=0", result)
             self.assertIn("Ink.roundTrip", result)
             self.assertIn("trace details", result)
+
+    def test_crash_report_keeps_lume_stack_and_drops_other_processes(self):
+        text = "E AndroidRuntime: FATAL EXCEPTION: main\nE AndroidRuntime: Process: dev.lumenotes.app, PID: 123\nE AndroidRuntime: java.lang.NoSuchMethodError: missing\nE AndroidRuntime: FATAL EXCEPTION: main\nE AndroidRuntime: Process: com.example.other, PID: 456\nE AndroidRuntime: unrelated secret\n"
+        result = crashes.diagnostics(text)
+        self.assertIn("NoSuchMethodError", result)
+        self.assertNotIn("unrelated secret", result)
+
+    def test_lint_report_selects_errors(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            xml = root / "app/build/reports/lint-results-debug.xml"
+            xml.parent.mkdir(parents=True)
+            xml.write_text('<issues><issue id="Actual" severity="Error" message="broken"><location file="src/foo.xml" line="2"/></issue><issue id="Warning" severity="Warning" message="notice"/></issues>')
+            result = lint.diagnostics(root)
+            self.assertIn("Actual at src/foo.xml:2: broken", result)
+            self.assertNotIn("Warning", result)
 
 
 if __name__ == "__main__":

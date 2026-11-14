@@ -1,4 +1,8 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+<!-- SESL is an AppCompat fork; lint does not recognize its Maven coordinates. -->
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="AppCompatResource">
     <item android:id="@+id/action_drawing" android:icon="@drawable/ic_pen" android:title="@string/drawing" app:showAsAction="always" />
     <item android:id="@+id/action_preview" android:title="@string/preview" app:showAsAction="never" />
     <item android:id="@+id/action_export" android:title="@string/export" app:showAsAction="never" />

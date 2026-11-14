@@ -22,21 +22,23 @@ jobs:
       - name: Install Android 17 SDK
         run: sdkmanager 'platforms;android-37.0' 'build-tools;36.0.0'
       - uses: gradle/actions/setup-gradle@v5
-      - name: Compile, lint and unit tests
-        run: ./scripts/ci_gradle.sh --no-daemon :app:assembleDebug :app:assembleRelease :app:lintDebug testDebugUnitTest ktlintCheck
-      - name: Diagnose Activity dependency selection
-        if: failure()
-        run: |
-          ./gradlew --no-daemon :app:dependencyInsight --dependency androidx.activity --configuration debugRuntimeClasspath --console=plain > "$RUNNER_TEMP/lume-activity-deps.txt" 2>&1 || true
-          python3 -c 'from pathlib import Path; import os, sys; sys.path.insert(0, "scripts"); from ci_report_failure import annotations; print("\n".join(annotations(Path(os.environ["RUNNER_TEMP"], "lume-activity-deps.txt").read_text(), "notice", "Activity dependency graph")))'
-      - name: Report generated Room schemas
-        if: always()
-        run: python3 scripts/ci_report_schemas.py core-database/schemas
+      - name: Compile and unit tests
+        id: compile
+        run: ./scripts/ci_gradle.sh --no-daemon :app:assembleDebug :app:assembleRelease testDebugUnitTest ktlintCheck
+      - name: Android lint
+        run: ./scripts/ci_gradle.sh --no-daemon :app:lintDebug
       - name: Verify checked-in Room schemas
+        if: always() && steps.compile.outcome == 'success'
         run: |
           git diff --exit-code -- core-database/schemas
           test -z "$(git ls-files --others --exclude-standard -- core-database/schemas)"
+      - name: Report schemas and lint issues on failure
+        if: failure()
+        run: |
+          python3 scripts/ci_report_schemas.py core-database/schemas
+          python3 scripts/ci_report_lint.py .
       - name: Audit packaged fonts and test the audit
+        if: always() && steps.compile.outcome == 'success'
         run: |
           python3 -m unittest discover -s scripts/tests -v
           python3 scripts/audit_apk_fonts.py app/build/outputs/apk/debug/app-debug.apk
@@ -78,7 +80,7 @@ jobs:
           target: google_apis
           arch: x86_64
           disable-animations: true
-          script: ./scripts/ci_gradle.sh --continue --no-daemon :core-database:connectedDebugAndroidTest :feature-drawing:connectedDebugAndroidTest :app:connectedDebugAndroidTest
+          script: ./scripts/ci_instrumented.sh :core-database:connectedDebugAndroidTest :feature-drawing:connectedDebugAndroidTest :app:connectedDebugAndroidTest
       - name: Report instrumented test results
         if: always()
         run: python3 scripts/ci_report_test_results.py .
