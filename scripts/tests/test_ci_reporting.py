@@ -64,6 +64,17 @@ class ReportingTest(unittest.TestCase):
         self.assertIn("NoSuchMethodError", result)
         self.assertNotIn("unrelated secret", result)
 
+    def test_lifecycle_mismatch_is_reported_when_there_is_no_crash(self):
+        text = (
+            "V ActivityScenario: ignored: startActivityIntent=Intent { act=android.intent.action.MAIN "
+            "cmp=dev.lumenotes.app/.MainActivity }, activity.getIntent()=Intent { act=null }\n"
+            "I ActivityManager: unrelated process\n"
+        )
+        result = crashes.diagnostics(text)
+        self.assertIn("android.intent.action.MAIN", result)
+        self.assertIn("act=null", result)
+        self.assertNotIn("unrelated process", result)
+
     def test_lint_report_selects_errors(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

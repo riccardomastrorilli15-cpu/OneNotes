@@ -381,7 +381,10 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-        intent?.action = null
+        // Keep the launch Intent intact. Re-delivery is prevented by the
+        // savedInstanceState check in onCreate, while onNewIntent represents
+        // a new user request. Mutating the action breaks ActivityScenario's
+        // intent matching (and can also surprise other lifecycle consumers).
     }
 
     private fun toast(message: Int) {

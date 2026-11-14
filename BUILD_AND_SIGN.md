@@ -1,6 +1,6 @@
 # Guida per principianti: build, installazione e firma
 
-Questi passaggi richiedono un PC con accesso a Internet e un Android SDK funzionante. Non sono stati eseguiti nella sandbox: errori di compatibilità possono ancora richiedere correzioni. Non installare un prototipo su un dispositivo con dati non sostituibili e non distribuirlo prima dei controlli di `LIMITATIONS.md`.
+Questi passaggi richiedono un PC con accesso a Internet e un Android SDK funzionante. La build Gradle debug e release non firmata è riuscita in CI, non nella sandbox; firma, installazione release e compatibilità su dispositivi reali restano da verificare. Non installare un prototipo su un dispositivo con dati non sostituibili e non distribuirlo prima dei controlli di `LIMITATIONS.md`.
 
 ## 1. Preparare Android Studio
 
@@ -64,7 +64,7 @@ Dopo che il controllo qualità è riuscito, crea l'APK non firmato. L'esempio è
 python3 scripts/audit_apk_fonts.py "$HOME/lume-release.apk"
 ```
 
-`apksigner` chiederà le password interattivamente. L'allineamento deve avvenire **prima** della firma; l'opzione 16 KiB non sostituisce la verifica di compatibilità delle librerie native con pagine da 16 KiB. Per un **Android App Bundle**, usa la procedura guidata di Android Studio o firma con `jarsigner`: `apksigner` firma APK, non AAB. La release con R8 e il pacchetto firmato non sono ancora stati provati qui.
+`apksigner` chiederà le password interattivamente. L'allineamento deve avvenire **prima** della firma; l'opzione 16 KiB non sostituisce la verifica di compatibilità delle librerie native con pagine da 16 KiB. Per un **Android App Bundle**, usa la procedura guidata di Android Studio o firma con `jarsigner`: `apksigner` firma APK, non AAB. La release con R8 è stata compilata e sottoposta all'audit font in CI, ma il pacchetto firmato e l'esecuzione della release non sono ancora stati provati.
 
 ## 6. Problemi frequenti
 

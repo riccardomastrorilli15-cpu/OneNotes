@@ -2,7 +2,7 @@
 
 Un prototipo Android di app per note **locale e indipendente**, con interfaccia View/XML ispirata a One UI tramite il progetto open source non ufficiale [OneUI Design](https://github.com/OneUIProject/oneui-design) e i fork SESL. Lume Notes non è affiliata a Samsung. Minimo Android 8.0 / API 26; progetto Kotlin, MVVM, Hilt, Room 3/FTS5 e DataStore.
 
-> **Stato: sorgenti di prototipo, non rilascio.** In questa sandbox non è stato possibile scaricare Gradle/SDK/dipendenze Android: in CI è stato installato un APK di debug sull’emulatore, ma il test di avvio dell’app è fallito; build completa, compatibilità OneUI/SESL, Hilt, R8, UI, prestazioni, accessibilità e licenze del pacchetto non sono ancora verificati. Non usare per dati importanti o riservati. Vedere [LIMITATIONS.md](LIMITATIONS.md) prima di provarlo.
+> **Stato: prototipo, non rilascio.** La [CI](https://github.com/riccardomastrorilli15-cpu/OneNotes/actions/runs/43636274046) ha compilato debug e release non firmata con R8, eseguito lint, test JVM e audit dei font negli APK. Su emulatore API 29 sono passati i test Room/disegno, ma il test UI è fallito: la correzione dell'intent è in verifica. Compatibilità runtime, flussi UI, prestazioni, accessibilità e licenze complete non sono ancora verificati. Non usare per dati importanti o riservati. Vedere [LIMITATIONS.md](LIMITATIONS.md).
 
 ## Cosa c'è nel codice
 
@@ -12,7 +12,7 @@ Un prototipo Android di app per note **locale e indipendente**, con interfaccia 
 - Import/export di **solo testo/Markdown** tramite selettore documenti e condivisione esplicita del testo. Le esportazioni non includono disegni.
 - Tema sistema/chiaro/scuro, stringhe italiane/inglesi, interfaccia ridimensionabile e indicazioni di privacy/licenze.
 
-La presenza di codice o di un pulsante non equivale a un collaudo riuscito. Il progetto non ha account, tracking o pubblicità; il manifest rimuove esplicitamente il permesso di rete ereditato, ma il manifest risultante va verificato. I dati locali e le esportazioni **non sono cifrati**; il backup cloud Android è disattivato nel manifest, ma alcuni produttori possono comunque consentire il trasferimento diretto tra dispositivi. Un'esportazione o condivisione è avviata solo dall'utente. Disinstallare l'app elimina i dati locali.
+La presenza di codice o di un pulsante non equivale a un collaudo riuscito. Il progetto non ha account, tracking o pubblicità; un test del manifest installato su API 29 ha verificato l'assenza dei permessi INTERNET e ACCESS_NETWORK_STATE nella build debug. I dati locali e le esportazioni **non sono cifrati**; il backup cloud Android è disattivato nel manifest, ma alcuni produttori possono comunque consentire il trasferimento diretto tra dispositivi. Un'esportazione o condivisione è avviata solo dall'utente. Disinstallare l'app elimina i dati locali.
 
 ## Per iniziare
 
@@ -29,11 +29,11 @@ Il terzo comando richiede un emulatore o dispositivo collegato. L'APK debug, **s
 ## Verifiche effettivamente eseguite
 
 - **15 test JVM isolati riusciti**: ricerca, trasformazioni/anteprima Markdown, undo/redo, coda di autosalvataggio e serializzazione/validazione del disegno. Per il test isolato del disegno è stato usato JSON-java su JVM e rimosso il runner Android dal test copiato temporaneamente; non sostituisce il test con `org.json` Android. Test compilati con Kotlin 2.2.10 temporaneo e JUnit compilato dal tag `r4.13.2` (il runner riporta `4.13.2-SNAPSHOT`), non dal Gradle del progetto.
-- **11 test Python riusciti**: controllo font su APK fittizi, diagnostica CI e contrasto di 16 coppie di colori statiche; uno smoke test SQLite FTS5 Python e controlli di localizzazione/XML riusciti. Le coppie controllate non certificano l’intera interfaccia. Il test FTS Python non equivale a Room.
-- **ktlint 1.8.0 CLI** eseguito su sorgenti Kotlin e script Gradle; il task Gradle `ktlintCheck` non è stato eseguito.
+- **12 test Python riusciti localmente**: controllo font su APK fittizi, diagnostica CI e contrasto di 16 coppie di colori statiche; uno smoke test SQLite FTS5 Python e controlli di localizzazione/XML riusciti. Le coppie controllate non certificano l’intera interfaccia. Il test FTS Python non equivale a Room.
+- **ktlint 1.8.0** eseguito localmente tramite CLI e, per la revisione collegata sotto, tramite il task Gradle `ktlintCheck` in CI.
 - **AAPT2 standalone** ha compilato le risorse e le ha collegate a un `android.jar` API 37 da mirror e a stub minimi delle risorse OneUI; una prova separata dell'overlay ha selezionato DejaVu al posto del font upstream. Non sono il merge delle dipendenze reali né una build APK funzionante.
 - Checksum della distribuzione e del wrapper Gradle confrontati con il [log indipendente F-Droid](https://github.com/f-droid/gradle-transparency-log/tree/master/sha256); il wrapper non ha scaricato la distribuzione nella sandbox.
-- La [Android CI](.github/workflows/android.yml) ha eseguito con successo **due test Room e tre test del disegno su emulatore API 29**. Il ponte SESL/AndroidX ha permesso la compilazione del debug, ma il test UI non ha raggiunto lo stato attivo e lint ha segnalato i menu del fork come se mancasse AppCompat. La correzione e la causa dell’avvio sono in verifica. L’audit font va eseguito su ogni APK generato; l’AAB richiede una verifica equivalente.
+- La [run CI 43636274046](https://github.com/riccardomastrorilli15-cpu/OneNotes/actions/runs/43636274046) ha completato `assembleDebug`, `assembleRelease` non firmata con R8, `testDebugUnitTest`, `ktlintCheck`, `lintDebug`, controllo schema Room e audit font su entrambi gli APK. La soppressione `AppCompatResource` è limitata ai due menu SESL. Su emulatore API 29 sono passati **due test Room, tre test del disegno e il test del manifest**, ma il test UI è fallito con timeout. L'app mutava l'azione dell'intent, impedendo il riconoscimento da parte di `ActivityScenario`; la modifica è in attesa di verifica CI. L'audit va ripetuto su ogni APK e non copre l'AAB o altre risorse.
 
 ## Stato rispetto al capitolato
 
@@ -45,13 +45,13 @@ Il terzo comando richiede un emulatore o dispositivo collegato. L'APK debug, **s
 | Disegno e S Pen | Parziale | Canvas vettoriale base; niente latenza certificata, palm rejection affidabile, riconoscimento o OCR. |
 | Import/export e privacy | Parziale | Solo testo; nessun backup completo/cifrato. Niente cifratura, blocco o biometria. |
 | OneUI, temi, localizzazione, layout, accessibilità | Parziale | Componenti upstream e risorse EN/IT; nessuna certificazione visiva, RTL, contrasto o TalkBack. |
-| CI e test | Parziale | Cinque test Room/disegno passati su API 29; APK debug installato ma test UI di avvio fallito, lint in verifica. |
+| CI e test | Parziale | Build debug/release non firmata, test JVM e lint passati; sei test Room/disegno/manifest passati su API 29. Flusso UI fallito, correzione in verifica. |
 | Prestazioni obiettivo (avvio, 5.000 note, 50k testo, latenza) | Non misurate | Non si dichiarano raggiunte. |
 | Allegati, audio, PDF, OCR, promemoria, widget, sincronizzazione e AI | Non implementate | Nessun pulsante funzionale che simuli queste funzioni. |
 
 ## Roadmap proposta
 
-1. Sbloccare Gradle/SDK, far passare build debug/release, lint e test su emulatore; risolvere i conflitti tra AndroidX e fork SESL.
+1. Verificare la correzione del test UI su emulatore e la compatibilità tra AndroidX e fork SESL su altre versioni; mantenere verdi build debug/release e lint.
 2. Testare salvataggio, interruzioni, import/export, TalkBack, RTL, font grandi, edge-to-edge e reali Galaxy, Fold e S Pen; raccogliere benchmark.
 3. Creare backup completo con ripristino verificato e protezione crittografica/biometrica prima di gestire dati sensibili.
 4. Evolvere editor, ricerca e organizzazione; aggiungere progressivamente disegno avanzato, allegati, PDF/OCR e promemoria solo con test e permessi appropriati.
@@ -61,6 +61,6 @@ Il terzo comando richiede un emulatore o dispositivo collegato. L'APK debug, **s
 
 Il codice di Lume Notes è [MIT](LICENSE). OneUI Design/SESL: MIT, © 2022 Yanndroid & BlackMesa123; AndroidX, Kotlin/coroutines, Hilt, ZXing e LeakCanary: Apache 2.0; SQLite: pubblico dominio per il motore; DejaVu/Bitstream Vera: licenza font libera. JUnit ed Hamcrest sono dipendenze di test. Testi e avvisi sono in [`licenses/`](licenses/) e nella schermata Licenze in app. La lista non sostituisce un inventario reale delle dipendenze transitive: si veda [`licenses/NOTICE.txt`](licenses/NOTICE.txt).
 
-Due font upstream dai diritti non chiariti o riservati sono sostituiti nei sorgenti da DejaVu con la stessa chiave/percorso. L'audit automatico dei font non è ancora stato applicato a un APK reale e non verifica immagini o altre risorse: la distribuzione resta subordinata a verifica tecnica e legale. Non sono utilizzati loghi o font Samsung come identità del prodotto.
+Due font upstream dai diritti non chiariti o riservati sono sostituiti nei sorgenti da DejaVu con la stessa chiave/percorso. L'audit automatico è passato sugli APK debug e release non firmata della run citata, ma non verifica immagini, altre risorse o AAB: la distribuzione resta subordinata a verifica tecnica e legale. Non sono utilizzati loghi o font Samsung come identità del prodotto.
 
 [Note di design](DESIGN_NOTES.md) · [Architettura](ARCHITECTURE.md) · [Limiti dettagliati](LIMITATIONS.md) · [Changelog](CHANGELOG.md) · [Build e firma](BUILD_AND_SIGN.md)

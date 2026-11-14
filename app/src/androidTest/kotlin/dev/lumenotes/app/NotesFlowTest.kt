@@ -1,5 +1,6 @@
 package dev.lumenotes.app
 
+import android.content.Intent
 import android.view.View
 import androidx.test.espresso.Espresso.closeSoftKeyboard
 import androidx.test.espresso.Espresso.onView
@@ -19,6 +20,7 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.allOf
+import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -26,6 +28,10 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class NotesFlowTest {
     @get:Rule val activity = ActivityScenarioRule(MainActivity::class.java)
+
+    @Test fun launcherIntentSurvivesActivityCreation() {
+        activity.scenario.onActivity { assertEquals(Intent.ACTION_MAIN, it.intent.action) }
+    }
 
     @Test fun createEditReopenAndSearch() {
         val title = "Lume test ${System.currentTimeMillis()}"

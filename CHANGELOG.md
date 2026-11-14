@@ -6,4 +6,4 @@
 - Struttura Gradle Kotlin DSL multi-modulo, Hilt, Room 3/FTS5, DataStore e tema OneUI.
 - Codice per note, editor Markdown, autosalvataggio, cartelle/tag testuali, preferiti, archivio, cestino, ricerca, sei modelli e backlink.
 - Canvas vettoriale semplice, condivisione testo e import/export testo tramite SAF; impostazioni tema, privacy e licenze.
-- Test unitari, test Room/UI e workflow CI avviato; controlli Kotlin isolati e ktlint eseguiti. Due test Room e tre del disegno sono passati su emulatore API 29; **lint e test UI dell’app non ancora riusciti**. Vedere `LIMITATIONS.md`.
+- Build debug e release non firmata con R8, test JVM, lint, ktlint e audit font sugli APK riusciti in CI. Due test Room, tre del disegno e uno sul manifest passati su emulatore API 29; **test UI fallito**, correzione dell'intent in verifica. Vedere `LIMITATIONS.md`.
