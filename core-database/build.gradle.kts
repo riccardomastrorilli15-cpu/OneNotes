@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.room3)
 }
 
 android {
@@ -16,7 +17,7 @@ android {
     }
 }
 
-ksp { arg("room.schemaLocation", "$projectDir/schemas") }
+room3 { schemaDirectory("$projectDir/schemas") }
 
 dependencies {
     implementation(project(":core-model"))

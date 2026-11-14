@@ -24,6 +24,9 @@ jobs:
       - uses: gradle/actions/setup-gradle@v5
       - name: Compile, lint and unit tests
         run: ./scripts/ci_gradle.sh --no-daemon :app:assembleDebug :app:assembleRelease :app:lintDebug testDebugUnitTest ktlintCheck
+      - name: Report generated Room schemas
+        if: always()
+        run: python3 scripts/ci_report_schemas.py core-database/schemas
       - name: Audit packaged fonts and test the audit
         run: |
           python3 -m unittest discover -s scripts/tests -v
