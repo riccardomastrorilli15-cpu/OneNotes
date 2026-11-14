@@ -1,17 +1,20 @@
 package dev.lumenotes.app
 
 import android.app.Activity
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Rect
 import android.os.SystemClock
 import android.util.Base64
 import android.util.Log
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
+import androidx.test.espresso.matcher.ViewMatchers.hasFocus
 import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.util.TreeIterables
@@ -46,6 +49,21 @@ internal fun waitForKeyboard(timeoutMs: Long = 10_000): ViewAction = object : Vi
             uiController.loopMainThreadForAtLeast(100)
         } while (SystemClock.elapsedRealtime() < deadline)
         throw AssertionError("Timed out waiting for the software keyboard inset")
+    }
+}
+
+/** Focus can precede the IME switching its input connection to the new field. */
+internal fun waitForInputConnection(timeoutMs: Long = 10_000): ViewAction = object : ViewAction {
+    override fun getConstraints(): Matcher<View> = hasFocus()
+    override fun getDescription(): String = "Wait for the focused field's input connection"
+    override fun perform(uiController: UiController, view: View) {
+        val manager = view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val deadline = SystemClock.elapsedRealtime() + timeoutMs
+        do {
+            if (view.hasFocus() && manager.isActive(view) && manager.isAcceptingText) return
+            uiController.loopMainThreadForAtLeast(100)
+        } while (SystemClock.elapsedRealtime() < deadline)
+        throw AssertionError("Timed out waiting for the editor input connection")
     }
 }
 

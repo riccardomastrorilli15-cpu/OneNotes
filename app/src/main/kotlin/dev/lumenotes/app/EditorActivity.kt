@@ -148,7 +148,9 @@ class EditorActivity : AppCompatActivity() {
         }
     }
 
-    private fun renderDraft(draft: NoteDraft) {
+    internal fun renderDraft(draft: NoteDraft) {
+        // A queued Flow emission must not overwrite characters entered since it was emitted.
+        if (draft != viewModel.draft.value) return
         rendering = true
         if (binding.titleField.text.toString() != draft.title) binding.titleField.setText(draft.title)
         if (binding.bodyField.text.toString() != draft.body) binding.bodyField.setText(draft.body)

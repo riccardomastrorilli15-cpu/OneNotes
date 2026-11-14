@@ -2,7 +2,7 @@
 
 Un prototipo Android di app per note **locale e indipendente**, con interfaccia View/XML ispirata a One UI tramite il progetto open source non ufficiale [OneUI Design](https://github.com/OneUIProject/oneui-design) e i fork SESL. Lume Notes non è affiliata a Samsung. Minimo Android 8.0 / API 26; progetto Kotlin, MVVM, Hilt, Room 3/FTS5 e DataStore.
 
-> **Stato: prototipo, non rilascio.** La [CI](https://github.com/riccardomastrorilli15-cpu/OneNotes/actions/runs/43639623424) ha compilato debug, release non firmata con R8 e AAB, superando lint, test JVM e audit font; su emulatore API 29 è passato anche un flusso UI di creazione, modifica, riapertura e ricerca. Compatibilità generale, altri flussi, prestazioni e accessibilità non sono ancora verificati. La distribuzione è bloccata da [diritti SESL da chiarire](licenses/SESL-RIGHTS-REVIEW.md). Non usare per dati importanti o riservati. Vedere [LIMITATIONS.md](LIMITATIONS.md).
+> **Stato: prototipo, non rilascio.** La CI ha compilato debug, release non firmata con R8 e AAB, superando lint, test JVM e audit font. I flussi UI di base sono passati su emulatori API 26/29/35/37 in esecuzioni separate, ma una ripetizione su API 26 ha perso un carattere e un job API 29 si è bloccato: le verifiche proseguono. Compatibilità generale, altri flussi, prestazioni e accessibilità non sono ancora verificati. La distribuzione è bloccata da [diritti SESL da chiarire](licenses/SESL-RIGHTS-REVIEW.md). Non usare per dati importanti o riservati. Vedere [LIMITATIONS.md](LIMITATIONS.md).
 
 ## Cosa c'è nel codice
 
@@ -34,19 +34,19 @@ Il terzo comando richiede un emulatore o dispositivo collegato. L'APK debug, **s
 - **AAPT2 standalone** ha compilato le risorse e le ha collegate a un `android.jar` API 37 da mirror e a stub minimi delle risorse OneUI; una prova separata dell'overlay ha selezionato DejaVu al posto del font upstream. Non sono il merge delle dipendenze reali né una build APK funzionante.
 - Checksum della distribuzione e del wrapper Gradle confrontati con il [log indipendente F-Droid](https://github.com/f-droid/gradle-transparency-log/tree/master/sha256); il wrapper non ha scaricato la distribuzione nella sandbox.
 - La [run CI 43639623424](https://github.com/riccardomastrorilli15-cpu/OneNotes/actions/runs/43639623424) ha completato `assembleDebug`, `assembleRelease` e `bundleRelease` non firmati con R8, `testDebugUnitTest`, `ktlintCheck`, `lintDebug`, controllo schema Room e audit font su entrambi gli APK e sull'AAB. La soppressione `AppCompatResource` è limitata ai due menu SESL. Su emulatore API 29 sono passati **due test Room, tre test di serializzazione del disegno e tre test app**, compreso il flusso creazione/modifica/riapertura/ricerca. L'audit va ripetuto su ogni pacchetto e non copre codice o altre risorse.
-- Nella più recente [matrice CI 43642073921](https://github.com/riccardomastrorilli15-cpu/OneNotes/actions/runs/43642073921), la build è riuscita e su API 26/29/35/37 sono passati **2 test Room e 7 test disegno per versione**. I test app sono parziali: 4/5 su API 26, 29 e 35, 2/5 su API 37. Su API 35 il pulsante Nuova nota riposizionato ha superato i controlli di visibilità e il flusso disegno; restano fallimenti nel flusso note. Su API 37 Espresso 3.6.1 ha fallito prima delle interazioni per una API interna rimossa da Android. Aggiornamenti dei test e del framework sono in verifica.
+- Nelle run [43643878484](https://github.com/riccardomastrorilli15-cpu/OneNotes/actions/runs/43643878484) e [43645334217](https://github.com/riccardomastrorilli15-cpu/OneNotes/actions/runs/43645334217), sullo stesso commit, sono passati almeno una volta **2 test Room, 7 disegno e 5 app per ciascuna API 26/29/35/37**, compresi creazione, digitazione, riapertura, ricerca e persistenza del disegno. Non è però una matrice interamente verde: nella prima il job API 29 è rimasto in corso oltre 25 minuti; nella ripetizione API 26 il primo carattere digitato non è comparso. La causa non è ancora accertata; un controllo contro emissioni di bozza obsolete e l'attesa della connessione IME sono in verifica. Espresso 3.7 ha consentito l'esecuzione dei test UI su Android 17.
 
 ## Stato rispetto al capitolato
 
 | Area | Stato | Evidenza / limite |
 | --- | --- | --- |
 | Ricerca iniziale OneUI, design e architettura | Completata come documentazione | [DESIGN_NOTES.md](DESIGN_NOTES.md), [ARCHITECTURE.md](ARCHITECTURE.md); compatibilità da provare. |
-| Note, editor, autosave, archivio/cestino, cartelle/tag e ricerca | Parziale | Creazione, modifica, riapertura e ricerca verificate nel test UI API 29; altri flussi e nessuna garanzia anti-perdita. |
+| Note, editor, autosave, archivio/cestino, cartelle/tag e ricerca | Parziale | Flusso UI di base passato su API 26/29/35/37 in run separate; un carattere perso in una ripetizione API 26 richiede verifica. Altri flussi e nessuna garanzia anti-perdita. |
 | Markdown, modelli e backlink | Parziale | Comandi semplici, sei modelli e backlink testuali; no WYSIWYG completo o grafo. |
 | Disegno e S Pen | Parziale | Canvas vettoriale base; niente latenza certificata, palm rejection affidabile, riconoscimento o OCR. |
 | Import/export e privacy | Parziale | Solo testo; nessun backup completo/cifrato. Niente cifratura, blocco o biometria. |
 | OneUI, temi, localizzazione, layout, accessibilità | Parziale | Componenti upstream e risorse EN/IT; nessuna certificazione visiva, RTL, contrasto o TalkBack. |
-| CI e test | Parziale | Build, test JVM e lint passati; 2 test Room e 7 disegno passati su API 26/29/35/37. I test app dell'ultima matrice sono parziali; dispositivi reali e altri flussi restano da verificare. |
+| CI e test | Parziale | Build, test JVM e lint passati; 14 test strumentali per API passati almeno una volta, ma non in un'unica matrice verde. Dispositivi reali e altri flussi restano da verificare. |
 | Prestazioni obiettivo (avvio, 5.000 note, 50k testo, latenza) | Non misurate | Non si dichiarano raggiunte. |
 | Allegati, audio, PDF, OCR, promemoria, widget, sincronizzazione e AI | Non implementate | Nessun pulsante funzionale che simuli queste funzioni. |
 

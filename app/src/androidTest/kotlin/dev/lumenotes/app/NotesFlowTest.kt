@@ -7,6 +7,8 @@ import android.util.Log
 import android.view.InputDevice
 import android.view.MotionEvent
 import android.view.View
+import android.widget.EditText
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.closeSoftKeyboard
@@ -33,6 +35,9 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry
+import androidx.test.runner.lifecycle.Stage
 import dev.lumenotes.drawing.InkCanvasView
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.allOf
@@ -78,6 +83,30 @@ class NotesFlowTest {
         onView(withText(title)).check(matches(isDisplayed()))
     }
 
+    @Test fun staleDraftCannotOverwriteNewerInput() {
+        clickNewNote()
+        waitForResumed(EditorActivity::class.java)
+        onView(isRoot()).perform(waitFor(allOf(withId(R.id.body_field), isEnabled())))
+        var currentDraft = ""
+        var displayed = ""
+        InstrumentationRegistry.getInstrumentation().runOnMainSync {
+            val editor = ActivityLifecycleMonitorRegistry.getInstance()
+                .getActivitiesInStage(Stage.RESUMED).filterIsInstance<EditorActivity>().single()
+            val model = ViewModelProvider(editor)[EditorViewModel::class.java]
+            val stale = checkNotNull(model.draft.value)
+            val body = editor.findViewById<EditText>(R.id.body_field)
+            body.setText("Newest input")
+            currentDraft = model.draft.value?.body.orEmpty()
+            editor.renderDraft(stale)
+            displayed = body.text.toString()
+        }
+        assertEquals("Newest input", currentDraft)
+        assertEquals("Newest input", displayed)
+        closeSoftKeyboard()
+        pressBack()
+        waitForResumed(MainActivity::class.java)
+    }
+
     @Test fun drawSaveAndReopen() {
         clickNewNote()
         waitForResumed(EditorActivity::class.java)
@@ -112,7 +141,8 @@ class NotesFlowTest {
             // The multiline field can be taller than the viewport with the IME open.
             // Tap a visible, touch-sized area, and verify focus before sending key events.
             onView(withId(R.id.body_field)).perform(tapVisiblePart())
-            onView(withId(R.id.body_field)).check(matches(hasFocus())).perform(typeTextIntoFocusedView(text))
+            onView(withId(R.id.body_field)).check(matches(hasFocus()))
+                .perform(waitForInputConnection(), typeTextIntoFocusedView(text))
             onView(withId(R.id.body_field)).check(matches(withText(text)))
         } catch (failure: Throwable) {
             captureFailedViewForCi(R.id.body_field)
