@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Bottom bar shown by the One UI ToolbarLayout while selecting notes. -->
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/action_pin"
+        android:icon="@drawable/ic_pin"
+        android:title="@string/action_pin" />
+
+    <item
+        android:id="@+id/action_color"
+        android:icon="@drawable/ic_text_color"
+        android:title="@string/action_color" />
+
+    <item
+        android:id="@+id/action_folder"
+        android:icon="@drawable/ic_folder"
+        android:title="@string/action_move_to_folder" />
+
+    <item
+        android:id="@+id/action_archive"
+        android:icon="@drawable/ic_archive"
+        android:title="@string/action_archive" />
+
+    <item
+        android:id="@+id/action_delete"
+        android:icon="@drawable/ic_delete"
+        android:title="@string/action_delete" />
+
+</menu>

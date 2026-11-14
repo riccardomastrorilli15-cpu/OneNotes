@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Same theme as values/themes.xml but with the correct system bar icons
+         for the dark palette (the One UI base theme keeps light icons). -->
+    <style name="OneNotesTheme" parent="OneUITheme">
+        <item name="colorPrimary">@color/onenotes_primary</item>
+        <item name="colorPrimaryDark">@color/onenotes_primary_dark</item>
+        <item name="colorAccent">@color/onenotes_primary</item>
+
+        <item name="android:windowBackground">@color/onenotes_bg</item>
+        <item name="android:statusBarColor">@color/onenotes_bg</item>
+        <item name="android:navigationBarColor">@color/onenotes_bg</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">false</item>
+
+        <item name="android:textColorPrimary">@color/onenotes_text_primary</item>
+        <item name="android:textColorSecondary">@color/onenotes_text_secondary</item>
+
+        <item name="bottomSheetDialogTheme">@style/OneNotesTheme.BottomSheetDialog</item>
+        <item name="alertDialogTheme">@style/OneNotesTheme.AlertDialog</item>
+    </style>
+
+    <style name="OneNotesTheme.Transparent" parent="OneNotesTheme">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+
+</resources>

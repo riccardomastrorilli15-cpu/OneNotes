@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="56dp"
+    android:gravity="center">
+
+    <ImageView
+        android:id="@+id/swatch_color"
+        android:layout_width="@dimen/color_swatch_size"
+        android:layout_height="@dimen/color_swatch_size"
+        android:layout_gravity="center"
+        android:contentDescription="@string/cd_note_color"
+        android:src="@drawable/bg_color_swatch" />
+
+    <View
+        android:id="@+id/swatch_selected"
+        android:layout_width="46dp"
+        android:layout_height="46dp"
+        android:layout_gravity="center"
+        android:background="@drawable/bg_swatch_selected"
+        android:visibility="gone" />
+
+</FrameLayout>

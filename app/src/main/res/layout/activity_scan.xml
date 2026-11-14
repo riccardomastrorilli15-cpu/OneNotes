@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/onenotes_bg"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/oui_space_s"
+        android:paddingEnd="@dimen/oui_space_s">
+
+        <ImageButton
+            android:id="@+id/scan_close"
+            style="@style/OneNotesToolbarButton"
+            android:contentDescription="@string/action_back"
+            app:srcCompat="@drawable/ic_back" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="@dimen/oui_space_s"
+            android:text="@string/title_activity_scan"
+            android:textAppearance="@style/OneNotesTextAppearance.Title" />
+
+        <TextView
+            android:id="@+id/scan_save"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:background="@drawable/bg_rounded_surface"
+            android:gravity="center"
+            android:paddingStart="@dimen/oui_space_m"
+            android:paddingEnd="@dimen/oui_space_m"
+            android:text="@string/action_save"
+            android:textAppearance="@style/OneNotesTextAppearance.Title"
+            android:textColor="@color/onenotes_primary" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/scan_preview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginStart="@dimen/oui_space_m"
+        android:layout_marginEnd="@dimen/oui_space_m"
+        android:adjustViewBounds="true"
+        android:background="@drawable/bg_rounded_surface"
+        android:contentDescription="@string/title_activity_scan"
+        android:scaleType="fitCenter" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="@dimen/oui_space_s">
+
+        <ImageButton
+            android:id="@+id/scan_rotate"
+            style="@style/OneNotesToolbarButton"
+            android:contentDescription="@string/action_rotate"
+            app:srcCompat="@drawable/ic_restore" />
+
+        <TextView
+            android:id="@+id/scan_filter_original"
+            style="@style/OneNotesFormatTextButton"
+            android:layout_width="wrap_content"
+            android:paddingStart="@dimen/oui_space_m"
+            android:paddingEnd="@dimen/oui_space_m"
+            android:text="@string/scan_filter_original"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/scan_filter_grayscale"
+            style="@style/OneNotesFormatTextButton"
+            android:layout_width="wrap_content"
+            android:paddingStart="@dimen/oui_space_m"
+            android:paddingEnd="@dimen/oui_space_m"
+            android:text="@string/scan_filter_grayscale"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/scan_filter_bw"
+            style="@style/OneNotesFormatTextButton"
+            android:layout_width="wrap_content"
+            android:paddingStart="@dimen/oui_space_m"
+            android:paddingEnd="@dimen/oui_space_m"
+            android:text="@string/scan_filter_bw"
+            android:textSize="14sp" />
+
+        <ImageButton
+            android:id="@+id/scan_ocr"
+            style="@style/OneNotesToolbarButton"
+            android:contentDescription="@string/scan_ocr"
+            app:srcCompat="@drawable/ic_text_color" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/scan_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxHeight="120dp"
+        android:paddingStart="@dimen/oui_space_m"
+        android:paddingEnd="@dimen/oui_space_m"
+        android:paddingBottom="@dimen/oui_space_m"
+        android:textAppearance="@style/OneNotesTextAppearance.Caption"
+        android:visibility="gone" />
+
+</LinearLayout>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="onenotes_primary">#FF8AB0FF</color>
+    <color name="onenotes_primary_dark">#FF6E96E8</color>
+    <color name="onenotes_on_primary">#FF0B1220</color>
+
+    <color name="onenotes_bg">#FF101114</color>
+    <color name="onenotes_surface">#FF1C1E22</color>
+    <color name="onenotes_surface_variant">#FF26292E</color>
+    <color name="onenotes_divider">#FF2C2F34</color>
+    <color name="onenotes_scrim">#CC000000</color>
+
+    <color name="onenotes_text_primary">#FFE7E9EC</color>
+    <color name="onenotes_text_secondary">#FF9AA0A6</color>
+    <color name="onenotes_text_hint">#FF6F757B</color>
+
+    <!-- Darker pastels keep the text readable in dark mode -->
+    <color name="note_color_default">#00000000</color>
+    <color name="note_color_yellow">#FF5B5000</color>
+    <color name="note_color_red">#FF5C2B26</color>
+    <color name="note_color_green">#FF23402A</color>
+    <color name="note_color_blue">#FF233247</color>
+    <color name="note_color_purple">#FF3B2C4C</color>
+    <color name="note_color_orange">#FF51371C</color>
+    <color name="note_color_brown">#FF453A35</color>
+    <color name="note_color_grey">#FF33373D</color>
+
+    <color name="text_color_default">#FFFFFFFF</color>
+    <color name="highlight_default">#00000000</color>
+</resources>

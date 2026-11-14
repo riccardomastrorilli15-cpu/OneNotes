@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Bottom bar used inside the trash: restore or delete for good. -->
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/action_restore"
+        android:icon="@drawable/ic_restore"
+        android:title="@string/action_restore" />
+
+    <item
+        android:id="@+id/action_delete_forever"
+        android:icon="@drawable/ic_delete"
+        android:title="@string/action_delete_forever" />
+
+</menu>

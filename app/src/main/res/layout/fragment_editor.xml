@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Body of the editor: the title, the list of blocks and the formatting toolbar.
+  It is a plain vertical layout so that it can be used both full screen (inside
+  EditorActivity, which provides the One UI app bar) and as the right pane of
+  MainActivity on tablets and on the unfolded Fold.
+-->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/onenotes_bg">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/editor_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autofillHints="noteTitle"
+        android:background="@null"
+        android:hint="@string/editor_hint_title"
+        android:imeOptions="actionNext"
+        android:inputType="textCapSentences|textMultiLine"
+        android:maxLines="4"
+        android:paddingStart="@dimen/oui_space_l"
+        android:paddingEnd="@dimen/oui_space_l"
+        android:paddingTop="@dimen/oui_space_m"
+        android:paddingBottom="@dimen/oui_space_s"
+        android:textAppearance="@style/OneNotesTextAppearance.Title"
+        android:textColor="@color/onenotes_text_primary"
+        android:textColorHint="@color/onenotes_text_hint"
+        android:textSize="22sp"
+        android:textStyle="bold" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/editor_blocks"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:descendantFocusability="beforeDescendants"
+        android:overScrollMode="ifContentScrolls"
+        android:paddingStart="@dimen/oui_space_l"
+        android:paddingEnd="@dimen/oui_space_l"
+        android:paddingBottom="@dimen/oui_space_s"
+        android:scrollbars="vertical" />
+
+    <LinearLayout
+        android:id="@+id/editor_bottom_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/onenotes_surface"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/onenotes_divider" />
+
+        <LinearLayout
+            android:id="@+id/color_palette_row"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="@dimen/oui_space_s"
+            android:paddingEnd="@dimen/oui_space_s"
+            android:paddingTop="@dimen/oui_space_s"
+            android:paddingBottom="@dimen/oui_space_s"
+            android:visibility="gone" />
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:id="@+id/format_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="@dimen/oui_space_s"
+                android:paddingEnd="@dimen/oui_space_s"
+                android:paddingTop="@dimen/oui_space_xs"
+                android:paddingBottom="@dimen/oui_space_xs">
+
+                <TextView
+                    android:id="@+id/btn_bold"
+                    style="@style/OneNotesFormatTextButton"
+                    android:text="B"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/btn_italic"
+                    style="@style/OneNotesFormatTextButton"
+                    android:text="I"
+                    android:textStyle="italic" />
+
+                <TextView
+                    android:id="@+id/btn_underline"
+                    style="@style/OneNotesFormatTextButton"
+                    android:text="U"
+                    android:gravity="center|bottom"
+                    android:paddingBottom="10dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/btn_strike"
+                    style="@style/OneNotesFormatTextButton"
+                    android:text="S"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/btn_heading"
+                    style="@style/OneNotesFormatTextButton"
+                    android:text="H1"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/btn_bullet"
+                    style="@style/OneNotesFormatTextButton"
+                    android:text="•"
+                    android:textSize="22sp" />
+
+                <TextView
+                    android:id="@+id/btn_number"
+                    style="@style/OneNotesFormatTextButton"
+                    android:text="1."
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/btn_check"
+                    style="@style/OneNotesFormatTextButton"
+                    android:text="☑"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/btn_quote"
+                    style="@style/OneNotesFormatTextButton"
+                    android:text="❝"
+                    android:textSize="18sp" />
+
+                <ImageButton
+                    android:id="@+id/btn_text_color"
+                    style="@style/OneNotesToolbarButton"
+                    android:contentDescription="@string/editor_text_color"
+                    app:srcCompat="@drawable/ic_text_color" />
+
+                <ImageButton
+                    android:id="@+id/btn_highlight"
+                    style="@style/OneNotesToolbarButton"
+                    android:contentDescription="@string/editor_highlight"
+                    app:srcCompat="@drawable/ic_highlight" />
+
+                <ImageButton
+                    android:id="@+id/btn_link"
+                    style="@style/OneNotesToolbarButton"
+                    android:contentDescription="@string/editor_link"
+                    app:srcCompat="@drawable/ic_link" />
+
+                <ImageButton
+                    android:id="@+id/btn_image"
+                    style="@style/OneNotesToolbarButton"
+                    android:contentDescription="@string/editor_insert_image"
+                    app:srcCompat="@drawable/ic_image" />
+
+                <ImageButton
+                    android:id="@+id/btn_camera"
+                    style="@style/OneNotesToolbarButton"
+                    android:contentDescription="@string/editor_insert_photo"
+                    app:srcCompat="@drawable/ic_camera" />
+
+                <ImageButton
+                    android:id="@+id/btn_audio"
+                    style="@style/OneNotesToolbarButton"
+                    android:contentDescription="@string/editor_insert_audio"
+                    app:srcCompat="@drawable/ic_mic" />
+
+                <ImageButton
+                    android:id="@+id/btn_file"
+                    style="@style/OneNotesToolbarButton"
+                    android:contentDescription="@string/editor_insert_file"
+                    app:srcCompat="@drawable/ic_file" />
+
+                <ImageButton
+                    android:id="@+id/btn_drawing"
+                    style="@style/OneNotesToolbarButton"
+                    android:contentDescription="@string/editor_insert_drawing"
+                    app:srcCompat="@drawable/ic_pen" />
+
+                <ImageButton
+                    android:id="@+id/btn_scan"
+                    style="@style/OneNotesToolbarButton"
+                    android:contentDescription="@string/editor_insert_scan"
+                    app:srcCompat="@drawable/ic_scan_document" />
+
+                <ImageButton
+                    android:id="@+id/btn_undo"
+                    style="@style/OneNotesToolbarButton"
+                    android:contentDescription="@string/action_undo"
+                    app:srcCompat="@drawable/ic_undo" />
+
+                <ImageButton
+                    android:id="@+id/btn_redo"
+                    style="@style/OneNotesToolbarButton"
+                    android:contentDescription="@string/action_redo"
+                    app:srcCompat="@drawable/ic_redo" />
+
+            </LinearLayout>
+
+        </HorizontalScrollView>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- Shown until the identity of the user is verified (locked note). -->
+    <LinearLayout
+        android:id="@+id/editor_locked"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/onenotes_bg"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="@dimen/oui_space_l"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:contentDescription="@string/lock_title"
+            app:srcCompat="@drawable/ic_lock" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/oui_space_m"
+            android:text="@string/lock_locked_content"
+            android:textAppearance="@style/OneNotesTextAppearance.Body" />
+
+        <TextView
+            android:id="@+id/editor_unlock"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_marginTop="@dimen/oui_space_m"
+            android:background="@drawable/bg_rounded_surface"
+            android:gravity="center"
+            android:paddingStart="@dimen/oui_space_l"
+            android:paddingEnd="@dimen/oui_space_l"
+            android:text="@string/lock_unlock"
+            android:textAppearance="@style/OneNotesTextAppearance.Title"
+            android:textColor="@color/onenotes_primary" />
+
+    </LinearLayout>
+
+</FrameLayout>

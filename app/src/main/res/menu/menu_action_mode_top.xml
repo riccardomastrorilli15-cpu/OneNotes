@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Overflow menu of the toolbar while selecting notes. -->
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_select_all"
+        android:icon="@drawable/ic_select_all"
+        android:title="@string/action_select_all"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_tags"
+        android:title="@string/action_tags"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_lock"
+        android:title="@string/action_lock"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_share"
+        android:title="@string/action_share"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_export"
+        android:title="@string/action_export"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_duplicate"
+        android:title="@string/action_duplicate"
+        app:showAsAction="never" />
+
+</menu>

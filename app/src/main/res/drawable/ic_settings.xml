@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:pathData="M4,7L20,7"
+        android:strokeColor="@color/onenotes_text_primary"
+        android:strokeWidth="1.8"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:fillColor="@android:color/transparent" />
+    <path
+        android:pathData="M4,12L20,12"
+        android:strokeColor="@color/onenotes_text_primary"
+        android:strokeWidth="1.8"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:fillColor="@android:color/transparent" />
+    <path
+        android:pathData="M4,17L20,17"
+        android:strokeColor="@color/onenotes_text_primary"
+        android:strokeWidth="1.8"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:fillColor="@android:color/transparent" />
+    <path
+        android:pathData="M6.8,7C6.8,5.78 7.78,4.8 9,4.8C10.22,4.8 11.2,5.78 11.2,7C11.2,8.22 10.22,9.2 9,9.2C7.78,9.2 6.8,8.22 6.8,7Z"
+        android:strokeColor="@color/onenotes_text_primary"
+        android:strokeWidth="1.8"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:fillColor="@android:color/transparent" />
+    <path
+        android:pathData="M12.8,12C12.8,10.78 13.78,9.8 15,9.8C16.22,9.8 17.2,10.78 17.2,12C17.2,13.22 16.22,14.2 15,14.2C13.78,14.2 12.8,13.22 12.8,12Z"
+        android:strokeColor="@color/onenotes_text_primary"
+        android:strokeWidth="1.8"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:fillColor="@android:color/transparent" />
+    <path
+        android:pathData="M5.8,17C5.8,15.78 6.78,14.8 8,14.8C9.22,14.8 10.2,15.78 10.2,17C10.2,18.22 9.22,19.2 8,19.2C6.78,19.2 5.8,18.22 5.8,17Z"
+        android:strokeColor="@color/onenotes_text_primary"
+        android:strokeWidth="1.8"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:fillColor="@android:color/transparent" />
+</vector>

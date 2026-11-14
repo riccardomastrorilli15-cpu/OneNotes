@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawer_item_root"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:layout_marginStart="@dimen/oui_space_s"
+    android:layout_marginEnd="@dimen/oui_space_s"
+    android:background="@drawable/bg_drawer_item"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingStart="@dimen/oui_space_m"
+    android:paddingEnd="@dimen/oui_space_m">
+
+    <ImageView
+        android:id="@+id/drawer_item_icon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:contentDescription="@string/nav_open_navigation"
+        android:tint="@color/onenotes_text_primary"
+        app:srcCompat="@drawable/ic_folder" />
+
+    <TextView
+        android:id="@+id/drawer_item_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/oui_space_m"
+        android:layout_weight="1"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="@string/nav_all_notes"
+        android:textAppearance="@style/OneNotesTextAppearance.Body"
+        android:textColor="@color/onenotes_text_primary"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/drawer_item_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/OneNotesTextAppearance.Caption" />
+
+</LinearLayout>

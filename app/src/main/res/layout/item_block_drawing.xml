@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/oui_space_s"
+    android:paddingBottom="@dimen/oui_space_s">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/block_drawing_preview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:background="@drawable/bg_rounded_surface"
+            android:contentDescription="@string/editor_insert_drawing"
+            android:maxHeight="@dimen/note_image_max_height"
+            android:scaleType="fitCenter" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|end"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/block_drawing_edit"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_margin="@dimen/oui_space_xs"
+                android:background="@drawable/bg_toolbar_button"
+                android:contentDescription="@string/action_more"
+                android:tint="@color/onenotes_text_primary"
+                app:srcCompat="@drawable/ic_pen" />
+
+            <ImageButton
+                android:id="@+id/block_remove"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_margin="@dimen/oui_space_xs"
+                android:background="@drawable/bg_toolbar_button"
+                android:contentDescription="@string/action_delete"
+                android:tint="@color/onenotes_text_primary"
+                app:srcCompat="@drawable/ic_close" />
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+</LinearLayout>

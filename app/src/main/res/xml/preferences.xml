@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory app:title="@string/pref_category_appearance">
+        <ListPreference
+            app:defaultValue="system"
+            app:entries="@array/pref_theme_entries"
+            app:entryValues="@array/pref_theme_values"
+            app:iconSpaceReserved="false"
+            app:key="theme_mode"
+            app:title="@string/pref_theme_title"
+            app:useSimpleSummaryProvider="true" />
+
+        <ListPreference
+            app:defaultValue="list"
+            app:entries="@array/pref_list_layout_entries"
+            app:entryValues="@array/pref_list_layout_values"
+            app:iconSpaceReserved="false"
+            app:key="list_layout"
+            app:title="@string/pref_list_layout_title"
+            app:useSimpleSummaryProvider="true" />
+
+        <ListPreference
+            app:defaultValue="1.0"
+            app:entries="@array/pref_font_size_entries"
+            app:entryValues="@array/pref_font_size_values"
+            app:iconSpaceReserved="false"
+            app:key="font_scale"
+            app:title="@string/pref_font_size_title"
+            app:useSimpleSummaryProvider="true" />
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/pref_category_editor">
+        <SwitchPreferenceCompat
+            app:defaultValue="false"
+            app:iconSpaceReserved="false"
+            app:key="pen_only"
+            app:summary="@string/pref_pen_only_summary"
+            app:title="@string/pref_pen_only_title" />
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/pref_category_security">
+        <SwitchPreferenceCompat
+            app:defaultValue="false"
+            app:iconSpaceReserved="false"
+            app:key="app_lock"
+            app:summary="@string/pref_app_lock_summary"
+            app:title="@string/pref_app_lock_title" />
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/pref_category_backup">
+        <Preference
+            app:iconSpaceReserved="false"
+            app:key="export_json"
+            app:summary="@string/pref_export_json_summary"
+            app:title="@string/pref_export_json_title" />
+
+        <Preference
+            app:iconSpaceReserved="false"
+            app:key="import_json"
+            app:summary="@string/pref_import_json_summary"
+            app:title="@string/pref_import_json_title" />
+
+        <Preference
+            app:iconSpaceReserved="false"
+            app:key="import_samsung"
+            app:summary="@string/pref_import_samsung_summary"
+            app:title="@string/pref_import_samsung_title" />
+
+        <Preference
+            app:iconSpaceReserved="false"
+            app:key="export_markdown"
+            app:title="@string/pref_export_markdown_title" />
+
+        <Preference
+            app:iconSpaceReserved="false"
+            app:key="export_pdf"
+            app:title="@string/pref_export_pdf_title" />
+
+        <Preference
+            app:iconSpaceReserved="false"
+            app:key="drive_signin"
+            app:summary="@string/pref_drive_signin_summary"
+            app:title="@string/pref_drive_signin_title" />
+
+        <Preference
+            app:iconSpaceReserved="false"
+            app:key="drive_backup"
+            app:title="@string/pref_drive_backup_title" />
+
+        <Preference
+            app:key="drive_restore"
+            app:iconSpaceReserved="false"
+            app:title="@string/pref_drive_restore_title" />
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/pref_category_about">
+        <Preference
+            app:iconSpaceReserved="false"
+            app:key="version"
+            app:selectable="false"
+            app:title="@string/pref_version_title" />
+
+        <Preference
+            app:iconSpaceReserved="false"
+            app:key="credits"
+            app:selectable="false"
+            app:summary="@string/pref_credits_summary"
+            app:title="@string/pref_credits_title" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

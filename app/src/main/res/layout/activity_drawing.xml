@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/onenotes_bg"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/oui_space_s"
+        android:paddingEnd="@dimen/oui_space_s">
+
+        <ImageButton
+            android:id="@+id/draw_close"
+            style="@style/OneNotesToolbarButton"
+            android:contentDescription="@string/action_back"
+            app:srcCompat="@drawable/ic_back" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="@dimen/oui_space_s"
+            android:text="@string/title_activity_drawing"
+            android:textAppearance="@style/OneNotesTextAppearance.Title" />
+
+        <ImageButton
+            android:id="@+id/draw_undo"
+            style="@style/OneNotesToolbarButton"
+            android:contentDescription="@string/action_undo"
+            app:srcCompat="@drawable/ic_undo" />
+
+        <ImageButton
+            android:id="@+id/draw_redo"
+            style="@style/OneNotesToolbarButton"
+            android:contentDescription="@string/action_redo"
+            app:srcCompat="@drawable/ic_redo" />
+
+        <ImageButton
+            android:id="@+id/draw_clear"
+            style="@style/OneNotesToolbarButton"
+            android:contentDescription="@string/draw_clear"
+            app:srcCompat="@drawable/ic_delete" />
+
+        <TextView
+            android:id="@+id/draw_save"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_marginStart="@dimen/oui_space_s"
+            android:background="@drawable/bg_rounded_surface"
+            android:gravity="center"
+            android:paddingStart="@dimen/oui_space_m"
+            android:paddingEnd="@dimen/oui_space_m"
+            android:text="@string/action_save"
+            android:textAppearance="@style/OneNotesTextAppearance.Title"
+            android:textColor="@color/onenotes_primary" />
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginStart="@dimen/oui_space_m"
+        android:layout_marginEnd="@dimen/oui_space_m"
+        android:background="@drawable/bg_rounded_surface">
+
+        <com.onenotes.app.ui.draw.DrawingView
+            android:id="@+id/drawing_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/oui_space_s"
+        android:paddingBottom="@dimen/oui_space_s">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="@dimen/oui_space_s"
+            android:paddingEnd="@dimen/oui_space_s">
+
+            <ImageButton
+                android:id="@+id/draw_tool_pen"
+                style="@style/OneNotesToolbarButton"
+                android:contentDescription="@string/draw_pen"
+                android:selected="true"
+                app:srcCompat="@drawable/ic_pen" />
+
+            <ImageButton
+                android:id="@+id/draw_tool_highlighter"
+                style="@style/OneNotesToolbarButton"
+                android:contentDescription="@string/draw_highlighter"
+                app:srcCompat="@drawable/ic_highlight" />
+
+            <ImageButton
+                android:id="@+id/draw_tool_eraser"
+                style="@style/OneNotesToolbarButton"
+                android:contentDescription="@string/draw_eraser"
+                app:srcCompat="@drawable/ic_eraser" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="28dp"
+                android:layout_marginStart="@dimen/oui_space_s"
+                android:layout_marginEnd="@dimen/oui_space_s"
+                android:background="@color/onenotes_divider" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/draw_pen_only"
+                android:textAppearance="@style/OneNotesTextAppearance.Body" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/draw_pen_only"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="@dimen/oui_space_s"
+                android:paddingEnd="@dimen/oui_space_s">
+
+                <LinearLayout
+                    android:id="@+id/draw_colors"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="28dp"
+                    android:layout_marginStart="@dimen/oui_space_s"
+                    android:layout_marginEnd="@dimen/oui_space_s"
+                    android:background="@color/onenotes_divider" />
+
+                <LinearLayout
+                    android:id="@+id/draw_sizes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal" />
+
+            </LinearLayout>
+
+        </HorizontalScrollView>
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">OneNotes</string>
+
+    <string name="title_activity_editor">Note</string>
+    <string name="title_activity_drawing">Drawing</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_lock">Unlock note</string>
+    <string name="title_activity_scan">Document scan</string>
+    <string name="title_activity_create_note">New note</string>
+
+    <string name="nav_all_notes">All notes</string>
+    <string name="nav_pinned">Pinned</string>
+    <string name="nav_folders">Folders</string>
+    <string name="nav_tags">Tags</string>
+    <string name="nav_archive">Archive</string>
+    <string name="nav_trash">Trash</string>
+    <string name="nav_settings">Settings</string>
+    <string name="nav_reminders">Reminders</string>
+    <string name="nav_no_folder">No folder</string>
+    <string name="nav_open_navigation">Open navigation</string>
+
+    <string name="action_new_note">New note</string>
+    <string name="action_search">Search</string>
+    <string name="action_select_all">Select all</string>
+    <string name="action_sort">Sort</string>
+    <string name="action_view_type">View</string>
+    <string name="action_pin">Pin to top</string>
+    <string name="action_unpin">Unpin</string>
+    <string name="action_archive">Archive</string>
+    <string name="action_unarchive">Remove from archive</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_delete_forever">Delete forever</string>
+    <string name="action_restore">Restore</string>
+    <string name="action_empty_trash">Empty trash</string>
+    <string name="action_share">Share</string>
+    <string name="action_export">Export</string>
+    <string name="action_duplicate">Duplicate</string>
+    <string name="action_lock">Lock with fingerprint</string>
+    <string name="action_unlock">Remove lock</string>
+    <string name="action_reminder">Reminder</string>
+    <string name="action_color">Colour</string>
+    <string name="action_move_to_folder">Move to folder</string>
+    <string name="action_tags">Tags</string>
+    <string name="action_add_tag">Add tag</string>
+    <string name="action_new_folder">New folder</string>
+    <string name="action_rename">Rename</string>
+    <string name="action_save">Save</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_ok">OK</string>
+    <string name="action_undo">Undo</string>
+    <string name="action_redo">Redo</string>
+    <string name="action_done">Done</string>
+    <string name="action_more">More</string>
+    <string name="action_close">Close</string>
+    <string name="action_back">Back</string>
+    <string name="action_open">Open</string>
+    <string name="action_send">Send</string>
+    <string name="action_copy_text">Copy text</string>
+    <string name="action_remove_reminder">Remove reminder</string>
+
+    <string name="editor_hint_title">Title</string>
+    <string name="editor_hint_body">Write a note…</string>
+    <string name="editor_bold">Bold</string>
+    <string name="editor_italic">Italic</string>
+    <string name="editor_underline">Underline</string>
+    <string name="editor_strikethrough">Strikethrough</string>
+    <string name="editor_heading">Heading</string>
+    <string name="editor_bullet">Bulleted list</string>
+    <string name="editor_number">Numbered list</string>
+    <string name="editor_checklist">Checklist</string>
+    <string name="editor_quote">Quote</string>
+    <string name="editor_text_color">Text colour</string>
+    <string name="editor_highlight">Highlight</string>
+    <string name="editor_link">Link</string>
+    <string name="editor_insert">Insert</string>
+    <string name="editor_insert_image">Image</string>
+    <string name="editor_insert_photo">Photo</string>
+    <string name="editor_insert_audio">Recording</string>
+    <string name="editor_insert_file">File / PDF</string>
+    <string name="editor_insert_drawing">Freehand drawing</string>
+    <string name="editor_insert_scan">Scan document</string>
+    <string name="editor_heading_normal">Normal text</string>
+    <string name="editor_link_dialog_title">Insert link</string>
+    <string name="editor_link_hint">https://…</string>
+    <string name="editor_empty_note_deleted">Empty note discarded</string>
+    <string name="editor_saved">Note saved</string>
+    <string name="editor_checklist_hint">List item</string>
+
+    <string name="draw_pen">Pen</string>
+    <string name="draw_highlighter">Highlighter</string>
+    <string name="draw_eraser">Eraser</string>
+    <string name="draw_color">Colour</string>
+    <string name="draw_size">Thickness</string>
+    <string name="draw_clear">Clear all</string>
+    <string name="draw_saved">Drawing saved</string>
+    <string name="draw_pen_only">S Pen only</string>
+
+    <string name="msg_note_moved_to_trash">Note moved to trash</string>
+    <string name="msg_notes_moved_to_trash">%1$d notes moved to trash</string>
+    <string name="msg_note_restored">Note restored</string>
+    <string name="msg_note_deleted">Note deleted permanently</string>
+    <string name="msg_note_archived">Note archived</string>
+    <string name="msg_note_locked">Note locked</string>
+    <string name="msg_note_unlocked">Lock removed</string>
+    <string name="msg_trash_emptied">Trash emptied</string>
+    <string name="msg_export_done">Export completed</string>
+    <string name="msg_import_done">%1$d notes imported</string>
+    <string name="msg_backup_done">Backup completed</string>
+    <string name="msg_restore_done">Restore completed</string>
+    <string name="msg_error_generic">Something went wrong</string>
+    <string name="msg_error_no_browser">No app can open this link</string>
+    <string name="msg_error_camera">Camera not available</string>
+    <string name="msg_attachment_missing">Attachment not found</string>
+    <string name="msg_reminder_set">Reminder set</string>
+    <string name="msg_reminder_removed">Reminder removed</string>
+    <string name="msg_ocr_done">Text recognised</string>
+    <string name="msg_sign_in_required">Sign in with your Google account</string>
+    <string name="msg_copy_done">Text copied</string>
+
+    <string name="empty_notes_title">No notes yet</string>
+    <string name="empty_notes_body">Tap the + button to write your first note.</string>
+    <string name="empty_trash_title">Trash is empty</string>
+    <string name="empty_trash_body">Deleted notes stay here for 30 days.</string>
+    <string name="empty_search_title">No results</string>
+    <string name="empty_search_body">Try a different keyword.</string>
+    <string name="empty_archive_title">Archive is empty</string>
+
+    <string name="dialog_delete_title">Delete this note?</string>
+    <string name="dialog_delete_message">The note will be moved to the trash.</string>
+    <string name="dialog_delete_forever_message">This cannot be undone.</string>
+    <string name="dialog_empty_trash_message">Every note in the trash will be deleted permanently.</string>
+    <string name="dialog_folder_name_title">Folder name</string>
+    <string name="dialog_tag_name_title">Tag name</string>
+    <string name="dialog_reminder_title">Reminder</string>
+    <string name="dialog_loading">Loading…</string>
+    <string name="dialog_export_title">Export as</string>
+
+    <string name="permission_audio_title">Microphone permission needed</string>
+    <string name="permission_audio_message">OneNotes uses it to record voice memos attached to your notes.</string>
+    <string name="permission_notifications_title">Allow notifications</string>
+    <string name="permission_notifications_message">Needed to show note reminders.</string>
+    <string name="permission_grant">Allow</string>
+    <string name="permission_deny">Not now</string>
+
+    <string name="lock_title">Locked note</string>
+    <string name="lock_subtitle">Use your fingerprint, face or device PIN to open the note</string>
+    <string name="lock_unlock">Unlock</string>
+    <string name="lock_not_available">No fingerprint or PIN set up on this device</string>
+    <string name="lock_failed">Authentication failed</string>
+    <string name="lock_locked_content">Hidden content</string>
+    <string name="lock_app_title">OneNotes is locked</string>
+
+    <string name="notification_channel_reminders">Note reminders</string>
+    <string name="notification_channel_reminders_desc">Alerts for notes with a reminder</string>
+    <string name="notification_reminder_title">Reminder</string>
+    <string name="notification_action_open">Open</string>
+    <string name="notification_action_done">Mark as done</string>
+
+    <string name="pref_category_appearance">Appearance</string>
+    <string name="pref_theme_title">Theme</string>
+    <string name="pref_list_layout_title">Default view</string>
+    <string name="pref_font_size_title">Text size</string>
+    <string name="pref_category_editor">Editor</string>
+    <string name="pref_pen_only_title">Draw with S Pen only</string>
+    <string name="pref_pen_only_summary">Finger touches do not draw (avoids stray strokes)</string>
+    <string name="pref_autosave_title">Autosave</string>
+    <string name="pref_category_security">Security</string>
+    <string name="pref_app_lock_title">Lock on start</string>
+    <string name="pref_app_lock_summary">Ask for fingerprint or PIN when OneNotes opens</string>
+    <string name="pref_category_backup">Backup and restore</string>
+    <string name="pref_export_json_title">Export backup (JSON)</string>
+    <string name="pref_export_json_summary">Save every note, folder and tag into a single file</string>
+    <string name="pref_import_json_title">Import backup</string>
+    <string name="pref_import_json_summary">Restore notes from a OneNotes file or a Samsung Notes export</string>
+    <string name="pref_export_markdown_title">Export as Markdown</string>
+    <string name="pref_export_pdf_title">Export as PDF</string>
+    <string name="pref_drive_signin_title">Google Drive account</string>
+    <string name="pref_drive_signin_summary">Not linked</string>
+    <string name="pref_drive_backup_title">Back up to Google Drive</string>
+    <string name="pref_drive_restore_title">Restore from Google Drive</string>
+    <string name="pref_category_about">About</string>
+    <string name="pref_version_title">Version</string>
+    <string name="pref_credits_title">Credits</string>
+    <string name="pref_credits_summary">One UI Design Library (OneUIProject) · ML Kit · Room</string>
+
+    <string name="sort_updated">Last modified</string>
+    <string name="sort_created">Date created</string>
+    <string name="sort_title">Title</string>
+    <string name="sort_reminder">Reminder</string>
+    <string name="view_type_list">List</string>
+    <string name="view_type_grid">Grid</string>
+
+    <string name="widget_notes_label">OneNotes notes</string>
+    <string name="widget_empty">No notes</string>
+
+    <string name="cd_note_color">Note colour</string>
+    <string name="cd_note_attachment">Attachment</string>
+    <string name="cd_note_pinned">Pinned note</string>
+    <string name="cd_note_locked">Locked note</string>
+    <string name="cd_more_options">More options</string>
+    <string name="cd_note_preview">Note preview</string>
+
+    <string name="date_today">Today</string>
+    <string name="date_yesterday">Yesterday</string>
+    <string name="date_time_short">d MMM, HH:mm</string>
+    <string name="date_time_full">d MMMM yyyy, HH:mm</string>
+    <!-- Document scanner -->
+    <string name="action_rotate">Rotate</string>
+    <string name="scan_filter_original">Original</string>
+    <string name="scan_filter_grayscale">Grayscale</string>
+    <string name="scan_filter_bw">Black and white</string>
+    <string name="scan_ocr">Recognise text</string>
+    <string name="scan_saved">Document saved as PDF</string>
+
+    <plurals name="notes_count">
+        <item quantity="one">%1$d note</item>
+        <item quantity="other">%1$d notes</item>
+    </plurals>
+
+    <!-- Audio recording -->
+    <string name="record_title">Recording…</string>
+    <string name="record_stop">Stop</string>
+    <string name="record_error">Recording failed</string>
+
+    <!-- Backup -->
+    <string name="pref_drive_signout_title">Sign out of Google Drive</string>
+    <string name="pref_last_backup">Last backup: %1$s</string>
+    <string name="pref_drive_backup_summary_none">No backup yet</string>
+    <string name="pref_import_samsung_title">Import from Samsung Notes</string>
+    <string name="pref_import_samsung_summary">.sdocx, .memo or .zip file exported by Samsung Notes</string>
+
+</resources>

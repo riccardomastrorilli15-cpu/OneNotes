@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Brand / One UI accent -->
+    <color name="onenotes_primary">#FF2E6BF6</color>
+    <color name="onenotes_primary_dark">#FF1F52C4</color>
+    <color name="onenotes_on_primary">#FFFFFFFF</color>
+
+    <!-- Surfaces -->
+    <color name="onenotes_bg">#FFF5F6F8</color>
+    <color name="onenotes_surface">#FFFFFFFF</color>
+    <color name="onenotes_surface_variant">#FFEFF1F4</color>
+    <color name="onenotes_divider">#FFE1E3E8</color>
+    <color name="onenotes_scrim">#88000000</color>
+
+    <!-- Text -->
+    <color name="onenotes_text_primary">#FF1B1D1F</color>
+    <color name="onenotes_text_secondary">#FF6B7075</color>
+    <color name="onenotes_text_hint">#FF9AA0A6</color>
+
+    <!-- Note colours (Samsung Notes style pastel set) -->
+    <color name="note_color_default">#00000000</color>
+    <color name="note_color_yellow">#FFFFF3B0</color>
+    <color name="note_color_red">#FFFFCFC9</color>
+    <color name="note_color_green">#FFCDEBD0</color>
+    <color name="note_color_blue">#FFC7DFFF</color>
+    <color name="note_color_purple">#FFE2D2F5</color>
+    <color name="note_color_orange">#FFFFDFC2</color>
+    <color name="note_color_brown">#FFE4D5CC</color>
+    <color name="note_color_grey">#FFDDE1E6</color>
+
+    <!-- Text / highlight colours offered by the editor -->
+    <color name="text_color_default">#FF000000</color>
+    <color name="text_color_1">#FF000000</color>
+    <color name="text_color_2">#FFD32F2F</color>
+    <color name="text_color_3">#FFE64A19</color>
+    <color name="text_color_4">#FFF9A825</color>
+    <color name="text_color_5">#FF388E3C</color>
+    <color name="text_color_6">#FF1976D2</color>
+    <color name="text_color_7">#FF7B1FA2</color>
+    <color name="text_color_8">#FF607D8B</color>
+
+    <color name="highlight_default">#00000000</color>
+    <color name="highlight_1">#66FFEB3B</color>
+    <color name="highlight_2">#6664DD17</color>
+    <color name="highlight_3">#6603A9F4</color>
+    <color name="highlight_4">#66FF4081</color>
+    <color name="highlight_5">#66FF9800</color>
+
+    <!-- Drawing -->
+    <color name="pen_black">#FF1B1D1F</color>
+    <color name="pen_red">#FFE53935</color>
+    <color name="pen_blue">#FF1E88E5</color>
+    <color name="pen_green">#FF43A047</color>
+    <color name="pen_yellow">#FFFDD835</color>
+    <color name="pen_purple">#FF8E24AA</color>
+    <color name="pen_white">#FFFFFFFF</color>
+</resources>

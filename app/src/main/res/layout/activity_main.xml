@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  One UI DrawerLayout: it provides the collapsing app bar, the Samsung style action mode,
+  the search view and the rounded side drawer.
+  The editor container is only visible on tablets / unfolded Fold (see values-w840dp).
+-->
+<dev.oneuiproject.oneui.layout.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:expanded="false"
+    app:title="@string/nav_all_notes">
+
+    <LinearLayout
+        android:id="@+id/content_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:baselineAligned="false"
+        app:layout_location="main_content">
+
+        <FrameLayout
+            android:id="@+id/list_container"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <View
+            android:id="@+id/pane_divider"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/onenotes_divider"
+            android:visibility="gone" />
+
+        <FrameLayout
+            android:id="@+id/editor_container"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.6"
+            android:background="@color/onenotes_bg"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/drawer_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingBottom="@dimen/oui_space_m"
+        android:scrollbars="vertical"
+        app:layout_location="drawer_panel" />
+
+</dev.oneuiproject.oneui.layout.DrawerLayout>

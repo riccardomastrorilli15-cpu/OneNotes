@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/notes_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingStart="@dimen/oui_space_m"
+        android:paddingEnd="@dimen/oui_space_m"
+        android:paddingTop="@dimen/oui_space_s"
+        android:paddingBottom="96dp"
+        android:scrollbars="vertical" />
+
+    <LinearLayout
+        android:id="@+id/empty_state"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/empty_icon"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:contentDescription="@string/cd_note_preview"
+            android:tint="@color/onenotes_text_hint"
+            app:srcCompat="@drawable/ic_file" />
+
+        <TextView
+            android:id="@+id/empty_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/oui_space_m"
+            android:text="@string/empty_notes_title"
+            android:textAppearance="@style/OneNotesTextAppearance.Title" />
+
+        <TextView
+            android:id="@+id/empty_body"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/oui_space_xs"
+            android:gravity="center_horizontal"
+            android:text="@string/empty_notes_body"
+            android:textAppearance="@style/OneNotesTextAppearance.Body" />
+
+    </LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_new_note"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="@dimen/oui_space_m"
+        android:layout_marginBottom="@dimen/oui_space_m"
+        android:contentDescription="@string/action_new_note"
+        app:backgroundTint="@color/onenotes_primary"
+        app:tint="@color/onenotes_on_primary"
+        app:srcCompat="@drawable/ic_add" />
+
+</FrameLayout>

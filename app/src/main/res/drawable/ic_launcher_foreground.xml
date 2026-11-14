@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Note sheet -->
+    <path
+        android:pathData="M38,20H78Q88,20 88,30V78Q88,88 78,88H38Q28,88 28,78V30Q28,20 38,20Z"
+        android:fillColor="#FFFFFFFF" />
+    <!-- Text lines -->
+    <path
+        android:pathData="M40,38H70M40,52H70M40,66H58"
+        android:strokeColor="@color/onenotes_primary"
+        android:strokeWidth="5"
+        android:strokeLineCap="round"
+        android:fillColor="@android:color/transparent" />
+    <!-- Handwritten accent -->
+    <path
+        android:pathData="M34,80Q44,74 52,80T70,80"
+        android:strokeColor="@color/note_color_yellow"
+        android:strokeWidth="5"
+        android:strokeLineCap="round"
+        android:fillColor="@android:color/transparent" />
+</vector>

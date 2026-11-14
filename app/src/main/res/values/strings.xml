@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">OneNotes</string>
+
+    <!-- Activities -->
+    <string name="title_activity_editor">Nota</string>
+    <string name="title_activity_drawing">Disegno</string>
+    <string name="title_activity_settings">Impostazioni</string>
+    <string name="title_activity_lock">Sblocca nota</string>
+    <string name="title_activity_scan">Scansione documento</string>
+    <string name="title_activity_create_note">Nuova nota</string>
+
+    <!-- Drawer / navigation -->
+    <string name="nav_all_notes">Tutte le note</string>
+    <string name="nav_pinned">Note fissate</string>
+    <string name="nav_folders">Cartelle</string>
+    <string name="nav_tags">Tag</string>
+    <string name="nav_archive">Archivio</string>
+    <string name="nav_trash">Cestino</string>
+    <string name="nav_settings">Impostazioni</string>
+    <string name="nav_reminders">Promemoria</string>
+    <string name="nav_no_folder">Senza cartella</string>
+    <string name="nav_open_navigation">Apri la navigazione</string>
+
+    <!-- Common actions -->
+    <string name="action_new_note">Nuova nota</string>
+    <string name="action_search">Cerca</string>
+    <string name="action_select_all">Seleziona tutto</string>
+    <string name="action_sort">Ordina</string>
+    <string name="action_view_type">Visualizzazione</string>
+    <string name="action_pin">Fissa in alto</string>
+    <string name="action_unpin">Rimuovi dai fissati</string>
+    <string name="action_archive">Archivia</string>
+    <string name="action_unarchive">Ripristina dall\'archivio</string>
+    <string name="action_delete">Elimina</string>
+    <string name="action_delete_forever">Elimina definitivamente</string>
+    <string name="action_restore">Ripristina</string>
+    <string name="action_empty_trash">Svuota cestino</string>
+    <string name="action_share">Condividi</string>
+    <string name="action_export">Esporta</string>
+    <string name="action_duplicate">Duplica</string>
+    <string name="action_lock">Blocca con impronta</string>
+    <string name="action_unlock">Rimuovi blocco</string>
+    <string name="action_reminder">Promemoria</string>
+    <string name="action_color">Colore</string>
+    <string name="action_move_to_folder">Sposta in cartella</string>
+    <string name="action_tags">Tag</string>
+    <string name="action_add_tag">Aggiungi tag</string>
+    <string name="action_new_folder">Nuova cartella</string>
+    <string name="action_rename">Rinomina</string>
+    <string name="action_save">Salva</string>
+    <string name="action_cancel">Annulla</string>
+    <string name="action_ok">OK</string>
+    <string name="action_undo">Annulla</string>
+    <string name="action_redo">Ripeti</string>
+    <string name="action_done">Fatto</string>
+    <string name="action_more">Altro</string>
+    <string name="action_close">Chiudi</string>
+    <string name="action_back">Indietro</string>
+    <string name="action_open">Apri</string>
+    <string name="action_send">Invia</string>
+    <string name="action_copy_text">Copia testo</string>
+    <string name="action_remove_reminder">Rimuovi promemoria</string>
+
+    <!-- Editor -->
+    <string name="editor_hint_title">Titolo</string>
+    <string name="editor_hint_body">Scrivi una nota…</string>
+    <string name="editor_bold">Grassetto</string>
+    <string name="editor_italic">Corsivo</string>
+    <string name="editor_underline">Sottolineato</string>
+    <string name="editor_strikethrough">Barrato</string>
+    <string name="editor_heading">Titolo</string>
+    <string name="editor_bullet">Elenco puntato</string>
+    <string name="editor_number">Elenco numerato</string>
+    <string name="editor_checklist">Elenco di controllo</string>
+    <string name="editor_quote">Citazione</string>
+    <string name="editor_text_color">Colore testo</string>
+    <string name="editor_highlight">Evidenziatore</string>
+    <string name="editor_link">Link</string>
+    <string name="editor_insert">Inserisci</string>
+    <string name="editor_insert_image">Immagine</string>
+    <string name="editor_insert_photo">Foto</string>
+    <string name="editor_insert_audio">Registrazione</string>
+    <string name="editor_insert_file">File / PDF</string>
+    <string name="editor_insert_drawing">Disegno a mano libera</string>
+    <string name="editor_insert_scan">Scansiona documento</string>
+    <string name="editor_heading_normal">Testo normale</string>
+    <string name="editor_link_dialog_title">Inserisci link</string>
+    <string name="editor_link_hint">https://…</string>
+    <string name="editor_empty_note_deleted">Nota vuota eliminata</string>
+    <string name="editor_saved">Nota salvata</string>
+    <string name="editor_checklist_hint">Elemento della lista</string>
+
+    <!-- Drawing -->
+    <string name="draw_pen">Penna</string>
+    <string name="draw_highlighter">Evidenziatore</string>
+    <string name="draw_eraser">Gomma</string>
+    <string name="draw_color">Colore</string>
+    <string name="draw_size">Spessore</string>
+    <string name="draw_clear">Cancella tutto</string>
+    <string name="draw_saved">Disegno salvato</string>
+    <string name="draw_pen_only">Solo S Pen</string>
+
+    <!-- Messages -->
+    <string name="msg_note_moved_to_trash">Nota spostata nel cestino</string>
+    <string name="msg_notes_moved_to_trash">%1$d note spostate nel cestino</string>
+    <string name="msg_note_restored">Nota ripristinata</string>
+    <string name="msg_note_deleted">Nota eliminata definitivamente</string>
+    <string name="msg_note_archived">Nota archiviata</string>
+    <string name="msg_note_locked">Nota bloccata</string>
+    <string name="msg_note_unlocked">Blocco rimosso</string>
+    <string name="msg_trash_emptied">Cestino svuotato</string>
+    <string name="msg_export_done">Esportazione completata</string>
+    <string name="msg_import_done">Importate %1$d note</string>
+    <string name="msg_backup_done">Backup completato</string>
+    <string name="msg_restore_done">Ripristino completato</string>
+    <string name="msg_error_generic">Si è verificato un errore</string>
+    <string name="msg_error_no_browser">Nessuna app per aprire il link</string>
+    <string name="msg_error_camera">Fotocamera non disponibile</string>
+    <string name="msg_attachment_missing">Allegato non trovato</string>
+    <string name="msg_reminder_set">Promemoria impostato</string>
+    <string name="msg_reminder_removed">Promemoria rimosso</string>
+    <string name="msg_ocr_done">Testo riconosciuto</string>
+    <string name="msg_sign_in_required">Accedi con il tuo account Google</string>
+    <string name="msg_copy_done">Testo copiato</string>
+
+    <!-- Empty states -->
+    <string name="empty_notes_title">Nessuna nota</string>
+    <string name="empty_notes_body">Tocca il pulsante + per creare la tua prima nota.</string>
+    <string name="empty_trash_title">Il cestino è vuoto</string>
+    <string name="empty_trash_body">Le note eliminate finiscono qui e restano per 30 giorni.</string>
+    <string name="empty_search_title">Nessun risultato</string>
+    <string name="empty_search_body">Prova con un\'altra parola chiave.</string>
+    <string name="empty_archive_title">Archivio vuoto</string>
+
+    <!-- Dialogs -->
+    <string name="dialog_delete_title">Eliminare la nota?</string>
+    <string name="dialog_delete_message">La nota verrà spostata nel cestino.</string>
+    <string name="dialog_delete_forever_message">L\'eliminazione è definitiva e non può essere annullata.</string>
+    <string name="dialog_empty_trash_message">Tutte le note nel cestino verranno eliminate definitivamente.</string>
+    <string name="dialog_folder_name_title">Nome cartella</string>
+    <string name="dialog_tag_name_title">Nome tag</string>
+    <string name="dialog_reminder_title">Promemoria</string>
+    <string name="dialog_loading">Caricamento…</string>
+    <string name="dialog_export_title">Esporta come</string>
+
+    <!-- Permissions -->
+    <string name="permission_audio_title">Serve l'autorizzazione per il microfono</string>
+    <string name="permission_audio_message">OneNotes la usa per registrare memo vocali da allegare alle note.</string>
+    <string name="permission_notifications_title">Autorizza le notifiche</string>
+    <string name="permission_notifications_message">Servono per mostrarti i promemoria delle note.</string>
+    <string name="permission_grant">Consenti</string>
+    <string name="permission_deny">Non ora</string>
+
+    <!-- Security -->
+    <string name="lock_title">Nota bloccata</string>
+    <string name="lock_subtitle">Usa impronta, volto o PIN del telefono per aprire la nota</string>
+    <string name="lock_unlock">Sblocca</string>
+    <string name="lock_not_available">Impronta o PIN non configurati sul dispositivo</string>
+    <string name="lock_failed">Autenticazione non riuscita</string>
+    <string name="lock_locked_content">Contenuto nascosto</string>
+    <string name="lock_app_title">OneNotes bloccato</string>
+
+    <!-- Reminders / notifications -->
+    <string name="notification_channel_reminders">Promemoria note</string>
+    <string name="notification_channel_reminders_desc">Avvisi per le note con promemoria</string>
+    <string name="notification_reminder_title">Promemoria</string>
+    <string name="notification_action_open">Apri</string>
+    <string name="notification_action_done">Segna come fatto</string>
+
+    <!-- Settings -->
+    <string name="pref_category_appearance">Aspetto</string>
+    <string name="pref_theme_title">Tema</string>
+    <string name="pref_list_layout_title">Visualizzazione predefinita</string>
+    <string name="pref_font_size_title">Dimensione testo</string>
+    <string name="pref_category_editor">Editor</string>
+    <string name="pref_pen_only_title">Disegna solo con S Pen</string>
+    <string name="pref_pen_only_summary">Il tocco delle dita non disegna (evita i tratti accidentali)</string>
+    <string name="pref_autosave_title">Salvataggio automatico</string>
+    <string name="pref_category_security">Sicurezza</string>
+    <string name="pref_app_lock_title">Blocco all\'avvio</string>
+    <string name="pref_app_lock_summary">Richiede impronta o PIN quando apri OneNotes</string>
+    <string name="pref_category_backup">Backup e ripristino</string>
+    <string name="pref_export_json_title">Esporta backup (JSON)</string>
+    <string name="pref_export_json_summary">Salva tutte le note, le cartelle e i tag in un unico file</string>
+    <string name="pref_import_json_title">Importa backup</string>
+    <string name="pref_import_json_summary">Ripristina le note da un file OneNotes o da un export di Samsung Notes</string>
+    <string name="pref_export_markdown_title">Esporta in Markdown</string>
+    <string name="pref_export_pdf_title">Esporta in PDF</string>
+    <string name="pref_drive_signin_title">Account Google Drive</string>
+    <string name="pref_drive_signin_summary">Non collegato</string>
+    <string name="pref_drive_backup_title">Esegui backup su Google Drive</string>
+    <string name="pref_drive_restore_title">Ripristina da Google Drive</string>
+    <string name="pref_category_about">Informazioni</string>
+    <string name="pref_version_title">Versione</string>
+    <string name="pref_credits_title">Crediti</string>
+    <string name="pref_credits_summary">One UI Design Library (OneUIProject) · ML Kit · Room</string>
+
+    <!-- Sort -->
+    <string name="sort_updated">Data modifica</string>
+    <string name="sort_created">Data creazione</string>
+    <string name="sort_title">Titolo</string>
+    <string name="sort_reminder">Promemoria</string>
+    <string name="view_type_list">Elenco</string>
+    <string name="view_type_grid">Griglia</string>
+
+    <!-- Widget -->
+    <string name="widget_notes_label">Note OneNotes</string>
+    <string name="widget_empty">Nessuna nota</string>
+
+    <!-- Content descriptions -->
+    <string name="cd_note_color">Colore della nota</string>
+    <string name="cd_note_attachment">Allegato</string>
+    <string name="cd_note_pinned">Nota fissata</string>
+    <string name="cd_note_locked">Nota bloccata</string>
+    <string name="cd_more_options">Altre opzioni</string>
+    <string name="cd_note_preview">Anteprima nota</string>
+
+    <plurals name="notes_count">
+        <item quantity="one">%1$d nota</item>
+        <item quantity="many">%1$d note</item>
+        <item quantity="other">%1$d note</item>
+    </plurals>
+
+    <!-- Date formats -->
+    <string name="date_today">Oggi</string>
+    <string name="date_yesterday">Ieri</string>
+    <string name="date_time_short">d MMM, HH:mm</string>
+    <string name="date_time_full">d MMMM yyyy, HH:mm</string>
+    <!-- Document scanner -->
+    <string name="action_rotate">Ruota</string>
+    <string name="scan_filter_original">Originale</string>
+    <string name="scan_filter_grayscale">Scala di grigio</string>
+    <string name="scan_filter_bw">Bianco e nero</string>
+    <string name="scan_ocr">Riconosci il testo</string>
+    <string name="scan_saved">Documento salvato come PDF</string>
+
+    <!-- Registrazione audio -->
+    <string name="record_title">Registrazione in corso…</string>
+    <string name="record_stop">Ferma</string>
+    <string name="record_error">Registrazione non riuscita</string>
+
+    <!-- Backup -->
+    <string name="pref_drive_signout_title">Disconnetti da Google Drive</string>
+    <string name="pref_last_backup">Ultimo backup: %1$s</string>
+    <string name="pref_drive_backup_summary_none">Nessun backup ancora</string>
+    <string name="pref_import_samsung_title">Importa da Samsung Notes</string>
+    <string name="pref_import_samsung_summary">File .sdocx, .memo o .zip esportato da Samsung Notes</string>
+
+</resources>

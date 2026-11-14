@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Note colours: index 0 means "no colour" -->
+    <array name="note_colors">
+        <item>@color/note_color_default</item>
+        <item>@color/note_color_yellow</item>
+        <item>@color/note_color_red</item>
+        <item>@color/note_color_green</item>
+        <item>@color/note_color_blue</item>
+        <item>@color/note_color_purple</item>
+        <item>@color/note_color_orange</item>
+        <item>@color/note_color_brown</item>
+        <item>@color/note_color_grey</item>
+    </array>
+    <string-array name="note_color_names">
+        <item>Nessuno</item>
+        <item>Giallo</item>
+        <item>Rosso</item>
+        <item>Verde</item>
+        <item>Blu</item>
+        <item>Viola</item>
+        <item>Arancio</item>
+        <item>Marrone</item>
+        <item>Grigio</item>
+    </string-array>
+
+    <!-- Editor text colours -->
+    <array name="text_colors">
+        <item>@color/text_color_default</item>
+        <item>@color/text_color_1</item>
+        <item>@color/text_color_2</item>
+        <item>@color/text_color_3</item>
+        <item>@color/text_color_4</item>
+        <item>@color/text_color_5</item>
+        <item>@color/text_color_6</item>
+        <item>@color/text_color_7</item>
+        <item>@color/text_color_8</item>
+    </array>
+    <string-array name="text_color_names">
+        <item>Predefinito</item>
+        <item>Nero</item>
+        <item>Rosso</item>
+        <item>Arancio</item>
+        <item>Giallo</item>
+        <item>Verde</item>
+        <item>Blu</item>
+        <item>Viola</item>
+        <item>Grigio</item>
+    </string-array>
+
+    <!-- Editor highlighters -->
+    <array name="highlight_colors">
+        <item>@color/highlight_default</item>
+        <item>@color/highlight_1</item>
+        <item>@color/highlight_2</item>
+        <item>@color/highlight_3</item>
+        <item>@color/highlight_4</item>
+        <item>@color/highlight_5</item>
+    </array>
+    <string-array name="highlight_color_names">
+        <item>Nessuno</item>
+        <item>Giallo</item>
+        <item>Verde</item>
+        <item>Blu</item>
+        <item>Rosa</item>
+        <item>Arancio</item>
+    </string-array>
+
+    <!-- Drawing -->
+    <array name="pen_colors">
+        <item>@color/pen_black</item>
+        <item>@color/pen_red</item>
+        <item>@color/pen_blue</item>
+        <item>@color/pen_green</item>
+        <item>@color/pen_yellow</item>
+        <item>@color/pen_purple</item>
+        <item>@color/pen_white</item>
+    </array>
+    <integer-array name="pen_sizes">
+        <item>3</item>
+        <item>6</item>
+        <item>12</item>
+        <item>24</item>
+        <item>40</item>
+    </integer-array>
+
+    <!-- Settings: theme -->
+    <string-array name="pref_theme_entries">
+        <item>Chiaro</item>
+        <item>Scuro</item>
+        <item>Segui il sistema</item>
+    </string-array>
+    <string-array name="pref_theme_values">
+        <item>light</item>
+        <item>dark</item>
+        <item>system</item>
+    </string-array>
+
+    <!-- Settings: default note list layout -->
+    <string-array name="pref_list_layout_entries">
+        <item>Elenco</item>
+        <item>Griglia</item>
+    </string-array>
+    <string-array name="pref_list_layout_values">
+        <item>list</item>
+        <item>grid</item>
+    </string-array>
+
+    <!-- Settings: font scale -->
+    <string-array name="pref_font_size_entries">
+        <item>Piccolo</item>
+        <item>Normale</item>
+        <item>Grande</item>
+        <item>Molto grande</item>
+    </string-array>
+    <string-array name="pref_font_size_values">
+        <item>0.9</item>
+        <item>1.0</item>
+        <item>1.15</item>
+        <item>1.3</item>
+    </string-array>
+
+    <!-- Sort -->
+    <string-array name="sort_entries">
+        <item>@string/sort_updated</item>
+        <item>@string/sort_created</item>
+        <item>@string/sort_title</item>
+        <item>@string/sort_reminder</item>
+    </string-array>
+    <string-array name="sort_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
+    <!-- Export formats -->
+    <string-array name="export_format_entries">
+        <item>Testo (Markdown)</item>
+        <item>PDF</item>
+        <item>Testo semplice</item>
+    </string-array>
+    <string-array name="export_format_values">
+        <item>md</item>
+        <item>pdf</item>
+        <item>txt</item>
+    </string-array>
+
+</resources>

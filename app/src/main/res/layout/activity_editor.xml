@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Editor screen: a One UI ToolbarLayout (collapsing app bar, contextual menu, footer)
+  that hosts the EditorFragment. The fragment is used a second time by the two pane
+  layout of MainActivity (tablets and unfolded Fold), where the app bar already exists:
+  that is why the bar lives here and not inside the fragment.
+-->
+<dev.oneuiproject.oneui.layout.ToolbarLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/editor_toolbar_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:expanded="false"
+    app:expandable="false"
+    app:title="@string/title_activity_editor">
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/editor_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_location="main_content" />
+
+</dev.oneuiproject.oneui.layout.ToolbarLayout>

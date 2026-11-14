@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="oui_space_xs">4dp</dimen>
+    <dimen name="oui_space_s">8dp</dimen>
+    <dimen name="oui_space_m">16dp</dimen>
+    <dimen name="oui_space_l">24dp</dimen>
+    <dimen name="oui_space_xl">32dp</dimen>
+
+    <dimen name="radius_card">20dp</dimen>
+    <dimen name="radius_card_small">14dp</dimen>
+    <dimen name="radius_chip">12dp</dimen>
+    <dimen name="radius_sheet">28dp</dimen>
+
+    <dimen name="editor_text_size">16sp</dimen>
+    <dimen name="editor_heading_1">24sp</dimen>
+    <dimen name="editor_heading_2">20sp</dimen>
+    <dimen name="editor_heading_3">18sp</dimen>
+    <dimen name="toolbar_button_size">48dp</dimen>
+    <dimen name="color_swatch_size">36dp</dimen>
+    <dimen name="note_image_max_height">240dp</dimen>
+    <dimen name="note_preview_max_height">96dp</dimen>
+</resources>

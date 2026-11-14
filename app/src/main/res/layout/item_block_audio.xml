@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_rounded_surface"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingStart="@dimen/oui_space_m"
+    android:paddingEnd="@dimen/oui_space_s"
+    android:paddingTop="@dimen/oui_space_s"
+    android:paddingBottom="@dimen/oui_space_s">
+
+    <ImageButton
+        android:id="@+id/block_audio_play"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:background="@drawable/bg_toolbar_button"
+        android:contentDescription="@string/action_open"
+        android:tint="@color/onenotes_primary"
+        app:srcCompat="@drawable/ic_play" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/oui_space_s"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/block_audio_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="middle"
+            android:maxLines="1"
+            android:textAppearance="@style/OneNotesTextAppearance.Body"
+            android:textColor="@color/onenotes_text_primary" />
+
+        <SeekBar
+            android:id="@+id/block_audio_seek"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:enabled="false" />
+
+        <TextView
+            android:id="@+id/block_audio_duration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/OneNotesTextAppearance.Caption" />
+
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/block_remove"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:background="@drawable/bg_toolbar_button"
+        android:contentDescription="@string/action_delete"
+        android:tint="@color/onenotes_text_primary"
+        app:srcCompat="@drawable/ic_close" />
+
+</LinearLayout>
