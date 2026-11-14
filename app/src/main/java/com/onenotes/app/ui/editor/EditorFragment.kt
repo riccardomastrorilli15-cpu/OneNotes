@@ -107,6 +107,10 @@ class EditorFragment : Fragment() {
         if (granted) startRecording() else requireContext().toast(R.string.permission_audio_title)
     }
 
+    private val requestNotifications = registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+        if (granted) pickReminder() else requireContext().toast(R.string.permission_notifications_title)
+    }
+
     /** Asks the user to verify his identity (biometrics or device PIN). */
     private val authenticate = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode != Activity.RESULT_OK) {
@@ -163,6 +167,13 @@ class EditorFragment : Fragment() {
         setupLockOverlay()
         observeState()
         viewModel.load(noteId)
+    }
+
+    override fun onPause() {
+        // In the two pane layout the pane can be replaced at any moment: the pending
+        // autosave would die with the fragment, so the note is flushed here.
+        saveNow()
+        super.onPause()
     }
 
     override fun onDestroyView() {
@@ -720,6 +731,7 @@ class EditorFragment : Fragment() {
                 viewModel.setPinned(!pinned)
                 context.toast(if (pinned) R.string.action_unpin else R.string.action_pin)
             }
+            R.id.action_color -> showNoteColor()
             R.id.action_reminder -> {
                 if (note?.reminderAt != null) {
                     AlertDialog.Builder(context)
@@ -731,10 +743,7 @@ class EditorFragment : Fragment() {
                         }
                         .show()
                 } else {
-                    Pickers.dateTime(context, null) { at ->
-                        viewModel.setReminder(at)
-                        context.toast(R.string.msg_reminder_set)
-                    }
+                    pickReminder()
                 }
             }
             R.id.action_lock -> toggleLock()
@@ -767,6 +776,33 @@ class EditorFragment : Fragment() {
             else -> return false
         }
         return true
+    }
+
+    private fun pickReminder() {
+        if (android.os.Build.VERSION.SDK_INT >= 33 &&
+            ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.POST_NOTIFICATIONS) !=
+            PackageManager.PERMISSION_GRANTED
+        ) {
+            requestNotifications.launch(Manifest.permission.POST_NOTIFICATIONS)
+            return
+        }
+        Pickers.dateTime(requireContext(), null) { at ->
+            viewModel.setReminder(at)
+            requireContext().toast(R.string.msg_reminder_set)
+        }
+    }
+
+    private fun showNoteColor() {
+        val colors = NoteSheets.noteColors(requireContext())
+        NoteSheets.showColors(
+            context = requireContext(),
+            title = getString(R.string.action_color),
+            colors = colors,
+            names = resources.getStringArray(R.array.note_color_names),
+            selected = viewModel.note.value?.color ?: 0
+        ) { color ->
+            viewModel.setColor(color)
+        }
     }
 
     private fun toggleLock() {
