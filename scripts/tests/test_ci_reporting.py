@@ -20,6 +20,7 @@ failure = load("ci_report_failure")
 schemas = load("ci_report_schemas")
 tests = load("ci_report_test_results")
 crashes = load("ci_report_crashes")
+screenshots = load("ci_report_screenshot")
 lint = load("ci_report_lint")
 
 
@@ -70,10 +71,21 @@ class ReportingTest(unittest.TestCase):
             "cmp=dev.lumenotes.app/.MainActivity }, activity.getIntent()=Intent { act=null }\n"
             "I ActivityManager: unrelated process\n"
         )
+        text += "I/LumeScreen: dev.lumenotes SCREEN 1 1/1 U0VDUkVU\n"
         result = crashes.diagnostics(text)
         self.assertIn("android.intent.action.MAIN", result)
         self.assertIn("act=null", result)
         self.assertNotIn("unrelated process", result)
+        self.assertNotIn("U0VDUkVU", result)
+
+    def test_screenshot_reassembles_only_complete_valid_jpeg(self):
+        image = b"\xff\xd8" + b"synthetic" * 200 + b"\xff\xd9"
+        encoded = base64.b64encode(image).decode()
+        parts = [encoded[i:i + 500] for i in range(0, len(encoded), 500)]
+        lines = [f"I/LumeScreen: dev.lumenotes SCREEN 1 {i + 1}/{len(parts)} {part}" for i, part in enumerate(parts)]
+        lines += ["I/LumeScreen: dev.lumenotes SCREEN 2 1/2 incomplete"]
+        self.assertEqual(encoded, screenshots.screenshot("\n".join(lines)))
+        self.assertIsNone(screenshots.screenshot("\n".join(lines[:-2])))
 
     def test_lint_report_selects_errors(self):
         with tempfile.TemporaryDirectory() as directory:

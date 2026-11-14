@@ -62,7 +62,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        api-level: [26, 29, 35, 37]
+        # Android 17 packages use the major.minor name android-37.0.
+        api-level: [26, 29, 35, '37.0']
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     steps:
@@ -72,8 +73,41 @@ jobs:
           distribution: temurin
           java-version: '17'
       - uses: android-actions/setup-android@v4
+        with:
+          cmdline-tools-version: '15859902' # 22.0 understands android-37.0 AVD targets
       - run: sdkmanager 'platforms;android-37.0' 'build-tools;36.0.0'
       - uses: gradle/actions/setup-gradle@v5
+      - name: Prepare Android 17 emulator image
+        if: matrix.api-level == '37.0'
+        shell: bash
+        run: |
+          set -euo pipefail
+          tools="$ANDROID_HOME/cmdline-tools"
+          # emulator-runner prepends latest/bin; ensure it points to the new tools
+          # rather than a preinstalled version that writes target=android-0.
+          version=''
+          if [ -x "$tools/latest/bin/sdkmanager" ]; then
+            version=$("$tools/latest/bin/sdkmanager" --version | tr -d '\r' | tail -n 1 || true)
+          fi
+          if [ "$version" != '22.0' ] && [ -x "$tools/22.0/bin/sdkmanager" ]; then
+            if [ -e "$tools/latest" ] || [ -L "$tools/latest" ]; then
+              mv "$tools/latest" "$tools/lume-ci-previous-latest"
+            fi
+            ln -s "$tools/22.0" "$tools/latest"
+            version=$("$tools/latest/bin/sdkmanager" --version | tr -d '\r' | tail -n 1)
+          fi
+          if [ "$version" != '22.0' ]; then
+            echo "::error title=Android 17 tools::Expected command-line tools 22.0, got $version"
+            exit 1
+          fi
+          set +e
+          "$tools/latest/bin/sdkmanager" --install 'system-images;android-37.0;google_apis;x86_64' 2>&1 | tee "$RUNNER_TEMP/android17-sdk.log"
+          status=${PIPESTATUS[0]}
+          set -e
+          if [ "$status" -ne 0 ]; then
+            python3 scripts/ci_report_failure.py "$RUNNER_TEMP/android17-sdk.log" || true
+            exit "$status"
+          fi
       - name: Enable KVM
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
@@ -84,8 +118,14 @@ jobs:
           api-level: ${{ matrix.api-level }}
           target: google_apis
           arch: x86_64
+          cores: ${{ matrix.api-level == '37.0' && '4' || '2' }}
+          ram-size: ${{ matrix.api-level == '37.0' && '4096M' || '2048M' }}
+          emulator-boot-timeout: 900
+          emulator-options: ${{ matrix.api-level == '37.0' && '-no-window -gpu software -no-snapshot -noaudio -no-boot-anim' || '-no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim' }}
           disable-animations: true
-          script: ./scripts/ci_instrumented.sh :core-database:connectedDebugAndroidTest :feature-drawing:connectedDebugAndroidTest :app:connectedDebugAndroidTest
+          disable-spellchecker: true
+          # Screenshot capture is opt-in and only for this disposable, synthetic-data emulator.
+          script: ./scripts/ci_instrumented.sh -Pandroid.testInstrumentationRunnerArguments.captureScreenshots=1 :core-database:connectedDebugAndroidTest :feature-drawing:connectedDebugAndroidTest :app:connectedDebugAndroidTest
       - name: Report instrumented test results
         if: always()
         run: python3 scripts/ci_report_test_results.py .

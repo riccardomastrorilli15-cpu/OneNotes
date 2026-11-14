@@ -6,6 +6,7 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.replaceText
+import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.action.ViewActions.swipeRight
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
@@ -34,11 +35,11 @@ class NotesFlowTest {
     @Test fun createEditReopenAndSearch() {
         val title = "Lume test ${System.currentTimeMillis()}"
         val body = "Farfalla ${System.nanoTime()}"
-        onView(withId(R.id.new_note_button)).perform(click())
+        clickNewNote()
         waitForResumed(EditorActivity::class.java)
         onView(isRoot()).perform(waitFor(allOf(withId(R.id.title_field), isEnabled())))
         onView(withId(R.id.title_field)).perform(replaceText(title))
-        onView(withId(R.id.body_field)).perform(replaceText(body))
+        onView(withId(R.id.body_field)).perform(scrollTo(), replaceText(body))
         closeSoftKeyboard()
         pressBack()
         waitForResumed(MainActivity::class.java)
@@ -61,7 +62,7 @@ class NotesFlowTest {
     }
 
     @Test fun drawSaveAndReopen() {
-        onView(withId(R.id.new_note_button)).perform(click())
+        clickNewNote()
         waitForResumed(EditorActivity::class.java)
         onView(isRoot()).perform(waitFor(allOf(withId(R.id.title_field), isEnabled())))
         onView(withId(R.id.title_field)).perform(replaceText("Sketch ${System.currentTimeMillis()}"))
@@ -77,6 +78,15 @@ class NotesFlowTest {
         waitForResumed(DrawingActivity::class.java)
         onView(isRoot()).perform(waitFor(allOf(withId(R.id.ink_canvas), isEnabled(), isDisplayed())))
         assertCanvasHasInk()
+    }
+
+    private fun clickNewNote() {
+        try {
+            onView(withId(R.id.new_note_button)).perform(click())
+        } catch (failure: Throwable) {
+            captureFailedViewForCi(R.id.new_note_button)
+            throw failure
+        }
     }
 
     private fun assertCanvasHasInk() {

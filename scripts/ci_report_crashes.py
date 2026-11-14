@@ -19,7 +19,9 @@ def diagnostics(text):
             blocks.append("\n".join(block))
     if blocks:
         return "\n--- another crash ---\n".join(blocks)[-24000:]
-    related = [line for line in lines if "dev.lumenotes" in line]
+    # Screenshot chunks have their own bounded reporter; do not duplicate them
+    # or bury the actual lifecycle/bounds diagnostics in base64 noise.
+    related = [line for line in lines if "dev.lumenotes" in line and "LumeScreen" not in line]
     return "\n".join(related[-50:]) if related else "No Lume crash or activity manager error found in logcat."
 
 
