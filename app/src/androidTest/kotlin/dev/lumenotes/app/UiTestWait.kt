@@ -34,6 +34,21 @@ internal fun waitFor(matcher: Matcher<View>, timeoutMs: Long = 10_000): ViewActi
     }
 }
 
+/** Wait until the software keyboard inset is reported, including on pre-Android 11 devices. */
+internal fun waitForKeyboard(timeoutMs: Long = 10_000): ViewAction = object : ViewAction {
+    override fun getConstraints(): Matcher<View> = isRoot()
+    override fun getDescription(): String = "Wait for the software keyboard"
+    override fun perform(uiController: UiController, view: View) {
+        val deadline = SystemClock.elapsedRealtime() + timeoutMs
+        do {
+            val insets = ViewCompat.getRootWindowInsets(view)
+            if (insets != null && insets.getInsets(WindowInsetsCompat.Type.ime()).bottom > 0) return
+            uiController.loopMainThreadForAtLeast(100)
+        } while (SystemClock.elapsedRealtime() < deadline)
+        throw AssertionError("Timed out waiting for the software keyboard inset")
+    }
+}
+
 /** Wait off the UI thread for an Activity started by an asynchronous Room operation. */
 internal fun waitForResumed(type: Class<out Activity>, timeoutMs: Long = 15_000) {
     val instrumentation = InstrumentationRegistry.getInstrumentation()
