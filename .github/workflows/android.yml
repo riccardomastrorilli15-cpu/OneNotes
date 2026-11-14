@@ -32,6 +32,10 @@ jobs:
       - name: Report generated Room schemas
         if: always()
         run: python3 scripts/ci_report_schemas.py core-database/schemas
+      - name: Verify checked-in Room schemas
+        run: |
+          git diff --exit-code -- core-database/schemas
+          test -z "$(git ls-files --others --exclude-standard -- core-database/schemas)"
       - name: Audit packaged fonts and test the audit
         run: |
           python3 -m unittest discover -s scripts/tests -v

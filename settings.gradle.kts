@@ -15,6 +15,7 @@ dependencyResolutionManagement {
 rootProject.name = "LumeNotes"
 include(
     ":app",
+    ":core-compat",
     ":core-model",
     ":core-database",
     ":core-data",

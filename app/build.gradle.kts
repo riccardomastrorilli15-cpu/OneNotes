@@ -32,6 +32,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":core-compat"))
     implementation(project(":core-model"))
     implementation(project(":core-database"))
     implementation(project(":core-data"))
@@ -45,6 +46,8 @@ dependencies {
     implementation(libs.coroutines.android)
     implementation(libs.lifecycle.runtime)
     implementation(libs.lifecycle.viewmodel)
+    // Keep Activity aligned with the explicitly backported AndroidX core APIs.
+    implementation(libs.activity) { version { strictly(libs.versions.activity.get()) } }
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
     debugImplementation(libs.leakcanary)

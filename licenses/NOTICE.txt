@@ -10,6 +10,9 @@ packaged assets before distribution.
 AndroidX (including Room, SQLite driver, DataStore and Android test libraries),
 Kotlin, Kotlin coroutines, Dagger/Hilt, ZXing and LeakCanary: Apache License 2.0,
 subject to each component's own copyright notices. LeakCanary is debug-only.
+The AndroidX Activity compatibility bridge in core-compat contains unmodified
+AndroidX Core source, Copyright The Android Open Source Project, Apache-2.0;
+see core-compat/README.md for the exact upstream revision and files.
 
 DejaVu Sans Bold: DejaVu/Bitstream Vera font license; see DejaVu.txt. It is used
 for the two app-level overrides of upstream font files.

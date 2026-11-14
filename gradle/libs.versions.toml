@@ -10,6 +10,8 @@ lifecycle = "2.6.2"
 datastore = "1.2.1"
 oneui = "1.2.6"
 appcompat = "1.4.0"
+sesl-core = "1.3.0"
+activity = "1.5.1"
 material = "1.5.0"
 recyclerview = "1.4.1"
 preference = "1.1.0"
@@ -22,6 +24,8 @@ ktlint = "14.2.0"
 [libraries]
 oneui-design = { module = "io.github.oneuiproject:design", version.ref = "oneui" }
 sesl-appcompat = { module = "io.github.oneuiproject.sesl:appcompat", version.ref = "appcompat" }
+sesl-core = { module = "io.github.oneuiproject.sesl:core", version.ref = "sesl-core" }
+activity = { module = "androidx.activity:activity", version.ref = "activity" }
 sesl-material = { module = "io.github.oneuiproject.sesl:material", version.ref = "material" }
 sesl-recyclerview = { module = "io.github.oneuiproject.sesl:recyclerview", version.ref = "recyclerview" }
 sesl-preference = { module = "io.github.oneuiproject.sesl:preference", version.ref = "preference" }

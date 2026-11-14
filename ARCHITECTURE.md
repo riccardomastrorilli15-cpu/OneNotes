@@ -11,6 +11,7 @@ Applicazione locale, offline-first, Kotlin e View/XML con ViewBinding per compat
 | Modulo | Responsabilità | Dipendenze |
 | --- | --- | --- |
 | `app` | Application, Activity, navigazione, ViewBinding, integrazione Hilt e manifest | feature e core |
+| `core-compat` | Ponte temporaneo per le classi AndroidX Core mancanti nel fork SESL | SESL Core e Lifecycle |
 | `core-model` | Modelli e funzioni di dominio pure, identificativi e regole | nessuna UI |
 | `core-database` | Room, DAO, schema, FTS5 e test di integrazione | core-model |
 | `core-data` | Repository, DataStore, transazioni e I/O SAF | core-model, core-database |
@@ -34,7 +35,7 @@ La presenza di un modulo senza interfaccia completa non equivale a una funzione 
 ## Piattaforma e build
 
 - minSdk 26; Android 17 stabile usa `compileSdk`/`targetSdk` 37 ([setup ufficiale](https://developer.android.com/about/versions/17/setup-sdk)). AGP 9.4.1 supporta API 37 e richiede almeno Gradle 9.6.0 e JDK 17 ([compatibilità](https://developer.android.com/build/releases/agp-9-4-0-release-notes)); wrapper 9.6.1. Kotlin integrato in AGP 9, KSP per Room e Hilt; version catalog e Gradle Kotlin DSL.
-- OneUI Design 1.2.6 e SESL sono fork vecchi del framework UI: `picker-basic` e `picker-color` pubblicano entrambi il namespace `androidx.picker`, perciò `android.uniquePackageNames=false` è un ripiego temporaneo per AGP 9 e non risolve possibili classi duplicate; isolare e controllare il grafo delle dipendenze per evitare classi duplicate e `NoSuchMethodError`; serviranno prove reali su API 26–37. Non sostituire SELS con AndroidX standard senza una migrazione completa della libreria.
+- OneUI Design 1.2.6 e SESL sono fork vecchi del framework UI: `picker-basic` e `picker-color` pubblicano entrambi il namespace `androidx.picker`, perciò `android.uniquePackageNames=false` è un ripiego temporaneo per AGP 9 e non risolve possibili classi duplicate. `core-compat` porta dieci classi AndroidX Apache-2.0 mancanti nel vecchio SESL Core, e Activity è vincolata alla 1.5.1; è un adattamento temporaneo, non una garanzia di compatibilità binaria. Occorre isolare e controllare il grafo delle dipendenze per evitare classi duplicate e `NoSuchMethodError`; serviranno prove reali su API 26–37. Non sostituire SELS con AndroidX standard senza una migrazione completa della libreria.
 - Insets di barre, display cutout e IME devono essere applicati esplicitamente: Android 15 impone edge-to-edge con target 35+ ([documentazione](https://developer.android.com/develop/ui/views/layout/edge-to-edge)). Layout sempre ridimensionabile.
 - `release` con R8 e firma esterna: mai chiavi o password nel repository. CI: compilazione, lint e test unitari; test strumentali richiedono emulatori/dispositivi.
 

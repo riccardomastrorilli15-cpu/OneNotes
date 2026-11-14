@@ -2,7 +2,7 @@
 
 Un prototipo Android di app per note **locale e indipendente**, con interfaccia View/XML ispirata a One UI tramite il progetto open source non ufficiale [OneUI Design](https://github.com/OneUIProject/oneui-design) e i fork SESL. Lume Notes non è affiliata a Samsung. Minimo Android 8.0 / API 26; progetto Kotlin, MVVM, Hilt, Room 3/FTS5 e DataStore.
 
-> **Stato: sorgenti di prototipo, non rilascio.** In questa sandbox non è stato possibile scaricare Gradle/SDK/dipendenze Android: nessun APK/AAB è stato costruito o avviato, e compatibilità OneUI/SESL, Room, Hilt, R8, UI, prestazioni, accessibilità e licenze del pacchetto non sono ancora verificati. Non usare per dati importanti o riservati. Vedere [LIMITATIONS.md](LIMITATIONS.md) prima di provarlo.
+> **Stato: sorgenti di prototipo, non rilascio.** In questa sandbox non è stato possibile scaricare Gradle/SDK/dipendenze Android: nessun APK/AAB è stato costruito o avviato, e compatibilità completa OneUI/SESL, Hilt, R8, UI, prestazioni, accessibilità e licenze del pacchetto non sono ancora verificati. Non usare per dati importanti o riservati. Vedere [LIMITATIONS.md](LIMITATIONS.md) prima di provarlo.
 
 ## Cosa c'è nel codice
 
@@ -29,11 +29,11 @@ Il terzo comando richiede un emulatore o dispositivo collegato. L'APK debug, **s
 ## Verifiche effettivamente eseguite
 
 - **15 test JVM isolati riusciti**: ricerca, trasformazioni/anteprima Markdown, undo/redo, coda di autosalvataggio e serializzazione/validazione del disegno. Per il test isolato del disegno è stato usato JSON-java su JVM e rimosso il runner Android dal test copiato temporaneamente; non sostituisce il test con `org.json` Android. Test compilati con Kotlin 2.2.10 temporaneo e JUnit compilato dal tag `r4.13.2` (il runner riporta `4.13.2-SNAPSHOT`), non dal Gradle del progetto.
-- **6 test Python riusciti**: controllo font su APK fittizi, diagnostica CI e contrasto di 16 coppie di colori statiche; uno smoke test SQLite FTS5 Python e controlli di localizzazione/XML riusciti. Le coppie controllate non certificano l’intera interfaccia. Il test FTS Python non equivale a Room.
+- **9 test Python riusciti**: controllo font su APK fittizi, diagnostica CI e contrasto di 16 coppie di colori statiche; uno smoke test SQLite FTS5 Python e controlli di localizzazione/XML riusciti. Le coppie controllate non certificano l’intera interfaccia. Il test FTS Python non equivale a Room.
 - **ktlint 1.8.0 CLI** eseguito su sorgenti Kotlin e script Gradle; il task Gradle `ktlintCheck` non è stato eseguito.
 - **AAPT2 standalone** ha compilato le risorse e le ha collegate a un `android.jar` API 37 da mirror e a stub minimi delle risorse OneUI; una prova separata dell'overlay ha selezionato DejaVu al posto del font upstream. Non sono il merge delle dipendenze reali né una build APK funzionante.
 - Checksum della distribuzione e del wrapper Gradle confrontati con il [log indipendente F-Droid](https://github.com/f-droid/gradle-transparency-log/tree/master/sha256); il wrapper non ha scaricato la distribuzione nella sandbox.
-- La [Android CI](.github/workflows/android.yml) è stata avviata: dopo un problema nel setup SDK, un tentativo successivo ha rilevato un conflitto nello schema Room e namespace duplicati nei picker SESL. Le correzioni sono in verifica; **non risulta ancora una build Android o un test strumentale riuscito**. L’audit font va eseguito su ogni APK generato; l’AAB richiede una verifica equivalente.
+- La [Android CI](.github/workflows/android.yml) ha eseguito con successo **due test Room e tre test del disegno su emulatore API 29**. La build completa e i test dell’app restano bloccati da incompatibilità SESL/AndroidX; il ponte introdotto è da verificare. L’audit font va eseguito su ogni APK generato; l’AAB richiede una verifica equivalente.
 
 ## Stato rispetto al capitolato
 
@@ -45,7 +45,7 @@ Il terzo comando richiede un emulatore o dispositivo collegato. L'APK debug, **s
 | Disegno e S Pen | Parziale | Canvas vettoriale base; niente latenza certificata, palm rejection affidabile, riconoscimento o OCR. |
 | Import/export e privacy | Parziale | Solo testo; nessun backup completo/cifrato. Niente cifratura, blocco o biometria. |
 | OneUI, temi, localizzazione, layout, accessibilità | Parziale | Componenti upstream e risorse EN/IT; nessuna certificazione visiva, RTL, contrasto o TalkBack. |
-| CI e test | Parziale | Workflow e test presenti; build e test Android non eseguiti. |
+| CI e test | Parziale | Cinque test Room/disegno passati su emulatore API 29; build e test dell’app non ancora riusciti. |
 | Prestazioni obiettivo (avvio, 5.000 note, 50k testo, latenza) | Non misurate | Non si dichiarano raggiunte. |
 | Allegati, audio, PDF, OCR, promemoria, widget, sincronizzazione e AI | Non implementate | Nessun pulsante funzionale che simuli queste funzioni. |
 
