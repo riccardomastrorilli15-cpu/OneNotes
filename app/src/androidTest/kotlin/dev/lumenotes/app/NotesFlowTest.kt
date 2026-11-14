@@ -23,6 +23,7 @@ import androidx.test.espresso.action.Tap
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.replaceText
 import androidx.test.espresso.action.ViewActions.swipeRight
+import androidx.test.espresso.action.ViewActions.swipeUp
 import androidx.test.espresso.action.ViewActions.typeTextIntoFocusedView
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.hasFocus
@@ -81,6 +82,33 @@ class NotesFlowTest {
         onView(withId(androidx.appcompat.R.id.search_src_text)).perform(replaceText("Farfalla"))
         onView(isRoot()).perform(waitFor(allOf(withText(title), isDisplayed())))
         onView(withText(title)).check(matches(isDisplayed()))
+    }
+
+    @Test fun longNoteMetadataCanBeReachedBySwiping() {
+        val title = "Long note ${System.currentTimeMillis()}"
+        val body = (1..40).joinToString("\n") { "Line $it of a note longer than the screen." }
+        val folder = "Swipe folder"
+        val tags = "swipe, metadata"
+        clickNewNote()
+        waitForResumed(EditorActivity::class.java)
+        onView(isRoot()).perform(waitFor(allOf(withId(R.id.title_field), isEnabled())))
+        onView(withId(R.id.title_field)).perform(replaceText(title))
+        onView(withId(R.id.body_field)).perform(replaceText(body))
+        closeSoftKeyboard()
+        swipeToMetadata()
+        onView(withId(R.id.folder_field)).perform(replaceText(folder))
+        onView(withId(R.id.tags_field)).perform(replaceText(tags))
+        pressBack()
+        waitForResumed(MainActivity::class.java)
+        onView(isRoot()).perform(waitFor(allOf(withId(R.id.notes_list), isDisplayed())))
+        clickSavedNote(title)
+        waitForResumed(EditorActivity::class.java)
+        onView(isRoot()).perform(waitFor(allOf(withId(R.id.body_field), isEnabled())))
+        onView(withId(R.id.body_field)).check(matches(withText(body)))
+        closeSoftKeyboard()
+        swipeToMetadata()
+        onView(withId(R.id.folder_field)).check(matches(withText(folder)))
+        onView(withId(R.id.tags_field)).check(matches(withText(tags)))
     }
 
     @Test fun staleDraftCannotOverwriteNewerInput() {
@@ -174,6 +202,34 @@ class NotesFlowTest {
             click.perform(uiController, view)
             uiController.loopMainThreadUntilIdle()
             Log.i("LumeUi", "dev.lumenotes editor body hasFocus=${view.hasFocus()} focusedId=${view.rootView.findFocus()?.id}")
+        }
+    }
+
+    /** Exercise actual touch scrolling, rather than moving the ScrollView programmatically. */
+    private fun swipeToMetadata() {
+        try {
+            onView(withId(R.id.editor_scroll)).check { view, missing ->
+                if (missing != null) throw missing
+                assertTrue("The long note must start above the bottom of the editor", view.canScrollVertically(1))
+            }
+            repeat(12) {
+                onView(withId(R.id.editor_scroll)).perform(swipeUp())
+                var fieldsVisible = false
+                onView(withId(R.id.editor_scroll)).check { view, missing ->
+                    if (missing != null) throw missing
+                    val folder = view.findViewById<View>(R.id.folder_field)
+                    val tags = view.findViewById<View>(R.id.tags_field)
+                    fieldsVisible = isCompletelyDisplayed().matches(folder) && isCompletelyDisplayed().matches(tags)
+                }
+                if (fieldsVisible) return
+            }
+            // Produce Espresso's detailed visibility diagnostic if swiping did not reach the fields.
+            onView(withId(R.id.folder_field)).check(matches(isCompletelyDisplayed()))
+            onView(withId(R.id.tags_field)).check(matches(isCompletelyDisplayed()))
+        } catch (failure: Throwable) {
+            captureFailedViewForCi(R.id.editor_scroll)
+            captureFailedViewForCi(R.id.tags_field)
+            throw failure
         }
     }
 
