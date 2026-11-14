@@ -1,0 +1,36 @@
+# Limiti e stato effettivo
+
+Aggiornato il 14 novembre 2026. **Questo è un prototipo, non un'app pronta per la produzione o per dati insostituibili.** «Implementato nel codice» non significa «verificato su Android». Nessuna promessa di superare Samsung Notes o di essere un'app Samsung.
+
+## Blocco di verifica e distribuzione
+
+- La sandbox iniziale non aveva JDK, Gradle o Android SDK. Un runtime Java 21 e il compilatore Kotlin sono stati procurati temporaneamente; il wrapper non riesce a scaricare Gradle da `services.gradle.org` (handshake di rete interrotto), e Google Maven/SDK non sono accessibili dalla sandbox. **Build APK/AAB, lint Android, test Room/strumentali e avvio su device non sono stati eseguiti qui.** I test JVM autonomi e ktlint eseguiti sono indicati nel README. La CI è configurata ma il suo risultato non va presunto.
+- OneUI Design 1.2.6 e SESL sono basati su One UI 4 e fork AndroidX datati. I conflitti tra classi/esclusioni e la compatibilità con Hilt, Activity/Lifecycle moderni e Android 15–17 richiedono una build e test reali. In particolare non è garantito che l'app si avvii su tutte le versioni supportate.
+- La libreria OneUI include Samsung Sharp Sans e SESL indexscroll include `sesl_indexscroll_group_font.ttf`, che riporta un avviso Samsung di diritti riservati. Nel progetto i due nomi sono sovrascritti da **DejaVu Sans Bold** liberamente distribuibile; `scripts/audit_apk_fonts.py` blocca i font di hash non autorizzato e verifica l'asset indexscroll nel pacchetto. Non è stata ancora ispezionata una build reale, né esaminata la provenienza di tutte le immagini e icone SESL. **Distribuzione bloccata fino a verifica tecnica e legale dell'APK/AAB.** Nessun logo/font/icona Samsung è stato copiato intenzionalmente nel codice dell'app.
+
+## Funzioni e dati
+
+| Area | Stato e limite |
+| --- | --- |
+| Note e autosalvataggio | Codice per creazione/modifica e coda seriale per nota. Una chiusura forzata o l'uccisione del processo prima del completamento di una scrittura può perdere gli ultimi caratteri; non esiste un journal di ripristino. In errore l'editor conserva la bozza in memoria e permette di riprovare, non è un backup durevole. Due editor contemporanei sulla stessa nota possono sovrascriversi: non c'è risoluzione dei conflitti. |
+| Editor | Markdown testuale con comandi per grassetto, corsivo, barrato, H1, punto elenco, checklist testuale, citazione, data e anteprima semplice; non è un editor WYSIWYG completo né un parser CommonMark completo. Checklist non interattive; nessuna tabella, toggle, formattazione colore/font/allineamento o elenchi annidati guidati. Undo/redo limitato a 100 snapshot del corpo nella sessione, non persistente. |
+| Cartelle/tag | Una cartella è una stringa per nota, filtrata per corrispondenza esatta; usare `/` nel nome non crea una vera gerarchia. Tag separati da virgole sono testo ricercabile, non entità indipendenti. Nessuna selezione multipla, colori, ordinamento manuale o raccolte intelligenti. |
+| Archivio/cestino | Flag, ripristino ed eliminazione singola permanente nel codice; nessuno svuotamento automatico o programmazione della conservazione. |
+| Ricerca | Schema Room 3 con FTS5 e SQLite bundled; ricerca prefix AND su titolo, corpo, cartella e tag. Non indicizza OCR, allegati o grafia; niente cronologia, filtri avanzati o evidenziazione interna. Test Room su emulatore ancora necessari. |
+| Disegno | View vettoriale sperimentale separata dal testo, pressione, colori, gomma a tratto, undo dell'ultimo tratto e opzione solo stilo; pulsante stilo rilevato all'inizio del gesto. Non usa renderer Jetpack a bassa latenza, né OCR, tilt, lazo, zoom/pan, forme, PDF, gomma pixel o autentico rifiuto del palmo. Le coordinate normalizzate possono deformare il disegno cambiando proporzioni; prestazioni e dispositivi S Pen non verificati. Salvataggio al termine del tratto. |
+| Modelli e link | Sei modelli testuali predefiniti; nessun modello personalizzato. Backlink per corrispondenza esatta `[[Titolo]]`, sensibile al titolo e non aggiornato al rinominarlo; niente vista grafo o apertura diretta dei link nel testo. |
+| Import/export | Solo testo e Markdown tramite SAF, limite import 5 MB; l'esportazione **non include il disegno**. Nessun PDF, immagine, HTML, backup completo o Drive. Non si leggono `.sdocx` o `.memo`: da Samsung Notes esportare il testo in `.txt` e importarlo; i PDF esportati da Samsung Notes non sono ancora importabili qui. |
+| Privacy e sicurezza | Database privato dell'app **non cifrato**; nessun blocco biometrico/PIN, `FLAG_SECURE`, backup cifrato o cancellazione sicura. Non usare per segreti. Backup cloud Android disattivato nel manifest; alcuni produttori possono comunque consentire trasferimenti diretti tra dispositivi su Android 12+. Disinstallare elimina i dati locali. Esportazioni non cifrate. |
+| Allegati e produttività | Immagini, fotocamera, audio, trascrizione, PDF, scansione, OCR, promemoria, notifiche, widget, tile e schermata di blocco non implementati. Shortcut dell'icona e ricezione testo condiviso sono nel codice ma non testati su device. |
+| Adattività | Lista a una o due colonne in base a `screenWidthDp`; non usa ancora WindowSizeClass né editor a più pannelli, cover screen o layout DeX dedicato. `Ctrl+K` apre la ricerca, non una palette comandi completa. Insets implementati, da verificare su API 26–37, tastiera, gesture e notch. |
+| Aspetto/accessibilità | Temi sistema/chiaro/scuro via DataStore; niente AMOLED nero opzionale o colori dinamici. Stringhe inglesi e italiane presenti, supporto RTL dichiarato, ma TalkBack, contrasto, ingrandimento massimo, riduzione animazioni e navigazione da tastiera non sono stati certificati. |
+| Prestazioni | Query iniziale limitata a 40 righe e caricamento incrementale con proiezione breve e DiffUtil, ma il limite cresce e non è Paging 3. Nessuna misura reale di avvio <1 s, 60/120 fps con 5.000 note, editor da 50.000 caratteri, latenza o memoria; non garantite. |
+| Versioni e AI | Nessuna cronologia persistente delle versioni, AI, focus a schermo intero, statistiche, grafico o immagine di condivisione. UUID, timestamp e versioni sono solo basi dati, non sincronizzazione o risoluzione conflitti. |
+| Migrazioni/test | Schema iniziale versione 1, nessuna migrazione da versioni precedenti; non è abilitato il fallback distruttivo. Test unitari e instrumented sono presenti ma non tutti eseguibili nella sandbox. Nessuna copertura misurata, nessun test di blocco/esportazione UI. LeakCanary è solo una dipendenza debug, non è stata eseguita un'analisi delle perdite. |
+
+## Prossimi gate prima di usare dati reali
+
+1. Compilare debug e release con Android Studio, controllare dipendenze duplicate e risolvere ogni errore.
+2. Eseguire unit test, lint e test Room/UI su emulatore; poi verificare Galaxy reali con S Pen, Fold, font grandi, RTL, TalkBack, split-screen e API 26/29/35/37.
+3. Ispezionare risorse e licenze del pacchetto finale, misurare prestazioni e accessibilità.
+4. Implementare un backup completo, recupero dopo interruzione e cifratura/biometria prima di promettere protezione o affidabilità di produzione.

@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dev.oneuiproject.oneui.layout.ToolbarLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/editor_toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/lume_background"
+    app:expandable="false"
+    app:title="@string/editor_title">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_location="main_content">
+        <ScrollView
+            android:id="@+id/editor_scroll"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:fillViewport="true">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingStart="24dp"
+                android:paddingTop="16dp"
+                android:paddingEnd="24dp"
+                android:paddingBottom="24dp">
+                <EditText
+                    android:id="@+id/title_field"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:hint="@string/title_hint"
+                    android:inputType="textCapSentences"
+                    android:minHeight="56dp"
+                    android:textColor="@color/lume_foreground"
+                    android:textColorHint="@color/lume_secondary"
+                    android:textSize="28sp"
+                    android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/counter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:textColor="@color/lume_secondary"
+                    android:textSize="13sp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_card"
+                    android:orientation="vertical"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp">
+                    <EditText
+                        android:id="@+id/folder_field"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:hint="@string/folder_hint"
+                        android:inputType="textCapSentences"
+                        android:maxLength="120"
+                        android:minHeight="48dp"
+                        android:textColor="@color/lume_foreground"
+                        android:textColorHint="@color/lume_secondary"
+                        android:textSize="15sp" />
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/lume_line" />
+                    <EditText
+                        android:id="@+id/tags_field"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:hint="@string/tags_hint"
+                        android:inputType="text"
+                        android:maxLength="500"
+                        android:minHeight="48dp"
+                        android:textColor="@color/lume_foreground"
+                        android:textColorHint="@color/lume_secondary"
+                        android:textSize="15sp" />
+                </LinearLayout>
+                <EditText
+                    android:id="@+id/body_field"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:background="@null"
+                    android:gravity="top|start"
+                    android:hint="@string/body_hint"
+                    android:inputType="textMultiLine|textCapSentences"
+                    android:minHeight="240dp"
+                    android:textColor="@color/lume_foreground"
+                    android:textColorHint="@color/lume_secondary"
+                    android:textSize="17sp" />
+                <TextView
+                    android:id="@+id/preview_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:minHeight="240dp"
+                    android:textColor="@color/lume_foreground"
+                    android:textIsSelectable="true"
+                    android:textSize="17sp"
+                    android:visibility="gone" />
+            </LinearLayout>
+        </ScrollView>
+        <TextView
+            android:id="@+id/save_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
+            android:minHeight="48dp"
+            android:gravity="center_vertical"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
+            android:text="@string/saving"
+            android:textColor="@color/lume_secondary"
+            android:textSize="13sp" />
+        <HorizontalScrollView
+            android:id="@+id/format_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/lume_surface"
+            android:fillViewport="false"
+            android:scrollbars="none">
+            <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal">
+                <Button android:id="@+id/format_undo" style="@style/Lume.FormatButton" android:contentDescription="@string/undo" android:text="@string/fmt_undo" />
+                <Button android:id="@+id/format_redo" style="@style/Lume.FormatButton" android:contentDescription="@string/redo" android:text="@string/fmt_redo" />
+                <Button android:id="@+id/format_bold" style="@style/Lume.FormatButton" android:contentDescription="@string/bold" android:text="@string/fmt_bold" android:textStyle="bold" />
+                <Button android:id="@+id/format_italic" style="@style/Lume.FormatButton" android:contentDescription="@string/italic" android:text="@string/fmt_italic" android:textStyle="italic" />
+                <Button android:id="@+id/format_strike" style="@style/Lume.FormatButton" android:contentDescription="@string/strikethrough" android:text="@string/fmt_strike" />
+                <Button android:id="@+id/format_heading" style="@style/Lume.FormatButton" android:contentDescription="@string/heading" android:text="@string/fmt_heading" />
+                <Button android:id="@+id/format_bullet" style="@style/Lume.FormatButton" android:contentDescription="@string/bulleted_list" android:text="@string/fmt_bullet" />
+                <Button android:id="@+id/format_check" style="@style/Lume.FormatButton" android:contentDescription="@string/checklist" android:text="@string/fmt_check" />
+                <Button android:id="@+id/format_quote" style="@style/Lume.FormatButton" android:contentDescription="@string/quote" android:text="@string/fmt_quote" />
+                <Button android:id="@+id/format_date" style="@style/Lume.FormatButton" android:contentDescription="@string/insert_date" android:text="@string/fmt_date" />
+            </LinearLayout>
+        </HorizontalScrollView>
+    </LinearLayout>
+</dev.oneuiproject.oneui.layout.ToolbarLayout>

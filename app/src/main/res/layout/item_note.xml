@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dev.oneuiproject.oneui.widget.RoundLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    android:background="@drawable/bg_card"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
+    android:minHeight="120dp"
+    android:orientation="vertical"
+    android:padding="20dp">
+    <TextView
+        android:id="@+id/folder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:textColor="@color/lume_accent"
+        android:textSize="13sp"
+        android:textStyle="bold"
+        android:visibility="gone" />
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/lume_foreground"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+    <TextView
+        android:id="@+id/preview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:ellipsize="end"
+        android:maxLines="3"
+        android:textColor="@color/lume_secondary"
+        android:textSize="15sp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/updated"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/lume_secondary"
+            android:textSize="12sp" />
+        <TextView
+            android:id="@+id/drawing_badge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text="@string/has_drawing"
+            android:textColor="@color/lume_accent"
+            android:textSize="12sp"
+            android:visibility="gone" />
+        <ImageView
+            android:id="@+id/favorite_badge"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:contentDescription="@string/favorite_description"
+            android:src="@drawable/ic_star"
+            android:visibility="gone" />
+        <TextView
+            android:id="@+id/pin_badge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:contentDescription="@string/pinned_description"
+            android:text="@string/fmt_bullet"
+            android:textColor="@color/lume_accent"
+            android:textSize="20sp"
+            android:visibility="gone" />
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/more_options"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/note_actions"
+            android:padding="12dp"
+            android:src="@drawable/ic_more" />
+    </LinearLayout>
+</dev.oneuiproject.oneui.widget.RoundLinearLayout>

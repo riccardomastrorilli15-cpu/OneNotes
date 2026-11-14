@@ -1,0 +1,5 @@
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut android:shortcutId="quick_note" android:enabled="true" android:icon="@drawable/ic_note" android:shortcutShortLabel="@string/shortcut_quick_note">
+        <intent android:action="dev.lumenotes.action.QUICK_NOTE" android:targetPackage="dev.lumenotes.app" android:targetClass="dev.lumenotes.app.MainActivity" />
+    </shortcut>
+</shortcuts>

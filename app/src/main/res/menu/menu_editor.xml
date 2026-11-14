@@ -1,0 +1,8 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/action_drawing" android:icon="@drawable/ic_pen" android:title="@string/drawing" app:showAsAction="always" />
+    <item android:id="@+id/action_preview" android:title="@string/preview" app:showAsAction="never" />
+    <item android:id="@+id/action_export" android:title="@string/export" app:showAsAction="never" />
+    <item android:id="@+id/action_share" android:title="@string/share_text" app:showAsAction="never" />
+    <item android:id="@+id/action_backlinks" android:title="@string/backlinks" app:showAsAction="never" />
+    <item android:id="@+id/action_note_options" android:title="@string/note_actions" app:showAsAction="never" />
+</menu>

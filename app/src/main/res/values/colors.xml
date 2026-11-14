@@ -1,0 +1,12 @@
+<resources>
+    <color name="lume_background">#F6F7FB</color>
+    <color name="lume_surface">#FFFFFF</color>
+    <color name="lume_foreground">#181B25</color>
+    <color name="lume_secondary">#596171</color>
+    <color name="lume_accent">#4454C5</color>
+    <color name="lume_accent_soft">#E9EBFF</color>
+    <color name="lume_on_accent">#FFFFFF</color>
+    <color name="lume_line">#E5E7EF</color>
+    <color name="lume_canvas">#FFFFFF</color>
+    <color name="lume_launcher_background">#4555C7</color>
+</resources>

@@ -1,0 +1,4 @@
+SQLite
+https://www.sqlite.org/copyright.html
+The original SQLite source code is in the public domain. SQLite is provided without warranty.
+The bundled SQLite driver is part of AndroidX and is distributed under the Apache License 2.0.

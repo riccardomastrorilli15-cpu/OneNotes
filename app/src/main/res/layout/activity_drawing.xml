@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dev.oneuiproject.oneui.layout.ToolbarLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawing_toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/lume_background"
+    app:expandable="false"
+    app:title="@string/drawing_title">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_location="main_content">
+        <dev.lumenotes.drawing.InkCanvasView
+            android:id="@+id/ink_canvas"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_weight="1"
+            android:background="@color/lume_canvas"
+            android:contentDescription="@string/drawing_description" />
+        <TextView
+            android:id="@+id/drawing_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            android:gravity="center_vertical"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
+            android:text="@string/saving"
+            android:textColor="@color/lume_secondary" />
+        <HorizontalScrollView android:layout_width="match_parent" android:layout_height="wrap_content" android:background="@color/lume_surface" android:scrollbars="none">
+            <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="center_vertical" android:orientation="horizontal">
+                <Button android:id="@+id/ink_pen" style="@style/Lume.FormatButton" android:text="@string/pen" />
+                <Button android:id="@+id/ink_eraser" style="@style/Lume.FormatButton" android:text="@string/eraser" />
+                <Button android:id="@+id/ink_undo" style="@style/Lume.FormatButton" android:text="@string/undo" />
+                <Button android:id="@+id/ink_clear" style="@style/Lume.FormatButton" android:text="@string/clear_drawing" />
+                <Button android:id="@+id/ink_black" style="@style/Lume.FormatButton" android:text="@string/ink_black" />
+                <Button android:id="@+id/ink_blue" style="@style/Lume.FormatButton" android:text="@string/ink_blue" />
+                <Button android:id="@+id/ink_red" style="@style/Lume.FormatButton" android:text="@string/ink_red" />
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/stylus_only"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minHeight="48dp"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="20dp"
+                    android:text="@string/stylus_only"
+                    android:textColor="@color/lume_foreground" />
+            </LinearLayout>
+        </HorizontalScrollView>
+    </LinearLayout>
+</dev.oneuiproject.oneui.layout.ToolbarLayout>
