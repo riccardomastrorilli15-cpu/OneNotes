@@ -36,7 +36,7 @@ python3 scripts/audit_apk_fonts.py app/build/outputs/bundle/release/app-release.
 
 I test con `connected...` richiedono un dispositivo/emulatore acceso. I report sono nelle cartelle `*/build/reports/`. Prova in particolare API 26, API recenti, lingua italiana/inglese, RTL, caratteri grandi, TalkBack, tastiera hardware, edge-to-edge, rotazione e interruzioni durante il salvataggio. Il workflow `.github/workflows/android.yml` esegue build/test e controlli font quando GitHub Actions è abilitato; verificane il risultato reale prima di fidarti.
 
-L'audit blocca font il cui hash non è esplicitamente approvato e verifica l'asset che sovrascrive il font SESL negli APK o nell'AAB; il controllo AAB è ancora in verifica CI. **Non** certifica le licenze transitive, il codice SESL, altre immagini, loghi o diritti di marchio. La distribuzione è bloccata dai [diritti SESL da chiarire](licenses/SESL-RIGHTS-REVIEW.md): esamina il grafo risolto con `./gradlew :app:dependencies --configuration releaseRuntimeClasspath`, conserva gli avvisi richiesti e ispeziona il pacchetto finale con APK Analyzer.
+L'audit blocca font il cui hash non è esplicitamente approvato e verifica l'asset che sovrascrive il font SESL negli APK o nell'AAB; è passato sui tre pacchetti della CI citata nel README. **Non** certifica le licenze transitive, il codice SESL, altre immagini, loghi o diritti di marchio. La distribuzione è bloccata dai [diritti SESL da chiarire](licenses/SESL-RIGHTS-REVIEW.md): esamina il grafo risolto con `./gradlew :app:dependencies --configuration releaseRuntimeClasspath`, conserva gli avvisi richiesti e ispeziona il pacchetto finale con APK Analyzer.
 
 ## 4. Creare e custodire una chiave release
 

@@ -2,7 +2,7 @@
 
 Un prototipo Android di app per note **locale e indipendente**, con interfaccia View/XML ispirata a One UI tramite il progetto open source non ufficiale [OneUI Design](https://github.com/OneUIProject/oneui-design) e i fork SESL. Lume Notes non è affiliata a Samsung. Minimo Android 8.0 / API 26; progetto Kotlin, MVVM, Hilt, Room 3/FTS5 e DataStore.
 
-> **Stato: prototipo, non rilascio.** La [CI](https://github.com/riccardomastrorilli15-cpu/OneNotes/actions/runs/43637000145) ha compilato debug e release non firmata con R8, eseguito lint, test JVM e audit dei font negli APK. Su emulatore API 29 l'app si avvia e il test UI ha creato, modificato e riaperto una nota, ma è fallito prima della ricerca. Compatibilità generale, flussi completi, prestazioni e accessibilità non sono ancora verificati. La distribuzione è bloccata anche da [diritti SESL da chiarire](licenses/SESL-RIGHTS-REVIEW.md). Non usare per dati importanti o riservati. Vedere [LIMITATIONS.md](LIMITATIONS.md).
+> **Stato: prototipo, non rilascio.** La [CI](https://github.com/riccardomastrorilli15-cpu/OneNotes/actions/runs/43639623424) ha compilato debug, release non firmata con R8 e AAB, superando lint, test JVM e audit font; su emulatore API 29 è passato anche un flusso UI di creazione, modifica, riapertura e ricerca. Compatibilità generale, altri flussi, prestazioni e accessibilità non sono ancora verificati. La distribuzione è bloccata da [diritti SESL da chiarire](licenses/SESL-RIGHTS-REVIEW.md). Non usare per dati importanti o riservati. Vedere [LIMITATIONS.md](LIMITATIONS.md).
 
 ## Cosa c'è nel codice
 
@@ -33,25 +33,25 @@ Il terzo comando richiede un emulatore o dispositivo collegato. L'APK debug, **s
 - **ktlint 1.8.0** eseguito localmente tramite CLI e, per la revisione collegata sotto, tramite il task Gradle `ktlintCheck` in CI.
 - **AAPT2 standalone** ha compilato le risorse e le ha collegate a un `android.jar` API 37 da mirror e a stub minimi delle risorse OneUI; una prova separata dell'overlay ha selezionato DejaVu al posto del font upstream. Non sono il merge delle dipendenze reali né una build APK funzionante.
 - Checksum della distribuzione e del wrapper Gradle confrontati con il [log indipendente F-Droid](https://github.com/f-droid/gradle-transparency-log/tree/master/sha256); il wrapper non ha scaricato la distribuzione nella sandbox.
-- La [run CI 43637000145](https://github.com/riccardomastrorilli15-cpu/OneNotes/actions/runs/43637000145) ha completato `assembleDebug`, `assembleRelease` non firmata con R8, `testDebugUnitTest`, `ktlintCheck`, `lintDebug`, controllo schema Room e audit font su entrambi gli APK. La soppressione `AppCompatResource` è limitata ai due menu SESL. Su emulatore API 29 sono passati **due test Room, tre test del disegno, il test del manifest e quello dell'intent**. Il test UI ha verificato creazione, modifica e riapertura, ma è scaduto prima di raggiungere la ricerca: la modifica al test è in verifica. È stato aggiunto un controllo AAB, da verificare in CI; l'audit font va ripetuto su ogni pacchetto e non copre codice o altre risorse.
+- La [run CI 43639623424](https://github.com/riccardomastrorilli15-cpu/OneNotes/actions/runs/43639623424) ha completato `assembleDebug`, `assembleRelease` e `bundleRelease` non firmati con R8, `testDebugUnitTest`, `ktlintCheck`, `lintDebug`, controllo schema Room e audit font su entrambi gli APK e sull'AAB. La soppressione `AppCompatResource` è limitata ai due menu SESL. Su emulatore API 29 sono passati **due test Room, tre test di serializzazione del disegno e tre test app**, compreso il flusso creazione/modifica/riapertura/ricerca. L'audit va ripetuto su ogni pacchetto e non copre codice o altre risorse. Ulteriori test di disegno e una matrice API 26/29/35/37 sono stati aggiunti, ma richiedono una nuova esecuzione.
 
 ## Stato rispetto al capitolato
 
 | Area | Stato | Evidenza / limite |
 | --- | --- | --- |
 | Ricerca iniziale OneUI, design e architettura | Completata come documentazione | [DESIGN_NOTES.md](DESIGN_NOTES.md), [ARCHITECTURE.md](ARCHITECTURE.md); compatibilità da provare. |
-| Note, editor, autosave, archivio/cestino, cartelle/tag e ricerca | Parziale | Creazione, modifica e riapertura verificate nel test UI API 29; ricerca UI ancora da verificare, nessuna garanzia anti-perdita. |
+| Note, editor, autosave, archivio/cestino, cartelle/tag e ricerca | Parziale | Creazione, modifica, riapertura e ricerca verificate nel test UI API 29; altri flussi e nessuna garanzia anti-perdita. |
 | Markdown, modelli e backlink | Parziale | Comandi semplici, sei modelli e backlink testuali; no WYSIWYG completo o grafo. |
 | Disegno e S Pen | Parziale | Canvas vettoriale base; niente latenza certificata, palm rejection affidabile, riconoscimento o OCR. |
 | Import/export e privacy | Parziale | Solo testo; nessun backup completo/cifrato. Niente cifratura, blocco o biometria. |
 | OneUI, temi, localizzazione, layout, accessibilità | Parziale | Componenti upstream e risorse EN/IT; nessuna certificazione visiva, RTL, contrasto o TalkBack. |
-| CI e test | Parziale | Build debug/release non firmata, test JVM e lint passati; sette test Room/disegno/manifest/intent passati su API 29. Il test del flusso completo è fallito prima della ricerca. |
+| CI e test | Parziale | Build debug e release/AAB non firmati, test JVM e lint passati; otto test Room/disegno/app su API 29, incluso un flusso UI completo. Altri API e funzionalità restano da verificare. |
 | Prestazioni obiettivo (avvio, 5.000 note, 50k testo, latenza) | Non misurate | Non si dichiarano raggiunte. |
 | Allegati, audio, PDF, OCR, promemoria, widget, sincronizzazione e AI | Non implementate | Nessun pulsante funzionale che simuli queste funzioni. |
 
 ## Roadmap proposta
 
-1. Verificare la correzione del test UI su emulatore e la compatibilità tra AndroidX e fork SESL su altre versioni; mantenere verdi build debug/release e lint.
+1. Ampliare i test UI e verificare la compatibilità tra AndroidX e fork SESL su altre versioni; mantenere verdi build debug/release e lint.
 2. Testare salvataggio, interruzioni, import/export, TalkBack, RTL, font grandi, edge-to-edge e reali Galaxy, Fold e S Pen; raccogliere benchmark.
 3. Creare backup completo con ripristino verificato e protezione crittografica/biometrica prima di gestire dati sensibili.
 4. Evolvere editor, ricerca e organizzazione; aggiungere progressivamente disegno avanzato, allegati, PDF/OCR e promemoria solo con test e permessi appropriati.
@@ -61,6 +61,6 @@ Il terzo comando richiede un emulatore o dispositivo collegato. L'APK debug, **s
 
 Il codice di Lume Notes è [MIT](LICENSE). I repository OneUI dichiarano MIT, © 2022 Yanndroid & BlackMesa123; alcuni file SESL riportano anche avvisi di diritti riservati Samsung, e **i diritti di ridistribuzione di quelle parti non sono stati accertati**. Vedere [la verifica aperta](licenses/SESL-RIGHTS-REVIEW.md). AndroidX, Kotlin/coroutines, Hilt, ZXing e LeakCanary dichiarano Apache 2.0; SQLite è pubblico dominio per il motore; DejaVu/Bitstream Vera ha una licenza font libera. JUnit ed Hamcrest sono dipendenze di test. Testi e avvisi sono in [`licenses/`](licenses/) e nella schermata Licenze; non costituiscono un inventario completo delle dipendenze.
 
-Due font upstream dai diritti non chiariti o riservati sono sostituiti nei sorgenti da DejaVu con la stessa chiave/percorso. L'audit automatico è passato sugli APK debug e release non firmata della run citata, ma non verifica immagini, altre risorse o AAB: la distribuzione resta subordinata a verifica tecnica e legale. Non sono utilizzati loghi o font Samsung come identità del prodotto.
+Due font upstream dai diritti non chiariti o riservati sono sostituiti nei sorgenti da DejaVu con la stessa chiave/percorso. L'audit automatico è passato sugli APK debug/release e sull'AAB della run citata, ma non verifica codice, immagini o altre risorse: la distribuzione resta subordinata a verifica tecnica e legale. Non sono utilizzati loghi o font Samsung come identità del prodotto.
 
 [Note di design](DESIGN_NOTES.md) · [Architettura](ARCHITECTURE.md) · [Limiti dettagliati](LIMITATIONS.md) · [Changelog](CHANGELOG.md) · [Build e firma](BUILD_AND_SIGN.md)
