@@ -86,4 +86,3 @@ jobs:
             **/build/reports/androidTests/
             **/build/outputs/androidTest-results/
           if-no-files-found: ignore
-          if-no-files-found: ignore
