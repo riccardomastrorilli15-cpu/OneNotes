@@ -3,6 +3,7 @@ package dev.lumenotes.app
 import android.content.Intent
 import android.graphics.Rect
 import android.os.SystemClock
+import android.util.Log
 import android.view.InputDevice
 import android.view.MotionEvent
 import android.view.View
@@ -17,12 +18,12 @@ import androidx.test.espresso.action.CoordinatesProvider
 import androidx.test.espresso.action.GeneralClickAction
 import androidx.test.espresso.action.Press
 import androidx.test.espresso.action.Tap
-import androidx.test.espresso.action.TypeTextAction
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.replaceText
 import androidx.test.espresso.action.ViewActions.swipeRight
-import androidx.test.espresso.action.ViewActions.swipeUp
+import androidx.test.espresso.action.ViewActions.typeTextIntoFocusedView
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.hasFocus
 import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
 import androidx.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
@@ -108,10 +109,10 @@ class NotesFlowTest {
     private fun typeBody(text: String) {
         try {
             onView(isRoot()).perform(waitForKeyboard())
-            // The multiline field can be taller than the viewport with the IME open;
-            // Espresso's scrollTo() incorrectly demands that 90% of it fit on screen.
-            onView(withId(R.id.editor_scroll)).perform(swipeUp())
-            onView(withId(R.id.body_field)).check(matches(isDisplayed())).perform(typeIntoVisiblePart(text))
+            // The multiline field can be taller than the viewport with the IME open.
+            // Tap a visible, touch-sized area, and verify focus before sending key events.
+            onView(withId(R.id.body_field)).perform(tapVisiblePart())
+            onView(withId(R.id.body_field)).check(matches(hasFocus())).perform(typeTextIntoFocusedView(text))
             onView(withId(R.id.body_field)).check(matches(withText(text)))
         } catch (failure: Throwable) {
             captureFailedViewForCi(R.id.body_field)
@@ -119,19 +120,30 @@ class NotesFlowTest {
         }
     }
 
-    /** Tap the visible portion, then send real key events; a large EditText need not fit entirely. */
-    private fun typeIntoVisiblePart(text: String): ViewAction {
-        val coordinates = CoordinatesProvider { view ->
+    /** A large EditText cannot always satisfy click()'s 90% visibility requirement. */
+    private fun tapVisiblePart(): ViewAction = object : ViewAction {
+        override fun getConstraints(): Matcher<View> = isDisplayed()
+        override fun getDescription(): String = "Tap the visible editor body"
+        override fun perform(uiController: UiController, view: View) {
             val visible = Rect()
             check(view.getLocalVisibleRect(visible)) { "The editor body is not visible" }
             val minimum = (48 * view.resources.displayMetrics.density).toInt()
             check(visible.width() >= minimum && visible.height() >= minimum) { "The visible body area is too small to tap" }
             val location = IntArray(2)
             view.getLocationOnScreen(location)
-            floatArrayOf(location[0] + visible.exactCenterX(), location[1] + visible.exactCenterY())
+            val point = floatArrayOf(location[0] + visible.exactCenterX(), location[1] + visible.exactCenterY())
+            Log.i("LumeUi", "dev.lumenotes editor tap local=$visible screen=${location.toList()} point=${point.toList()}")
+            val click = GeneralClickAction(
+                Tap.SINGLE,
+                CoordinatesProvider { point },
+                Press.FINGER,
+                InputDevice.SOURCE_UNKNOWN,
+                MotionEvent.BUTTON_PRIMARY
+            )
+            click.perform(uiController, view)
+            uiController.loopMainThreadUntilIdle()
+            Log.i("LumeUi", "dev.lumenotes editor body hasFocus=${view.hasFocus()} focusedId=${view.rootView.findFocus()?.id}")
         }
-        val click = GeneralClickAction(Tap.SINGLE, coordinates, Press.FINGER, InputDevice.SOURCE_UNKNOWN, MotionEvent.BUTTON_PRIMARY)
-        return TypeTextAction(text, true, click)
     }
 
     private fun clickSavedNote(title: String) {
