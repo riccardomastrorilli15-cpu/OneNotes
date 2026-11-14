@@ -24,6 +24,11 @@ jobs:
       - uses: gradle/actions/setup-gradle@v5
       - name: Compile, lint and unit tests
         run: ./scripts/ci_gradle.sh --no-daemon :app:assembleDebug :app:assembleRelease :app:lintDebug testDebugUnitTest ktlintCheck
+      - name: Diagnose Activity dependency selection
+        if: failure()
+        run: |
+          ./gradlew --no-daemon :app:dependencyInsight --dependency androidx.activity --configuration debugRuntimeClasspath --console=plain > "$RUNNER_TEMP/lume-activity-deps.txt" 2>&1 || true
+          python3 -c 'from pathlib import Path; import os, sys; sys.path.insert(0, "scripts"); from ci_report_failure import annotations; print("\n".join(annotations(Path(os.environ["RUNNER_TEMP"], "lume-activity-deps.txt").read_text(), "notice", "Activity dependency graph")))'
       - name: Report generated Room schemas
         if: always()
         run: python3 scripts/ci_report_schemas.py core-database/schemas
@@ -69,10 +74,16 @@ jobs:
           target: google_apis
           arch: x86_64
           disable-animations: true
-          script: ./scripts/ci_gradle.sh --no-daemon :core-database:connectedDebugAndroidTest :feature-drawing:connectedDebugAndroidTest :app:connectedDebugAndroidTest
+          script: ./scripts/ci_gradle.sh --continue --no-daemon :core-database:connectedDebugAndroidTest :feature-drawing:connectedDebugAndroidTest :app:connectedDebugAndroidTest
+      - name: Report instrumented test results
+        if: always()
+        run: python3 scripts/ci_report_test_results.py .
       - uses: actions/upload-artifact@v6
         if: always()
         with:
           name: instrumented-reports
-          path: '**/build/reports/androidTests/'
+          path: |
+            **/build/reports/androidTests/
+            **/build/outputs/androidTest-results/
+          if-no-files-found: ignore
           if-no-files-found: ignore

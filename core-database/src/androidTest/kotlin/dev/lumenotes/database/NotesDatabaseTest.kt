@@ -2,7 +2,6 @@ package dev.lumenotes.database
 
 import androidx.room3.Room
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import dev.lumenotes.model.Note
 import kotlinx.coroutines.Dispatchers
@@ -21,7 +20,7 @@ class NotesDatabaseTest {
     private lateinit var dao: NoteDao
 
     @Before fun open() {
-        db = Room.inMemoryDatabaseBuilder<NotesDatabase>(ApplicationProvider.getApplicationContext())
+        db = Room.inMemoryDatabaseBuilder<NotesDatabase>()
             .setDriver(BundledSQLiteDriver())
             .setQueryCoroutineContext(Dispatchers.IO)
             .build()

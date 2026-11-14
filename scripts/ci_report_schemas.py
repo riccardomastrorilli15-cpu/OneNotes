@@ -1,16 +1,21 @@
 #!/usr/bin/env python3
-"""Make generated, non-secret Room schemas inspectable in GitHub check annotations."""
+"""Expose generated, non-secret Room schemas as bounded base64 annotations."""
 
 import base64
 import sys
 from pathlib import Path
 
+from ci_report_failure import chunks
 
-root = Path(sys.argv[1])
-for schema in sorted(root.rglob("*.json")):
-    relative = schema.relative_to(root)
-    encoded = base64.b64encode(schema.read_bytes()).decode("ascii")
-    if len(encoded) <= 48_000:
-        print(f"::notice title=Room schema {relative}::{encoded}")
-    else:
-        print(f"::warning title=Room schema omitted::{relative} exceeds the annotation size limit")
+
+def annotations(root):
+    for schema in sorted(root.rglob("*.json")):
+        relative = schema.relative_to(root)
+        encoded = base64.b64encode(schema.read_bytes()).decode("ascii")
+        parts = chunks(encoded)
+        for index, part in enumerate(parts, 1):
+            yield f"::notice title=Room schema {relative} {index}/{len(parts)}::{part}"
+
+
+if __name__ == "__main__":
+    print("\n".join(annotations(Path(sys.argv[1]))))
