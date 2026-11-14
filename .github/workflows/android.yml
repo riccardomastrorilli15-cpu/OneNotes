@@ -87,17 +87,18 @@ jobs:
           # rather than a preinstalled version that writes target=android-0.
           version=''
           if [ -x "$tools/latest/bin/sdkmanager" ]; then
-            version=$("$tools/latest/bin/sdkmanager" --version | tr -d '\r' | tail -n 1 || true)
+            version=$("$tools/latest/bin/sdkmanager" --version | tr -d '\r' | awk 'NF { line=$0 } END { print line }' || true)
           fi
           if [ "$version" != '22.0' ] && [ -x "$tools/22.0/bin/sdkmanager" ]; then
             if [ -e "$tools/latest" ] || [ -L "$tools/latest" ]; then
               mv "$tools/latest" "$tools/lume-ci-previous-latest"
             fi
             ln -s "$tools/22.0" "$tools/latest"
-            version=$("$tools/latest/bin/sdkmanager" --version | tr -d '\r' | tail -n 1)
+            version=$("$tools/latest/bin/sdkmanager" --version | tr -d '\r' | awk 'NF { line=$0 } END { print line }')
           fi
           if [ "$version" != '22.0' ]; then
-            echo "::error title=Android 17 tools::Expected command-line tools 22.0, got $version"
+            candidates=$(find "$tools" -maxdepth 3 -name sdkmanager -print 2>/dev/null | tr '\n' ' ' || true)
+            echo "::error title=Android 17 tools::Expected 22.0, got '$version'; tools=$tools; candidates=$candidates; PATH tool=$(command -v sdkmanager || true)"
             exit 1
           fi
           set +e

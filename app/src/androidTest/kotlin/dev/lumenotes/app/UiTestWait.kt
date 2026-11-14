@@ -51,19 +51,21 @@ internal fun waitForResumed(type: Class<out Activity>, timeoutMs: Long = 15_000)
 }
 
 /** Opt-in CI diagnostics: the disposable emulator contains synthetic test data only. */
-internal fun captureFailedViewForCi(id: Int) {
+internal fun captureFailedViewForCi(id: Int) = captureFailedViewForCi(withId(id))
+
+internal fun captureFailedViewForCi(matcher: Matcher<View>) {
     if (InstrumentationRegistry.getArguments().getString("captureScreenshots") != "1") return
     try {
-        onView(withId(id)).check { view, _ ->
+        onView(matcher).check { view, _ ->
             if (view != null) {
                 val chain = generateSequence(view) { it.parent as? View }.take(12).joinToString(" > ") { ancestor ->
                     val visible = Rect()
                     val location = IntArray(2)
-                    ancestor.getGlobalVisibleRect(visible)
+                    val displayed = ancestor.getGlobalVisibleRect(visible)
                     ancestor.getLocationOnScreen(location)
                     "${ancestor.javaClass.simpleName}(at=${location.toList()}, size=${ancestor.width}x${ancestor.height}, " +
-                        "visible=$visible, padding=${ancestor.paddingLeft},${ancestor.paddingTop}," +
-                        "${ancestor.paddingRight},${ancestor.paddingBottom})"
+                        "visible=$displayed:$visible, scroll=${ancestor.scrollX},${ancestor.scrollY}, " +
+                        "padding=${ancestor.paddingLeft},${ancestor.paddingTop},${ancestor.paddingRight},${ancestor.paddingBottom})"
                 }
                 val insets = ViewCompat.getRootWindowInsets(view)
                 val bars = insets?.getInsets(WindowInsetsCompat.Type.systemBars())

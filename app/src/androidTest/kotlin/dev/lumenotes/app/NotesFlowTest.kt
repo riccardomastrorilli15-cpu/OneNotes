@@ -9,6 +9,7 @@ import androidx.test.espresso.action.ViewActions.replaceText
 import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.action.ViewActions.swipeRight
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.isEnabled
 import androidx.test.espresso.matcher.ViewMatchers.isRoot
@@ -39,13 +40,13 @@ class NotesFlowTest {
         waitForResumed(EditorActivity::class.java)
         onView(isRoot()).perform(waitFor(allOf(withId(R.id.title_field), isEnabled())))
         onView(withId(R.id.title_field)).perform(replaceText(title))
-        onView(withId(R.id.body_field)).perform(scrollTo(), replaceText(body))
+        replaceBody(body)
         closeSoftKeyboard()
         pressBack()
         waitForResumed(MainActivity::class.java)
         onView(isRoot()).perform(waitFor(allOf(withId(R.id.notes_list), isDisplayed())))
         onView(isRoot()).perform(waitFor(withText(title)))
-        onView(withText(title)).perform(click())
+        clickSavedNote(title)
         waitForResumed(EditorActivity::class.java)
         onView(isRoot()).perform(waitFor(allOf(withId(R.id.body_field), isEnabled())))
         onView(withId(R.id.body_field)).check(matches(withText(body)))
@@ -82,9 +83,27 @@ class NotesFlowTest {
 
     private fun clickNewNote() {
         try {
-            onView(withId(R.id.new_note_button)).perform(click())
+            onView(withId(R.id.new_note_button)).check(matches(isCompletelyDisplayed())).perform(click())
         } catch (failure: Throwable) {
             captureFailedViewForCi(R.id.new_note_button)
+            throw failure
+        }
+    }
+
+    private fun replaceBody(text: String) {
+        try {
+            onView(withId(R.id.body_field)).perform(scrollTo(), replaceText(text))
+        } catch (failure: Throwable) {
+            captureFailedViewForCi(R.id.body_field)
+            throw failure
+        }
+    }
+
+    private fun clickSavedNote(title: String) {
+        try {
+            onView(withText(title)).perform(click())
+        } catch (failure: Throwable) {
+            captureFailedViewForCi(withText(title))
             throw failure
         }
     }
