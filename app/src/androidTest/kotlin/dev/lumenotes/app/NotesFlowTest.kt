@@ -89,8 +89,9 @@ class NotesFlowTest {
         onView(isRoot()).perform(waitFor(allOf(withId(R.id.body_field), isEnabled())))
         var currentDraft = ""
         var displayed = ""
+        lateinit var editor: EditorActivity
         InstrumentationRegistry.getInstrumentation().runOnMainSync {
-            val editor = ActivityLifecycleMonitorRegistry.getInstance()
+            editor = ActivityLifecycleMonitorRegistry.getInstance()
                 .getActivitiesInStage(Stage.RESUMED).filterIsInstance<EditorActivity>().single()
             val model = ViewModelProvider(editor)[EditorViewModel::class.java]
             val stale = checkNotNull(model.draft.value)
@@ -102,8 +103,8 @@ class NotesFlowTest {
         }
         assertEquals("Newest input", currentDraft)
         assertEquals("Newest input", displayed)
-        closeSoftKeyboard()
-        pressBack()
+        // This test exercises rendering; the end-to-end flow separately tests Back and saving.
+        InstrumentationRegistry.getInstrumentation().runOnMainSync { editor.finish() }
         waitForResumed(MainActivity::class.java)
     }
 
