@@ -65,6 +65,27 @@ class NotesDatabaseTest {
         assertEquals(8L, edited.version)
     }
 
+    @Test fun libraryProjectionBoundsLongFieldsWithoutChangingStoredNote() = runBlocking {
+        val original = Note(
+            uuid = "long-summary",
+            title = "T".repeat(500),
+            body = "B".repeat(500),
+            folder = "F".repeat(200),
+            tags = "G".repeat(600),
+            drawing = "\u0000",
+            createdAt = 1,
+            updatedAt = 1
+        )
+        val id = dao.insert(original.toEntity())
+        val summary = dao.observeCollection("notes", null, 10).first().single()
+        assertEquals(320, summary.title.length)
+        assertEquals(320, summary.preview.length)
+        assertEquals(120, summary.folder.length)
+        assertEquals(500, summary.tags.length)
+        assertTrue(summary.hasDrawing)
+        assertEquals(original.toEntity().copy(id = id), dao.find(id))
+    }
+
     @Test fun contentSaveDoesNotOverwriteOtherFields() = runBlocking {
         val id = dao.insert(Note(uuid = "another", createdAt = 1, updatedAt = 1).toEntity())
         dao.setPinned(id, true, 2)

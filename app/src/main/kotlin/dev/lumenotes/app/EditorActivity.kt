@@ -28,6 +28,8 @@ import dev.lumenotes.editor.EditResult
 import dev.lumenotes.editor.MarkdownEditing
 import dev.lumenotes.editor.MarkdownPreview
 import dev.lumenotes.model.NoteDraft
+import java.io.OutputStreamWriter
+import java.nio.charset.CodingErrorAction
 import java.text.DateFormat
 import java.util.Date
 import javax.inject.Inject
@@ -437,7 +439,10 @@ class EditorActivity : AppCompatActivity() {
                 val text = exportText(draft, format)
                 withContext(Dispatchers.IO) {
                     val stream = contentResolver.openOutputStream(uri, "wt") ?: error("No output stream")
-                    stream.use { it.write(text.toByteArray(Charsets.UTF_8)) }
+                    val encoder = Charsets.UTF_8.newEncoder()
+                        .onMalformedInput(CodingErrorAction.REPORT)
+                        .onUnmappableCharacter(CodingErrorAction.REPORT)
+                    OutputStreamWriter(stream, encoder).use { it.write(text) }
                 }
                 toast(R.string.export_complete)
             } catch (cancelled: CancellationException) {

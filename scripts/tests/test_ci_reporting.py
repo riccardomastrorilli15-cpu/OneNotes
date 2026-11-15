@@ -200,6 +200,7 @@ class ReportingTest(unittest.TestCase):
             result = lint.diagnostics(root)
             self.assertIn("Actual at src/foo.xml:2: broken", result)
             self.assertNotIn("Warning", result)
+            self.assertIn("Warning", lint.diagnostics(root, include_warnings=True))
 
 
 if __name__ == "__main__":

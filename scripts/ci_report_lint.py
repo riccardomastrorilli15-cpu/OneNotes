@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Expose lint errors from CI reports without requiring artifact downloads."""
+"""Expose lint issues from CI reports without requiring artifact downloads."""
 
 import sys
 import xml.etree.ElementTree as ET
@@ -8,15 +8,16 @@ from pathlib import Path
 from ci_report_failure import annotations
 
 
-def diagnostics(root):
+def diagnostics(root, include_warnings=False):
     errors = []
+    levels = {"Error", "Fatal", "Warning"} if include_warnings else {"Error", "Fatal"}
     for path in sorted(root.glob("*/build/reports/lint-results*.xml")):
         try:
             report = ET.parse(path).getroot()
         except ET.ParseError:
             continue
         for issue in report.iter("issue"):
-            if issue.get("severity") not in {"Error", "Fatal"}:
+            if issue.get("severity") not in levels:
                 continue
             location = issue.find("location")
             where = f"{location.get('file', '')}:{location.get('line', '')}" if location is not None else str(path)
@@ -28,4 +29,6 @@ def diagnostics(root):
 
 
 if __name__ == "__main__":
-    print("\n".join(annotations(diagnostics(Path(sys.argv[1])), "warning", "Lint report")))
+    warnings = "--warnings" in sys.argv[2:]
+    level = "notice" if warnings else "warning"
+    print("\n".join(annotations(diagnostics(Path(sys.argv[1]), include_warnings=warnings), level, "Lint report")))

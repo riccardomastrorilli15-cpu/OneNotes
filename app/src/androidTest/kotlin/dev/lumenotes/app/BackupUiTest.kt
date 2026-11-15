@@ -11,6 +11,7 @@ import android.view.View
 import android.widget.PopupMenu
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import androidx.test.espresso.matcher.ViewMatchers.withText
@@ -37,8 +38,8 @@ class BackupUiTest {
         val monitor = monitorPicker(Intent.ACTION_CREATE_DOCUMENT, "application/json", file)
         try {
             selectMenuAction(R.id.action_backup_export)
-            onView(withText(R.string.backup_continue)).perform(click())
-            assertTrue("Create-document picker was not launched", instrumentation.checkMonitorHit(monitor, 1))
+            onView(withText(R.string.backup_continue)).inRoot(isDialog()).perform(click())
+            assertPickerLaunched(monitor, "Create-document")
             val json = awaitBackup(file)
             assertEquals("lume-notes-backup", json.getString("format"))
             assertEquals(json.getJSONArray("notes").length(), json.getInt("count"))
@@ -62,8 +63,8 @@ class BackupUiTest {
         val monitor = monitorPicker(Intent.ACTION_OPEN_DOCUMENT, "*/*", file)
         try {
             selectMenuAction(R.id.action_backup_restore)
-            onView(withText(R.string.backup_continue)).perform(click())
-            assertTrue("Open-document picker was not launched", instrumentation.checkMonitorHit(monitor, 1))
+            onView(withText(R.string.backup_continue)).inRoot(isDialog()).perform(click())
+            assertPickerLaunched(monitor, "Open-document")
             onView(isRoot()).perform(waitFor(allOf(withText(title), isDisplayed()), 20_000))
         } finally {
             instrumentation.removeMonitor(monitor)
@@ -87,6 +88,12 @@ class BackupUiTest {
         // The test intercepts the chooser and supplies a private file URI; it does not exercise a real document provider.
         val result = Instrumentation.ActivityResult(Activity.RESULT_OK, Intent().setData(Uri.fromFile(file)))
         return instrumentation.addMonitor(filter, result, true)
+    }
+
+    private fun assertPickerLaunched(monitor: Instrumentation.ActivityMonitor, name: String) {
+        val deadline = SystemClock.elapsedRealtime() + 10_000
+        while (monitor.hits < 1 && SystemClock.elapsedRealtime() < deadline) SystemClock.sleep(50)
+        assertTrue("$name picker was not launched", monitor.hits >= 1)
     }
 
     private fun awaitBackup(file: File): JSONObject {

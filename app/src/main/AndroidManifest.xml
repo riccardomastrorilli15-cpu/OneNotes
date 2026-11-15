@@ -15,8 +15,9 @@
         <!-- The database is single-process; profile installation is optional.
              Neither component is needed for this offline app. -->
         <service android:name="androidx.room3.MultiInstanceInvalidationService" tools:node="remove" />
-        <receiver android:name="androidx.profileinstaller.ProfileInstallReceiver" tools:node="remove" />
-        <provider android:name="androidx.startup.InitializationProvider" tools:node="remove" />
+        <!-- Lint inspects these removal markers even though the classes are deliberately not packaged. -->
+        <receiver android:name="androidx.profileinstaller.ProfileInstallReceiver" tools:node="remove" tools:ignore="MissingClass" />
+        <provider android:name="androidx.startup.InitializationProvider" tools:node="remove" tools:ignore="MissingClass" />
         <activity android:name=".SettingsActivity" android:exported="false" android:windowSoftInputMode="adjustResize" />
         <activity android:name=".DrawingActivity" android:exported="false" android:windowSoftInputMode="adjustResize" />
         <activity android:name=".EditorActivity" android:exported="false" android:windowSoftInputMode="adjustResize" />

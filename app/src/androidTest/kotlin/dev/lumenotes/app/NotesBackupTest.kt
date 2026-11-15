@@ -93,6 +93,9 @@ class NotesBackupTest {
             json.replace("\"count\":2", "\"count\":3"),
             json.replace("\"version\":1,\"notes\"", "\"version\":2,\"notes\""),
             json.replace("\"trashedAt\":null", "\"trashedAt\":null,\"trashedAt\":null"),
+            json.replace("\"body\":\"\"", "\"body\":\"\\ud800\""),
+            json.replace("\"folder\":\"\"", "\"folder\":\"${"f".repeat(121)}\""),
+            json.replace("\"tags\":\"\"", "\"tags\":\"${"t".repeat(501)}\""),
             json + "{}"
         )
         for (data in invalid) {

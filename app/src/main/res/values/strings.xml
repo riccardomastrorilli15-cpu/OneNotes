@@ -68,9 +68,9 @@
     <string name="export_text">Export plain text</string>
     <string name="share_text">Share text</string>
     <string name="export_complete">Export complete</string>
-    <string name="export_failed">Could not export the file.</string>
+    <string name="export_failed">Could not export the file. An incomplete file may remain in the chosen location.</string>
     <string name="import_complete">Note imported</string>
-    <string name="import_failed">Could not import the file. It must be text and no larger than 5 MB.</string>
+    <string name="import_failed">Could not import the file. It must be valid UTF-8 text and no larger than 5 MiB.</string>
     <string name="backlinks">Backlinks</string>
     <string name="no_backlinks">No notes link to this title using [[Title]].</string>
     <string name="bold">Bold</string>

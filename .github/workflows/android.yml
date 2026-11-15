@@ -35,6 +35,9 @@ jobs:
         run: ./scripts/ci_gradle.sh --no-daemon -Plume.signTestRelease=true :app:assembleDebug :app:assembleRelease :app:bundleRelease testDebugUnitTest ktlintCheck
       - name: Android lint
         run: ./scripts/ci_gradle.sh --no-daemon :app:lintDebug
+      - name: Summarize Android lint warnings
+        if: always() && steps.compile.outcome == 'success'
+        run: python3 scripts/ci_report_lint.py . --warnings
       - name: Verify checked-in Room schemas
         if: always() && steps.compile.outcome == 'success'
         run: |
@@ -145,13 +148,7 @@ jobs:
           disable-animations: true
           disable-spellchecker: true
           # Screenshot capture is opt-in and only for this disposable, synthetic-data emulator.
-          script: |
-            set -e
-            ./scripts/ci_instrumented.sh -Pandroid.testInstrumentationRunnerArguments.captureScreenshots=1 :core-database:connectedDebugAndroidTest :feature-drawing:connectedDebugAndroidTest :app:connectedDebugAndroidTest
-            if [ '${{ matrix.api-level }}' = '29' ]; then
-              ./scripts/ci_gradle.sh --no-daemon -Plume.signTestRelease=true :app:assembleRelease
-              ./scripts/ci_release_smoke.sh app/build/outputs/apk/release/app-release.apk
-            fi
+          script: ./scripts/ci_emulator_suite.sh '${{ matrix.api-level }}'
       - name: Report and validate instrumented test results
         if: always()
         run: python3 scripts/ci_report_test_results.py . "$RUNNER_TEMP/lume-gradle-$GITHUB_JOB.log"

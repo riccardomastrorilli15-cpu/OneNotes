@@ -60,7 +60,12 @@ internal fun waitForInputConnection(timeoutMs: Long = 10_000): ViewAction = obje
         val manager = view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         val deadline = SystemClock.elapsedRealtime() + timeoutMs
         do {
-            if (view.hasFocus() && manager.isActive(view) && manager.isAcceptingText) return
+            if (view.hasFocus() && manager.isActive(view) && manager.isAcceptingText) {
+                // isActive can become true before an emulator IME finishes switching fields.
+                // Keep the real key-injection assertion; this delay does not prove the app is race-free.
+                uiController.loopMainThreadForAtLeast(500)
+                if (view.hasFocus() && manager.isActive(view) && manager.isAcceptingText) return
+            }
             uiController.loopMainThreadForAtLeast(100)
         } while (SystemClock.elapsedRealtime() < deadline)
         throw AssertionError("Timed out waiting for the editor input connection")

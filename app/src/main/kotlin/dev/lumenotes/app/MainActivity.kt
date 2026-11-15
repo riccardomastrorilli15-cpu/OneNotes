@@ -26,7 +26,6 @@ import dev.lumenotes.data.NotesRepository
 import dev.lumenotes.model.NoteCollection
 import dev.lumenotes.model.NoteSummary
 import dev.oneuiproject.oneui.layout.ToolbarLayout
-import java.io.ByteArrayOutputStream
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -433,20 +432,7 @@ class MainActivity : AppCompatActivity() {
                     }.orEmpty()
                     val name = importTitle(displayName)
                     val input = contentResolver.openInputStream(uri) ?: error("No input stream")
-                    val bytes = input.use { stream ->
-                        val output = ByteArrayOutputStream()
-                        val buffer = ByteArray(8192)
-                        var total = 0
-                        while (true) {
-                            val read = stream.read(buffer)
-                            if (read < 0) break
-                            total += read
-                            require(total <= MAX_IMPORT_BYTES)
-                            output.write(buffer, 0, read)
-                        }
-                        output.toByteArray()
-                    }
-                    name to bytes.toString(Charsets.UTF_8).removePrefix("\uFEFF")
+                    name to input.use { readTextDocument(it) }
                 }
                 viewModel.create(title, body)
             } catch (cancelled: CancellationException) {
@@ -503,7 +489,6 @@ class MainActivity : AppCompatActivity() {
         private const val REQUEST_IMPORT = 1001
         private const val REQUEST_BACKUP_EXPORT = 1003
         private const val REQUEST_BACKUP_RESTORE = 1004
-        private const val MAX_IMPORT_BYTES = 5 * 1024 * 1024
         private const val ACTION_QUICK_NOTE = "dev.lumenotes.action.QUICK_NOTE"
     }
 }

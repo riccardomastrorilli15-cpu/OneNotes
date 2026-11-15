@@ -17,7 +17,6 @@ import java.io.InputStream
 import java.io.InputStreamReader
 import java.io.OutputStream
 import java.io.OutputStreamWriter
-import java.io.Reader
 import java.nio.charset.CodingErrorAction
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -137,7 +136,7 @@ class NotesBackup @Inject constructor(@ApplicationContext private val context: C
             .onMalformedInput(CodingErrorAction.REPORT)
             .onUnmappableCharacter(CodingErrorAction.REPORT)
         val source = InputStreamReader(file.inputStream(), decoder)
-        JsonReader(JsonStringLimitReader(source, MAX_JSON_STRING_CHARS)).use { reader ->
+        JsonReader(JsonStringLimitReader(source, MAX_JSON_STRING_CHARS, MAX_JSON_NAME_CHARS)).use { reader ->
             val fields = mutableSetOf<String>()
             val seenIds = mutableSetOf<String>()
             var format: String? = null
@@ -214,9 +213,10 @@ class NotesBackup @Inject constructor(@ApplicationContext private val context: C
 
                 "body" -> body = readText()
 
-                "folder" -> folder = readText()
+                // Match the editor's length filters to avoid truncating restored metadata on the next save.
+                "folder" -> folder = readText(120)
 
-                "tags" -> tags = readText()
+                "tags" -> tags = readText(500)
 
                 "drawing" -> drawing = readText()
 
@@ -264,7 +264,20 @@ class NotesBackup @Inject constructor(@ApplicationContext private val context: C
 
     private fun readString(reader: JsonReader, max: Int): String {
         require(reader.peek() == JsonToken.STRING) { "Expected text" }
-        return reader.nextString().also { require(it.length <= max) { "Text is too large" } }
+        val value = reader.nextString()
+        require(value.length <= max) { "Text is too large" }
+        // JSON escapes can encode unpaired UTF-16 surrogates even with a strict UTF-8 decoder.
+        // Reject them rather than silently replacing characters while writing to SQLite.
+        var index = 0
+        while (index < value.length) {
+            val char = value[index++]
+            if (Character.isHighSurrogate(char)) {
+                require(index < value.length && Character.isLowSurrogate(value[index++])) { "Invalid Unicode" }
+            } else {
+                require(!Character.isLowSurrogate(char)) { "Invalid Unicode" }
+            }
+        }
+        return value
     }
 
     private fun readLong(reader: JsonReader): Long {
@@ -303,61 +316,6 @@ class NotesBackup @Inject constructor(@ApplicationContext private val context: C
             require(total <= limit) { "Backup is too large" }
             out.write(bytes, offset, length)
         }
-    }
-
-    /** Bound names, string tokens and nesting before JsonReader allocates them. */
-    private class JsonStringLimitReader(private val source: Reader, private val limit: Int) : Reader() {
-        private data class Frame(val type: Char, var expectingName: Boolean)
-
-        private val stack = java.util.ArrayDeque<Frame>()
-        private var inside = false
-        private var escaped = false
-        private var size = 0
-        private var tokenLimit = limit
-
-        override fun read(buffer: CharArray, offset: Int, length: Int): Int {
-            val read = source.read(buffer, offset, length)
-            for (index in offset until offset + maxOf(0, read)) {
-                val char = buffer[index]
-                if (inside) {
-                    require(++size <= tokenLimit) { "JSON string is too large" }
-                    if (escaped) {
-                        escaped = false
-                    } else if (char == '\\') {
-                        escaped = true
-                    } else if (char == '"') {
-                        inside = false
-                    }
-                } else {
-                    when (char) {
-                        '"' -> {
-                            inside = true
-                            size = 0
-                            val frame = stack.peekLast()
-                            tokenLimit = if (frame?.type == '{' && frame.expectingName) MAX_JSON_NAME_CHARS else limit
-                        }
-
-                        '{', '[' -> {
-                            require(stack.size < 16) { "JSON nesting is too deep" }
-                            stack.addLast(Frame(char, char == '{'))
-                        }
-
-                        '}', ']' -> {
-                            val expected = if (char == '}') '{' else '['
-                            require(stack.peekLast()?.type == expected) { "Invalid JSON nesting" }
-                            stack.removeLast()
-                        }
-
-                        ':' -> stack.peekLast()?.expectingName = false
-
-                        ',' -> if (stack.peekLast()?.type == '{') stack.peekLast().expectingName = true
-                    }
-                }
-            }
-            return read
-        }
-
-        override fun close() = source.close()
     }
 
     companion object {

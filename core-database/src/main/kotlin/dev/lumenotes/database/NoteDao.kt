@@ -8,8 +8,9 @@ import dev.lumenotes.model.NoteSummary
 import kotlinx.coroutines.flow.Flow
 
 private const val SUMMARY_COLUMNS = """
-    n.id, n.title, substr(n.body, 1, 320) AS preview, n.folder, n.tags,
-    CASE WHEN length(n.drawing) > 0 THEN 1 ELSE 0 END AS hasDrawing,
+    n.id, substr(n.title, 1, 320) AS title, substr(n.body, 1, 320) AS preview,
+    substr(n.folder, 1, 120) AS folder, substr(n.tags, 1, 500) AS tags,
+    CASE WHEN n.drawing != '' THEN 1 ELSE 0 END AS hasDrawing,
     n.pinned, n.favorite, n.archived, n.trashedAt, n.updatedAt
 """
 

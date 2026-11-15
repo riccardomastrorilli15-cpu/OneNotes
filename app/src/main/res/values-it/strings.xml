@@ -68,9 +68,9 @@
     <string name="export_text">Esporta testo semplice</string>
     <string name="share_text">Condividi testo</string>
     <string name="export_complete">Esportazione completata</string>
-    <string name="export_failed">Impossibile esportare il file.</string>
+    <string name="export_failed">Impossibile esportare il file. Un file incompleto potrebbe rimanere nella posizione scelta.</string>
     <string name="import_complete">Nota importata</string>
-    <string name="import_failed">Impossibile importare il file. Deve essere testo e non superare 5 MB.</string>
+    <string name="import_failed">Impossibile importare il file. Deve essere testo UTF-8 valido e non superare 5 MiB.</string>
     <string name="backlinks">Collegamenti in entrata</string>
     <string name="no_backlinks">Nessuna nota contiene un collegamento [[Titolo]] a questa nota.</string>
     <string name="bold">Grassetto</string>
