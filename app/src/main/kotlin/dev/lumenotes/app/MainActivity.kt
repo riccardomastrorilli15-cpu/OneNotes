@@ -334,9 +334,10 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             try {
                 val (title, body) = withContext(Dispatchers.IO) {
-                    val name = contentResolver.query(uri, arrayOf(OpenableColumns.DISPLAY_NAME), null, null, null)?.use { cursor ->
+                    val displayName = contentResolver.query(uri, arrayOf(OpenableColumns.DISPLAY_NAME), null, null, null)?.use { cursor ->
                         if (cursor.moveToFirst()) cursor.getString(0) else null
-                    }.orEmpty().substringBeforeLast('.', "").take(120)
+                    }.orEmpty()
+                    val name = importTitle(displayName)
                     val input = contentResolver.openInputStream(uri) ?: error("No input stream")
                     val bytes = input.use { stream ->
                         val output = ByteArrayOutputStream()

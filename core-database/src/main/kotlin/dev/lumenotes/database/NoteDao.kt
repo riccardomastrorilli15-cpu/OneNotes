@@ -69,7 +69,10 @@ interface NoteDao {
     @Query(
         """
         UPDATE notes SET title = :title, body = :body, folder = :folder, tags = :tags,
-            updatedAt = :now, version = version + 1
+            updatedAt = CASE WHEN title != :title OR body != :body OR folder != :folder OR tags != :tags
+                THEN :now ELSE updatedAt END,
+            version = CASE WHEN title != :title OR body != :body OR folder != :folder OR tags != :tags
+                THEN version + 1 ELSE version END
         WHERE id = :id AND trashedAt IS NULL
     """
     )
@@ -77,7 +80,9 @@ interface NoteDao {
 
     @Query(
         """
-        UPDATE notes SET drawing = :drawing, updatedAt = :now, version = version + 1
+        UPDATE notes SET drawing = :drawing,
+            updatedAt = CASE WHEN drawing != :drawing THEN :now ELSE updatedAt END,
+            version = CASE WHEN drawing != :drawing THEN version + 1 ELSE version END
         WHERE id = :id AND trashedAt IS NULL
     """
     )

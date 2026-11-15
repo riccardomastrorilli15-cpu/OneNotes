@@ -11,8 +11,8 @@ right to redistribute all third-party code or assets. Distribution is blocked
 pending provenance and legal review; see the project's SESL-RIGHTS-REVIEW.md.
 
 AndroidX (including Room, SQLite driver, DataStore and Android test libraries),
-Kotlin, Kotlin coroutines, Dagger/Hilt, ZXing and LeakCanary: Apache License 2.0,
-subject to each component's own copyright notices. LeakCanary is debug-only.
+Kotlin, Kotlin coroutines, Dagger/Hilt and ZXing: Apache License 2.0,
+subject to each component's own copyright notices.
 The AndroidX Activity compatibility bridge in core-compat contains unmodified
 AndroidX Core source, Copyright The Android Open Source Project, Apache-2.0;
 see core-compat/README.md for the exact upstream revision and files.

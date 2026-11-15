@@ -48,6 +48,23 @@ class NotesDatabaseTest {
         assertTrue(dao.search("trash", null, "\"new\"*", 50).first().isEmpty())
     }
 
+    @Test fun savingUnchangedContentAndDrawingDoesNotAlterModificationTime() = runBlocking {
+        val original = Note(
+            uuid = "unchanged", title = "Title", body = "Body", folder = "Folder", tags = "tag",
+            drawing = "ink", createdAt = 1, updatedAt = 2, version = 7
+        )
+        val id = dao.insert(original.toEntity())
+        assertEquals(1, dao.updateContent(id, "Title", "Body", "Folder", "tag", 100))
+        assertEquals(1, dao.updateDrawing(id, "ink", 200))
+        val unchanged = dao.find(id)!!
+        assertEquals(2L, unchanged.updatedAt)
+        assertEquals(7L, unchanged.version)
+        assertEquals(1, dao.updateContent(id, "Title", "Changed", "Folder", "tag", 300))
+        val edited = dao.find(id)!!
+        assertEquals(300L, edited.updatedAt)
+        assertEquals(8L, edited.version)
+    }
+
     @Test fun contentSaveDoesNotOverwriteOtherFields() = runBlocking {
         val id = dao.insert(Note(uuid = "another", createdAt = 1, updatedAt = 1).toEntity())
         dao.setPinned(id, true, 2)

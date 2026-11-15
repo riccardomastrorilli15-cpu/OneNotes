@@ -7,7 +7,6 @@ import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
-import kotlin.math.hypot
 
 /** A simple vector notebook canvas. This is not a Jetpack low-latency ink renderer. */
 class InkCanvasView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
@@ -20,6 +19,8 @@ class InkCanvasView @JvmOverloads constructor(context: Context, attrs: Attribute
     private var current = mutableListOf<InkPoint>()
     private var activePointer = MotionEvent.INVALID_POINTER_ID
     private var erasing = false
+    private var lastEraserX = Float.NaN
+    private var lastEraserY = Float.NaN
     private var changedDuringGesture = false
 
     var inkColor: Int = Color.rgb(31, 36, 52)
@@ -91,6 +92,8 @@ class InkCanvasView @JvmOverloads constructor(context: Context, attrs: Attribute
                 erasing = eraserSelected || type == MotionEvent.TOOL_TYPE_ERASER ||
                     (event.buttonState and MotionEvent.BUTTON_STYLUS_PRIMARY) != 0
                 changedDuringGesture = false
+                lastEraserX = Float.NaN
+                lastEraserY = Float.NaN
                 current.clear()
                 addPointOrErase(event.getX(0), event.getY(0), event.getPressure(0))
                 invalidate()
@@ -144,13 +147,35 @@ class InkCanvasView @JvmOverloads constructor(context: Context, attrs: Attribute
 
     private fun addPointOrErase(x: Float, y: Float, pressure: Float) {
         if (erasing) {
+            val fromX = if (lastEraserX.isFinite()) lastEraserX else x
+            val fromY = if (lastEraserY.isFinite()) lastEraserY else y
             val radius = 24f * resources.displayMetrics.density
-            val removed = strokes.removeAll { stroke ->
-                stroke.points.any { hypot(it.x * width - x, it.y * height - y) <= radius }
-            }
+            val removed = strokes.removeAll { stroke -> strokeIntersectsEraser(stroke, fromX, fromY, x, y, radius) }
+            lastEraserX = x
+            lastEraserY = y
             changedDuringGesture = changedDuringGesture || removed
         } else {
             current.add(InkPoint((x / width).coerceIn(0f, 1f), (y / height).coerceIn(0f, 1f), pressure.coerceIn(0.1f, 1.5f)))
         }
+    }
+
+    private fun strokeIntersectsEraser(stroke: InkStroke, fromX: Float, fromY: Float, toX: Float, toY: Float, radius: Float): Boolean {
+        val points = stroke.points
+        if (points.isEmpty()) return false
+        val scale = resources.displayMetrics.density
+        if (points.size == 1) {
+            val point = points.first()
+            val threshold = radius + stroke.widthDp * scale * point.pressure.coerceAtLeast(0.25f) / 2f
+            return InkGeometry.pointToSegmentSquared(point.x * width, point.y * height, fromX, fromY, toX, toY) <= threshold * threshold
+        }
+        for (index in 1 until points.size) {
+            val a = points[index - 1]
+            val b = points[index]
+            val thickness = stroke.widthDp * scale * ((a.pressure + b.pressure) / 2f).coerceAtLeast(0.25f)
+            val threshold = radius + thickness / 2f
+            val distance = InkGeometry.segmentsSquared(fromX, fromY, toX, toY, a.x * width, a.y * height, b.x * width, b.y * height)
+            if (distance <= threshold * threshold) return true
+        }
+        return false
     }
 }

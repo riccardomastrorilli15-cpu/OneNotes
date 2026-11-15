@@ -22,6 +22,10 @@ android {
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            // Opt in only for an internal test APK; the standard debug key is not a release key.
+            if (providers.gradleProperty("lume.signTestRelease").orNull == "true") {
+                signingConfig = signingConfigs.getByName("debug")
+            }
         }
     }
     compileOptions {
@@ -50,7 +54,6 @@ dependencies {
     implementation(libs.activity) { version { strictly(libs.versions.activity.get()) } }
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
-    debugImplementation(libs.leakcanary)
     testImplementation(libs.junit)
     testImplementation(libs.coroutines.test)
     androidTestImplementation(libs.androidx.test.junit)

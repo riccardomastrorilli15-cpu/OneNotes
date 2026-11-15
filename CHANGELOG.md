@@ -1,5 +1,13 @@
 # Changelog
 
+## In sviluppo
+
+- Corretto il salvataggio invariato di testo e disegno: aprire e chiudere una nota senza modificarla non ne cambia più data e versione.
+- Corretta la gomma a tratto: intercetta anche il centro dei segmenti con pochi punti e i tratti attraversati tra due eventi di movimento.
+- Corretto il titolo delle importazioni di file senza estensione o con nome nascosto.
+- Aggiunta una regressione per ricreazione dell'editor e riapertura della nota; il ripristino dopo arresto forzato non è garantito.
+- Rimossa la dipendenza debug LeakCanary. Aggiunta una build release ottimizzata firmabile esplicitamente con la chiave debug per prove interne, con audit dei permessi, firma e allineamento.
+
 ## 0.1.0 — prototipo, verifiche parziali
 
 - Identità originale Lume Notes, ricerca e documentazione di OneUI Design/SESL.

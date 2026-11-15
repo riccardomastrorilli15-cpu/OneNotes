@@ -111,6 +111,34 @@ class NotesFlowTest {
         onView(withId(R.id.tags_field)).check(matches(withText(tags)))
     }
 
+    @Test fun draftSurvivesEditorRecreationAndReopening() {
+        val title = "Rotation ${System.currentTimeMillis()}"
+        val body = "Latest draft before recreating the editor"
+        clickNewNote()
+        waitForResumed(EditorActivity::class.java)
+        onView(isRoot()).perform(waitFor(allOf(withId(R.id.title_field), isEnabled())))
+        onView(withId(R.id.title_field)).perform(replaceText(title))
+        onView(withId(R.id.body_field)).perform(replaceText(body))
+        lateinit var original: EditorActivity
+        InstrumentationRegistry.getInstrumentation().runOnMainSync {
+            original = ActivityLifecycleMonitorRegistry.getInstance()
+                .getActivitiesInStage(Stage.RESUMED).filterIsInstance<EditorActivity>().single()
+            original.recreate()
+        }
+        waitForNewEditor(original)
+        onView(isRoot()).perform(waitFor(allOf(withId(R.id.body_field), isEnabled())))
+        onView(withId(R.id.title_field)).check(matches(withText(title)))
+        onView(withId(R.id.body_field)).check(matches(withText(body)))
+        closeSoftKeyboard()
+        pressBack()
+        waitForResumed(MainActivity::class.java)
+        onView(isRoot()).perform(waitFor(allOf(withId(R.id.notes_list), isDisplayed())))
+        clickSavedNote(title)
+        waitForResumed(EditorActivity::class.java)
+        onView(isRoot()).perform(waitFor(allOf(withId(R.id.body_field), isEnabled())))
+        onView(withId(R.id.body_field)).check(matches(withText(body)))
+    }
+
     @Test fun staleDraftCannotOverwriteNewerInput() {
         clickNewNote()
         waitForResumed(EditorActivity::class.java)
@@ -153,6 +181,21 @@ class NotesFlowTest {
         waitForResumed(DrawingActivity::class.java)
         onView(isRoot()).perform(waitFor(allOf(withId(R.id.ink_canvas), isEnabled(), isDisplayed())))
         assertCanvasHasInk()
+    }
+
+    private fun waitForNewEditor(original: EditorActivity) {
+        val instrumentation = InstrumentationRegistry.getInstrumentation()
+        val deadline = SystemClock.elapsedRealtime() + 15_000
+        do {
+            var recreated = false
+            instrumentation.runOnMainSync {
+                recreated = ActivityLifecycleMonitorRegistry.getInstance()
+                    .getActivitiesInStage(Stage.RESUMED).filterIsInstance<EditorActivity>().any { it !== original }
+            }
+            if (recreated) return
+            SystemClock.sleep(50)
+        } while (SystemClock.elapsedRealtime() < deadline)
+        throw AssertionError("Timed out waiting for the recreated editor")
     }
 
     private fun clickNewNote() {

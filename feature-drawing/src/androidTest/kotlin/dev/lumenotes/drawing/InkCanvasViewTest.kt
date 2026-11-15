@@ -102,6 +102,38 @@ class InkCanvasViewTest {
         assertFalse(updates.single().contains(stroke))
     }
 
+    @Test fun eraserTouchesMiddleOfSparseStroke() {
+        val stroke = InkStroke(0xff123456.toInt(), 3f, listOf(InkPoint(0.1f, 0.5f, 1f), InkPoint(0.9f, 0.5f, 1f)))
+        lateinit var document: List<InkStroke>
+        onMain {
+            val canvas = newCanvas().apply {
+                setDocument(listOf(stroke))
+                eraserSelected = true
+            }
+            val downTime = SystemClock.uptimeMillis()
+            canvas.send(MotionEvent.ACTION_DOWN, 200f, 100f, downTime, 0)
+            canvas.send(MotionEvent.ACTION_UP, 200f, 100f, downTime, 10)
+            document = canvas.document()
+        }
+        assertTrue(document.isEmpty())
+    }
+
+    @Test fun eraserSweepsAcrossStrokeBetweenMotionEvents() {
+        val stroke = InkStroke(0xff123456.toInt(), 3f, listOf(InkPoint(0.1f, 0.5f, 1f), InkPoint(0.9f, 0.5f, 1f)))
+        lateinit var document: List<InkStroke>
+        onMain {
+            val canvas = newCanvas().apply {
+                setDocument(listOf(stroke))
+                eraserSelected = true
+            }
+            val downTime = SystemClock.uptimeMillis()
+            canvas.send(MotionEvent.ACTION_DOWN, 200f, 0f, downTime, 0)
+            canvas.send(MotionEvent.ACTION_UP, 200f, 200f, downTime, 10)
+            document = canvas.document()
+        }
+        assertTrue(document.isEmpty())
+    }
+
     private fun newCanvas(): InkCanvasView = InkCanvasView(ApplicationProvider.getApplicationContext<Context>()).apply {
         layout(0, 0, 400, 200)
     }

@@ -22,9 +22,17 @@ jobs:
       - name: Install Android 17 SDK
         run: sdkmanager 'platforms;android-37.0' 'build-tools;36.0.0'
       - uses: gradle/actions/setup-gradle@v5
+      - name: Create ephemeral debug signing key
+        run: |
+          mkdir -p "$HOME/.android"
+          if [ ! -f "$HOME/.android/debug.keystore" ]; then
+            keytool -genkeypair -keystore "$HOME/.android/debug.keystore" -storepass android \
+              -alias androiddebugkey -keypass android -dname 'CN=Android Debug,O=Android,C=US' \
+              -keyalg RSA -keysize 2048 -validity 10000
+          fi
       - name: Compile and unit tests
         id: compile
-        run: ./scripts/ci_gradle.sh --no-daemon :app:assembleDebug :app:assembleRelease :app:bundleRelease testDebugUnitTest ktlintCheck
+        run: ./scripts/ci_gradle.sh --no-daemon -Plume.signTestRelease=true :app:assembleDebug :app:assembleRelease :app:bundleRelease testDebugUnitTest ktlintCheck
       - name: Android lint
         run: ./scripts/ci_gradle.sh --no-daemon :app:lintDebug
       - name: Verify checked-in Room schemas
@@ -42,8 +50,17 @@ jobs:
         run: |
           python3 -m unittest discover -s scripts/tests -v
           python3 scripts/audit_apk_fonts.py app/build/outputs/apk/debug/app-debug.apk
-          python3 scripts/audit_apk_fonts.py app/build/outputs/apk/release/app-release-unsigned.apk
+          python3 scripts/audit_apk_fonts.py app/build/outputs/apk/release/app-release.apk
           python3 scripts/audit_apk_fonts.py app/build/outputs/bundle/release/app-release.aab
+      - name: Inspect signed test release
+        run: ./scripts/ci_inspect_apk.sh app/build/outputs/apk/release/app-release.apk app/build/outputs/apk/release/apk-inspection.txt
+      - uses: actions/upload-artifact@v6
+        if: success()
+        with:
+          name: signed-test-release-apk
+          path: |
+            app/build/outputs/apk/release/app-release.apk
+            app/build/outputs/apk/release/apk-inspection.txt
       - uses: actions/upload-artifact@v6
         if: success()
         with:

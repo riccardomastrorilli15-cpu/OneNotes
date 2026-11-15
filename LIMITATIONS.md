@@ -27,7 +27,7 @@ Aggiornato il 14 novembre 2026. **Questo è un prototipo, non un'app pronta per 
 | Aspetto/accessibilità | Temi sistema/chiaro/scuro via DataStore; niente AMOLED nero opzionale o colori dinamici. Stringhe inglesi e italiane presenti, supporto RTL dichiarato, ma TalkBack, contrasto, ingrandimento massimo, riduzione animazioni e navigazione da tastiera non sono stati certificati. |
 | Prestazioni | Query iniziale limitata a 40 righe e caricamento incrementale con proiezione breve e DiffUtil, ma il limite cresce e non è Paging 3. Nessuna misura reale di avvio <1 s, 60/120 fps con 5.000 note, editor da 50.000 caratteri, latenza o memoria; non garantite. |
 | Versioni e AI | Nessuna cronologia persistente delle versioni, AI, focus a schermo intero, statistiche, grafico o immagine di condivisione. UUID, timestamp e versioni sono solo basi dati, non sincronizzazione o risoluzione conflitti. |
-| Migrazioni/test | Schema iniziale versione 1, nessuna migrazione da versioni precedenti; non è abilitato il fallback distruttivo. Test unitari e instrumented sono presenti ma non tutti eseguibili nella sandbox. Nessuna copertura misurata, nessun test di blocco/esportazione UI. LeakCanary è solo una dipendenza debug, non è stata eseguita un'analisi delle perdite. |
+| Migrazioni/test | Schema iniziale versione 1, nessuna migrazione da versioni precedenti; non è abilitato il fallback distruttivo. Test unitari e instrumented sono presenti ma non tutti eseguibili nella sandbox. Nessuna copertura misurata, nessun test di blocco/esportazione UI. Non è stata eseguita un'analisi delle perdite. |
 
 ## Prossimi gate prima di usare dati reali
 
