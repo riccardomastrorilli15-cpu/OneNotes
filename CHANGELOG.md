@@ -6,7 +6,10 @@
 - Corretta la gomma a tratto: intercetta anche il centro dei segmenti con pochi punti e i tratti attraversati tra due eventi di movimento.
 - Corretto il titolo delle importazioni di file senza estensione o con nome nascosto.
 - Aggiunta una regressione per ricreazione dell'editor e riapertura della nota; il ripristino dopo arresto forzato non è garantito.
-- Rimossa la dipendenza debug LeakCanary. Aggiunta una build release ottimizzata firmabile esplicitamente con la chiave debug per prove interne, con audit dei permessi, firma e allineamento.
+- Rimossa la dipendenza debug LeakCanary. Aggiunta una build release ottimizzata firmabile esplicitamente con la chiave debug per prove interne, con audit dei permessi, firma e allineamento. R8 effettua shrinking e ottimizzazione senza rinominare le classi (`-dontobfuscate`).
+- Aggiunto backup JSON manuale con SAF e ripristino transazionale senza sovrascrivere UUID già presenti; copre disegni, metadati, archivio e cestino, entro i limiti documentati. Non è cifrato.
+- Rimossi dal manifest il servizio di invalidazione Room multi-processo non utilizzato e i componenti opzionali di installazione del profilo AndroidX; aggiunti controlli su servizi e receiver nel pacchetto.
+- **Problema aperto:** nella [CI 43700790007](https://github.com/riccardomastrorilli15-cpu/OneNotes/actions/runs/43700790007) il primo carattere non è apparso nel test di digitazione su API 26 e 29. Non è ancora noto se la causa sia nell'app, nel sistema di input o nel test; non dichiarare risolta la perdita di caratteri.
 
 ## 0.1.0 — prototipo, verifiche parziali
 

@@ -14,6 +14,15 @@
     <string name="folder_filter">Folder: %1$s</string>
     <string name="settings">Settings</string>
     <string name="import_note">Import text or Markdown</string>
+    <string name="backup_export">Export all notes as backup</string>
+    <string name="backup_restore">Restore a backup</string>
+    <string name="backup_export_warning">The backup includes notes, drawings, archive and trash. It is not encrypted. Choose a safe location. Maximum: 128 MiB and 10,000 notes; very large fields can also be rejected. Keep the app open until it finishes.</string>
+    <string name="backup_restore_warning">Only backups made by Lume Notes can be restored. Existing notes with the same identifier are not overwritten. Keep the app open until it finishes.</string>
+    <string name="backup_continue">Continue</string>
+    <string name="backup_in_progress">Processing backup…</string>
+    <string name="backup_exported">Backup exported: %1$d notes. The file is not encrypted.</string>
+    <string name="backup_restored">Restored %1$d notes; %2$d existing notes were left unchanged.</string>
+    <string name="backup_failed">Backup failed. Check the file and the 128 MiB limit. An incomplete export may remain in the chosen location.</string>
     <string name="templates">New from template</string>
     <string name="empty_title">A clear space to think</string>
     <string name="empty_message">Your notes will appear here. Start with an idea, a list, or a sketch.</string>

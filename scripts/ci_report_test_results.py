@@ -10,7 +10,7 @@ from ci_report_failure import annotations
 
 
 # One emulator per CI job. Update these minima deliberately when tests are removed.
-MIN_TESTS = {"core-database": 3, "feature-drawing": 9, "app": 8}
+MIN_TESTS = {"core-database": 3, "feature-drawing": 9, "app": 18}
 
 
 def reports(root):

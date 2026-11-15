@@ -2,17 +2,25 @@
 
 Un prototipo Android di app per note **locale e indipendente**, con interfaccia View/XML ispirata a One UI tramite il progetto open source non ufficiale [OneUI Design](https://github.com/OneUIProject/oneui-design) e i fork SESL. Lume Notes non è affiliata a Samsung. Minimo Android 8.0 / API 26; progetto Kotlin, MVVM, Hilt, Room 3/FTS5 e DataStore.
 
-> **Stato: prototipo, non rilascio.** La CI ha compilato debug, release non firmata con R8 e AAB, superando lint, test JVM e audit font. Una matrice di test di base è passata su emulatori API 26/29/35/37; in precedenza un test API 26 aveva perso un carattere e un job API 29 si era bloccato, con cause non accertate. Compatibilità generale, stabilità, altri flussi, prestazioni e accessibilità non sono ancora verificati. La distribuzione è bloccata da [diritti SESL da chiarire](licenses/SESL-RIGHTS-REVIEW.md). Non usare per dati importanti o riservati. Vedere [LIMITATIONS.md](LIMITATIONS.md).
+> **Stato: prototipo, non rilascio.** La CI ha compilato debug, release e AAB con R8, superando lint, test JVM e audit font. In una matrice precedente i test sono passati su API 26/29/35/37, ma nella [run 43700790007](https://github.com/riccardomastrorilli15-cpu/OneNotes/actions/runs/43700790007) il primo carattere è mancato nel test di digitazione su API 26 e 29: causa non accertata. Compatibilità generale, stabilità, prestazioni e accessibilità non sono certificate. La distribuzione è bloccata da [diritti SESL da chiarire](licenses/SESL-RIGHTS-REVIEW.md). Non usare per dati importanti o riservati. Vedere [LIMITATIONS.md](LIMITATIONS.md).
 
 ## Cosa c'è nel codice
 
 - Biblioteca con ricerca per prefisso FTS5, cartella e tag testuali, preferiti, pin, archivio, cestino e caricamento incrementale.
 - Editor testuale Markdown con formattazioni base, anteprima limitata, undo/redo in sessione, autosalvataggio e indicazione degli errori; backlink `[[Titolo]]` e sei modelli.
 - Disegno vettoriale sperimentale a pressione, gomma per tratto e opzione solo stilo; non è un motore S Pen a bassa latenza.
-- Import/export di **solo testo/Markdown** tramite selettore documenti e condivisione esplicita del testo. Le esportazioni non includono disegni.
+- Import/export della singola nota in **solo testo/Markdown** e condivisione esplicita del testo; questi export non includono disegni. Backup manuale JSON separato tramite selettore documenti, con note, disegni, metadati, archivio e cestino.
 - Tema sistema/chiaro/scuro, stringhe italiane/inglesi, interfaccia ridimensionabile e indicazioni di privacy/licenze.
 
-La presenza di codice o di un pulsante non equivale a un collaudo riuscito. Il progetto non ha account, tracking o pubblicità; un test del manifest installato su API 29 ha verificato l'assenza dei permessi INTERNET e ACCESS_NETWORK_STATE nella build debug. I dati locali e le esportazioni **non sono cifrati**; il backup cloud Android è disattivato nel manifest, ma alcuni produttori possono comunque consentire il trasferimento diretto tra dispositivi. Un'esportazione o condivisione è avviata solo dall'utente. Disinstallare l'app elimina i dati locali.
+La presenza di codice o di un pulsante non equivale a un collaudo riuscito. Non sono stati aggiunti account, analytics, tracking o pubblicità; il manifest rimuove INTERNET e ACCESS_NETWORK_STATE, e la CI controlla il pacchetto risultante. Non è stato effettuato un audit completo di tutto il codice delle dipendenze. I dati locali e le esportazioni **non sono cifrati**; il backup cloud Android è disattivato nel manifest, ma alcuni produttori possono comunque consentire trasferimenti diretti tra dispositivi. L'esportazione è avviata dall'utente: il provider di documenti scelto può avere una propria rete o conservazione. Disinstallare l'app elimina i dati privati, **non** copie esportate o condivise altrove.
+
+## Backup manuale delle note
+
+Dalla biblioteca apri il menu o il pannello laterale e scegli **Esporta tutte le note (backup)**; conferma l'avviso e scegli esplicitamente un file con il selettore Android. L'istantanea JSON comprende tutte le note indipendentemente dai filtri, inclusi disegni, metadati, archivio e cestino; non comprende impostazioni, esportazioni esterne o funzioni non implementate. **Non è cifrata**: conservala e cancellala separatamente in un luogo sicuro.
+
+Per ripristinare, scegli **Ripristina un backup** e seleziona un JSON creato dall'app. Il ripristino aggiunge solo UUID mancanti: se una nota con lo stesso identificativo esiste già, viene mantenuta senza confrontare il contenuto; il messaggio finale riporta importate e saltate. Una transazione annulla gli inserimenti se il file è incompleto o non valido. Non chiudere l'app durante l'operazione; se l'export viene interrotto può rimanere un file incompleto nella destinazione. L'app usa anche un file temporaneo nella propria cache privata: un arresto forzato può lasciarlo fino alla pulizia della cache o alla disinstallazione.
+
+Limiti: 128 MiB per file, 10.000 note, 8.000.000 di caratteri per campo e 12.000.000 per nota; anche una stringa JSON con più di 16.000.000 di caratteri codificati viene rifiutata. Se i dati superano un limite, l'operazione fallisce anziché esportare solo una parte. Il backup non sostituisce prove di ripristino su un dispositivo e non garantisce recupero dopo un arresto forzato.
 
 ## Per iniziare
 
@@ -29,7 +37,7 @@ Il terzo comando richiede un emulatore o dispositivo collegato. L'APK debug, **s
 ## Verifiche effettivamente eseguite
 
 - **15 test JVM isolati riusciti**: ricerca, trasformazioni/anteprima Markdown, undo/redo, coda di autosalvataggio e serializzazione/validazione del disegno. Per il test isolato del disegno è stato usato JSON-java su JVM e rimosso il runner Android dal test copiato temporaneamente; non sostituisce il test con `org.json` Android. Test compilati con Kotlin 2.2.10 temporaneo e JUnit compilato dal tag `r4.13.2` (il runner riporta `4.13.2-SNAPSHOT`), non dal Gradle del progetto.
-- **20 test Python riusciti localmente**: controllo font su APK/AAB fittizi, diagnostica e validazione dei rapporti CI, contrasto di 16 coppie di colori statiche; uno smoke test SQLite FTS5 Python e controlli di localizzazione/XML riusciti. Le coppie controllate non certificano l’intera interfaccia. Il test FTS Python non equivale a Room.
+- **24 test Python riusciti localmente**: controllo font e permessi su APK/AAB fittizi, diagnostica e validazione dei rapporti CI, contrasto di 16 coppie di colori statiche; uno smoke test SQLite FTS5 Python e controlli di localizzazione/XML riusciti. Le coppie controllate non certificano l’intera interfaccia. Il test FTS Python non equivale a Room.
 - **ktlint 1.8.0** eseguito localmente tramite CLI e, per la revisione collegata sotto, tramite il task Gradle `ktlintCheck` in CI.
 - **AAPT2 standalone** ha compilato le risorse e le ha collegate a un `android.jar` API 37 da mirror e a stub minimi delle risorse OneUI; una prova separata dell'overlay ha selezionato DejaVu al posto del font upstream. Non sono il merge delle dipendenze reali né una build APK funzionante.
 - Checksum della distribuzione e del wrapper Gradle confrontati con il [log indipendente F-Droid](https://github.com/f-droid/gradle-transparency-log/tree/master/sha256); il wrapper non ha scaricato la distribuzione nella sandbox.
@@ -45,10 +53,10 @@ Il terzo comando richiede un emulatore o dispositivo collegato. L'APK debug, **s
 | Area | Stato | Evidenza / limite |
 | --- | --- | --- |
 | Ricerca iniziale OneUI, design e architettura | Completata come documentazione | [DESIGN_NOTES.md](DESIGN_NOTES.md), [ARCHITECTURE.md](ARCHITECTURE.md); compatibilità da provare. |
-| Note, editor, autosave, archivio/cestino, cartelle/tag e ricerca | Parziale | Flusso UI di base passato nella stessa matrice API 26/29/35/37; un carattere perso in una precedente ripetizione API 26 resta senza causa accertata. Altri flussi e nessuna garanzia anti-perdita. |
+| Note, editor, autosave, archivio/cestino, cartelle/tag e ricerca | Parziale | Flusso UI passato in una precedente matrice, ma un carattere è mancato nella ripetizione su API 26/29; causa non accertata. Altri flussi e nessuna garanzia anti-perdita. |
 | Markdown, modelli e backlink | Parziale | Comandi semplici, sei modelli e backlink testuali; no WYSIWYG completo o grafo. |
 | Disegno e S Pen | Parziale | Canvas vettoriale base; niente latenza certificata, palm rejection affidabile, riconoscimento o OCR. |
-| Import/export e privacy | Parziale | Solo testo; nessun backup completo/cifrato. Niente cifratura, blocco o biometria. |
+| Import/export e privacy | Parziale | Export testo senza disegno; backup JSON manuale di note e disegni con limiti, senza cifratura. Niente blocco o biometria. |
 | OneUI, temi, localizzazione, layout, accessibilità | Parziale | Componenti upstream e risorse EN/IT; nessuna certificazione visiva, RTL, contrasto o TalkBack. |
 | CI e test | Parziale | Build, test JVM e lint passati; in una matrice sono passati 16/16 test su ciascuna API 26/29/35/37. Dispositivi reali, stabilità e altri flussi restano da verificare. |
 | Prestazioni obiettivo (avvio, 5.000 note, 50k testo, latenza) | Non misurate | Non si dichiarano raggiunte. |

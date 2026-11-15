@@ -3,6 +3,8 @@ package dev.lumenotes.app
 import android.content.Intent
 import android.graphics.Rect
 import android.os.SystemClock
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.InputDevice
 import android.view.MotionEvent
@@ -208,17 +210,40 @@ class NotesFlowTest {
     }
 
     private fun typeBody(text: String) {
+        val trace = StringBuilder()
         try {
             onView(isRoot()).perform(waitForKeyboard())
             // The multiline field can be taller than the viewport with the IME open.
             // Tap a visible, touch-sized area, and verify focus before sending key events.
             onView(withId(R.id.body_field)).perform(tapVisiblePart())
+            onView(withId(R.id.title_field)).perform(traceSyntheticInput("title", trace))
+            onView(withId(R.id.body_field)).perform(traceSyntheticInput("body", trace))
             onView(withId(R.id.body_field)).check(matches(hasFocus()))
                 .perform(waitForInputConnection(), typeTextIntoFocusedView(text))
             onView(withId(R.id.body_field)).check(matches(withText(text)))
         } catch (failure: Throwable) {
             captureFailedViewForCi(R.id.body_field)
-            throw failure
+            // Only synthetic test data is observed; record lengths and key codes, never field contents.
+            throw AssertionError("Synthetic input trace: $trace", failure)
+        }
+    }
+
+    private fun traceSyntheticInput(label: String, trace: StringBuilder): ViewAction = object : ViewAction {
+        override fun getConstraints(): Matcher<View> = isAssignableFrom(EditText::class.java)
+        override fun getDescription(): String = "Trace synthetic key events and edit lengths"
+        override fun perform(uiController: UiController, view: View) {
+            val field = view as EditText
+            field.setOnKeyListener { _, code, event ->
+                trace.append("$label:key=${event.action}/$code/${event.metaState},focus=${field.hasFocus()},len=${field.length()};")
+                false
+            }
+            field.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    trace.append("$label:change=$start/$before/$count,len=${s?.length};")
+                }
+                override fun afterTextChanged(s: Editable?) = Unit
+            })
         }
     }
 

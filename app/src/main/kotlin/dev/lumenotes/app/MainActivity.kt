@@ -10,6 +10,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
@@ -36,6 +37,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var viewModel: LibraryViewModel
     private lateinit var adapter: NoteAdapter
+    private val backupBackCallback = object : OnBackPressedCallback(false) {
+        override fun handleOnBackPressed() = toast(R.string.backup_in_progress)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +47,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         applySafeInsets(window, binding.root)
         viewModel = ViewModelProvider(this)[LibraryViewModel::class.java]
+        onBackPressedDispatcher.addCallback(this, backupBackCallback)
         setupList()
         setupNavigation()
         setupSearch()
@@ -109,6 +114,14 @@ class MainActivity : AppCompatActivity() {
             closeDrawer()
             importDocument()
         }
+        binding.drawerBackupExport.setOnClickListener {
+            closeDrawer()
+            confirmBackupExport()
+        }
+        binding.drawerBackupRestore.setOnClickListener {
+            closeDrawer()
+            confirmBackupRestore()
+        }
         binding.drawerSettings.setOnClickListener {
             closeDrawer()
             openSettings()
@@ -136,6 +149,21 @@ class MainActivity : AppCompatActivity() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch { viewModel.state.collect(::render) }
                 launch {
+                    viewModel.backupBusy.collect { busy ->
+                        binding.backupProgress.visibility = if (busy) View.VISIBLE else View.GONE
+                        backupBackCallback.isEnabled = busy
+                        binding.newNoteButton.isEnabled = !busy
+                        listOf(
+                            binding.drawerNotes, binding.drawerFavorites, binding.drawerArchive, binding.drawerTrash,
+                            binding.drawerFolders, binding.drawerTemplates, binding.drawerImport, binding.drawerSettings,
+                            binding.drawerBackupExport, binding.drawerBackupRestore
+                        ).forEach { it.isEnabled = !busy }
+                        for (index in 0 until binding.bottomNavigation.menu.size()) {
+                            binding.bottomNavigation.menu.getItem(index).isEnabled = !busy
+                        }
+                    }
+                }
+                launch {
                     viewModel.collection.collect { collection ->
                         binding.sectionTitle.setText(collection.label())
                         val menuId = collection.navigationId()
@@ -152,6 +180,9 @@ class MainActivity : AppCompatActivity() {
                     viewModel.events.collect { event ->
                         when (event) {
                             is LibraryEvent.OpenEditor -> openEditor(event.id)
+                            is LibraryEvent.BackupExported -> toast(getString(R.string.backup_exported, event.count))
+                            is LibraryEvent.BackupRestored -> toast(getString(R.string.backup_restored, event.imported, event.skipped))
+                            LibraryEvent.BackupError -> toast(R.string.backup_failed)
                             LibraryEvent.Error -> toast(R.string.action_failed)
                         }
                     }
@@ -186,33 +217,46 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
-        R.id.action_search -> {
-            binding.libraryToolbar.showSearchMode()
-            true
-        }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (viewModel.backupBusy.value) return true
+        return when (item.itemId) {
+            R.id.action_search -> {
+                binding.libraryToolbar.showSearchMode()
+                true
+            }
 
-        R.id.action_folders -> {
-            showFolders()
-            true
-        }
+            R.id.action_folders -> {
+                showFolders()
+                true
+            }
 
-        R.id.action_templates -> {
-            showTemplates()
-            true
-        }
+            R.id.action_templates -> {
+                showTemplates()
+                true
+            }
 
-        R.id.action_import -> {
-            importDocument()
-            true
-        }
+            R.id.action_import -> {
+                importDocument()
+                true
+            }
 
-        R.id.action_settings -> {
-            openSettings()
-            true
-        }
+            R.id.action_backup_export -> {
+                confirmBackupExport()
+                true
+            }
 
-        else -> super.onOptionsItemSelected(item)
+            R.id.action_backup_restore -> {
+                confirmBackupRestore()
+                true
+            }
+
+            R.id.action_settings -> {
+                openSettings()
+                true
+            }
+
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
@@ -310,6 +354,50 @@ class MainActivity : AppCompatActivity() {
             .show()
     }
 
+    private fun confirmBackupExport() {
+        if (viewModel.backupBusy.value) return
+        AlertDialog.Builder(this).setTitle(R.string.backup_export).setMessage(R.string.backup_export_warning)
+            .setNegativeButton(R.string.cancel, null)
+            .setPositiveButton(R.string.backup_continue) { _, _ -> chooseBackupDestination() }
+            .show()
+    }
+
+    private fun confirmBackupRestore() {
+        if (viewModel.backupBusy.value) return
+        AlertDialog.Builder(this).setTitle(R.string.backup_restore).setMessage(R.string.backup_restore_warning)
+            .setNegativeButton(R.string.cancel, null)
+            .setPositiveButton(R.string.backup_continue) { _, _ -> chooseBackupToRestore() }
+            .show()
+    }
+
+    @Suppress("DEPRECATION")
+    private fun chooseBackupDestination() {
+        val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+            addCategory(Intent.CATEGORY_OPENABLE)
+            type = "application/json"
+            putExtra(Intent.EXTRA_TITLE, "lume-notes-backup.json")
+        }
+        try {
+            startActivityForResult(intent, REQUEST_BACKUP_EXPORT)
+        } catch (_: Exception) {
+            toast(R.string.backup_failed)
+        }
+    }
+
+    @Suppress("DEPRECATION")
+    private fun chooseBackupToRestore() {
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+            addCategory(Intent.CATEGORY_OPENABLE)
+            type = "*/*"
+            putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("application/json", "text/plain", "application/octet-stream"))
+        }
+        try {
+            startActivityForResult(intent, REQUEST_BACKUP_RESTORE)
+        } catch (_: Exception) {
+            toast(R.string.backup_failed)
+        }
+    }
+
     @Suppress("DEPRECATION")
     private fun importDocument() {
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
@@ -327,7 +415,13 @@ class MainActivity : AppCompatActivity() {
     @Deprecated("Activity result APIs remain supported on API 26 and the SESL activity base")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_IMPORT && resultCode == RESULT_OK) data?.data?.let(::readImport)
+        if (resultCode != RESULT_OK) return
+        val uri = data?.data ?: return
+        when (requestCode) {
+            REQUEST_IMPORT -> readImport(uri)
+            REQUEST_BACKUP_EXPORT -> viewModel.exportBackup(uri)
+            REQUEST_BACKUP_RESTORE -> viewModel.restoreBackup(uri)
+        }
     }
 
     private fun readImport(uri: Uri) {
@@ -388,7 +482,8 @@ class MainActivity : AppCompatActivity() {
         // intent matching (and can also surprise other lifecycle consumers).
     }
 
-    private fun toast(message: Int) {
+    private fun toast(message: Int) = toast(getString(message))
+    private fun toast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }
     private fun NoteCollection.label(): Int = when (this) {
@@ -406,6 +501,8 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         private const val REQUEST_IMPORT = 1001
+        private const val REQUEST_BACKUP_EXPORT = 1003
+        private const val REQUEST_BACKUP_RESTORE = 1004
         private const val MAX_IMPORT_BYTES = 5 * 1024 * 1024
         private const val ACTION_QUICK_NOTE = "dev.lumenotes.action.QUICK_NOTE"
     }

@@ -12,7 +12,7 @@ trap 'rm -rf -- "$tmp"' EXIT
 "$tools/apksigner" verify --verbose --print-certs "$apk" > "$tmp/signature.txt"
 "$tools/zipalign" -c -P 16 4 "$apk" > "$tmp/alignment.txt"
 set +e
-python3 scripts/audit_apk_permissions.py "$tmp/permissions.txt" "$tmp/badging.txt" > "$tmp/audit.txt" 2>&1
+python3 scripts/audit_apk_permissions.py "$tmp/permissions.txt" "$tmp/badging.txt" "$tmp/manifest.txt" > "$tmp/audit.txt" 2>&1
 audit_status=$?
 set -e
 {

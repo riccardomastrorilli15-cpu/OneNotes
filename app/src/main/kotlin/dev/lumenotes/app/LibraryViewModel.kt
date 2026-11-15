@@ -1,5 +1,6 @@
 package dev.lumenotes.app
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -30,6 +31,9 @@ sealed interface LibraryState {
 
 sealed interface LibraryEvent {
     data class OpenEditor(val id: Long) : LibraryEvent
+    data class BackupExported(val count: Int) : LibraryEvent
+    data class BackupRestored(val imported: Int, val skipped: Int) : LibraryEvent
+    data object BackupError : LibraryEvent
     data object Error : LibraryEvent
 }
 
@@ -37,7 +41,7 @@ private data class Filters(val collection: NoteCollection, val query: String, va
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
-class LibraryViewModel @Inject constructor(private val repository: NotesRepository) : ViewModel() {
+class LibraryViewModel @Inject constructor(private val repository: NotesRepository, private val backup: NotesBackup) : ViewModel() {
     val collection = MutableStateFlow(NoteCollection.NOTES)
     val query = MutableStateFlow("")
     val folder = MutableStateFlow<String?>(null)
@@ -45,6 +49,8 @@ class LibraryViewModel @Inject constructor(private val repository: NotesReposito
     private val retryCounter = MutableStateFlow(0)
     private val eventsChannel = Channel<LibraryEvent>(Channel.BUFFERED)
     val events = eventsChannel.receiveAsFlow()
+    private val mutableBackupBusy = MutableStateFlow(false)
+    val backupBusy: StateFlow<Boolean> = mutableBackupBusy
     val folders = repository.observeFolders().catch { emit(emptyList()) }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
@@ -96,6 +102,28 @@ class LibraryViewModel @Inject constructor(private val repository: NotesReposito
                 eventsChannel.send(LibraryEvent.Error)
             } finally {
                 creating = false
+            }
+        }
+    }
+
+    fun exportBackup(uri: Uri) = runBackup { LibraryEvent.BackupExported(backup.export(uri)) }
+
+    fun restoreBackup(uri: Uri) = runBackup {
+        val result = backup.restore(uri)
+        LibraryEvent.BackupRestored(result.imported, result.skipped)
+    }
+
+    private fun runBackup(operation: suspend () -> LibraryEvent) {
+        if (!mutableBackupBusy.compareAndSet(false, true)) return
+        viewModelScope.launch {
+            try {
+                eventsChannel.send(operation())
+            } catch (cancelled: CancellationException) {
+                throw cancelled
+            } catch (_: Exception) {
+                eventsChannel.send(LibraryEvent.BackupError)
+            } finally {
+                mutableBackupBusy.value = false
             }
         }
     }

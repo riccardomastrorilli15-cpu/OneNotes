@@ -28,6 +28,14 @@ class ApkPermissionsTest(unittest.TestCase):
         self.assertTrue(audit.audit("uses-permission: unknown", self.badging))
         self.assertTrue(audit.audit("", self.badging + "application-debuggable\n"))
 
+    def test_services_receivers_and_missing_manifest_tree_are_rejected(self):
+        tree = "  E: manifest (line=2)\n    E: application (line=10)\n"
+        self.assertEqual([], audit.audit("", self.badging, tree))
+        self.assertTrue(audit.audit("", self.badging, "invalid"))
+        for component in ("service", "receiver"):
+            with self.subTest(component=component):
+                self.assertTrue(audit.audit("", self.badging, tree + f"      E: {component} (line=15)\n"))
+
 
 if __name__ == "__main__":
     unittest.main()

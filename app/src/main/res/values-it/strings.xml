@@ -14,6 +14,15 @@
     <string name="folder_filter">Cartella: %1$s</string>
     <string name="settings">Impostazioni</string>
     <string name="import_note">Importa testo o Markdown</string>
+    <string name="backup_export">Esporta tutte le note (backup)</string>
+    <string name="backup_restore">Ripristina un backup</string>
+    <string name="backup_export_warning">Il backup include note, disegni, archivio e cestino. Non è cifrato: scegli una posizione sicura. Massimo 128 MiB e 10.000 note; campi molto grandi possono essere rifiutati. Mantieni aperta l’app fino al termine.</string>
+    <string name="backup_restore_warning">Puoi ripristinare solo backup creati da Lume Notes. Le note già presenti con lo stesso identificativo non vengono sovrascritte. Mantieni aperta l’app fino al termine.</string>
+    <string name="backup_continue">Continua</string>
+    <string name="backup_in_progress">Elaborazione del backup…</string>
+    <string name="backup_exported">Backup esportato: %1$d note. Il file non è cifrato.</string>
+    <string name="backup_restored">Ripristinate %1$d note; %2$d già presenti sono rimaste invariate.</string>
+    <string name="backup_failed">Backup non riuscito. Controlla il file e il limite di 128 MiB. Un’esportazione incompleta potrebbe rimanere nella posizione scelta.</string>
     <string name="templates">Nuova da modello</string>
     <string name="empty_title">Uno spazio libero per pensare</string>
     <string name="empty_message">Le tue note appariranno qui. Inizia con un’idea, un elenco o uno schizzo.</string>

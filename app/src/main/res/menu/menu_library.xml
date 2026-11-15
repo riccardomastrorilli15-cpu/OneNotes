@@ -7,5 +7,7 @@
     <item android:id="@+id/action_folders" android:icon="@drawable/ic_folder" android:title="@string/folders" app:showAsAction="always" />
     <item android:id="@+id/action_templates" android:title="@string/templates" app:showAsAction="never" />
     <item android:id="@+id/action_import" android:title="@string/import_note" app:showAsAction="never" />
+    <item android:id="@+id/action_backup_export" android:title="@string/backup_export" app:showAsAction="never" />
+    <item android:id="@+id/action_backup_restore" android:title="@string/backup_restore" app:showAsAction="never" />
     <item android:id="@+id/action_settings" android:title="@string/settings" app:showAsAction="never" />
 </menu>
